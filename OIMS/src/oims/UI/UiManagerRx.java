@@ -17,7 +17,8 @@ public interface UiManagerRx {
         INIT_PAGE,
         MAIN_PAGE,
         WAREHOUSE_PAGE,
-        EMPLOYEE_PAGE
+        EMPLOYEE_PAGE,
+        STACK_PAGE
     };
     public Page getPage(PageType pt);
     public void showPage(Integer pageId);

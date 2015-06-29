@@ -10,5 +10,5 @@ package oims.UI.pages.warehouseManagerment;
  * @author ezouyyi
  */
 public interface WarehousePageRx {
-    
+    public void showAllWarehouse();
 }

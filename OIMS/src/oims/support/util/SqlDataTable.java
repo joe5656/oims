@@ -17,28 +17,33 @@ import java.util.Vector;
 public class SqlDataTable {
     private String     tableName_;
     private Vector     tableHead_;
-    private String[][] data_;
+    private Vector     data_;
     
     public SqlDataTable(ResultSet rs, String tableName) throws SQLException
     {
         tableName_ = tableName;
+        data_ = new Vector();
         if(rs != null && rs.first())
         {
             ResultSetMetaData metaData = rs.getMetaData();
             Integer loop = metaData.getColumnCount();
-            rs.first();
             for(int i = 1; i <= loop; i++)
             {
                 tableHead_.add(metaData.getColumnName(i));
-                int row = 1;
-                do
-                {
-                    data_[row][i] = rs.getString(row);
-                    row++;
-                }while(rs.next());
             }
+            
+            rs.first();
+            do
+            {
+                Vector row = new Vector();
+                for(int i = 1; i <= loop; i++)
+                {
+                    row.add(rs.getString(i));
+                }
+                data_.add(row);
+            }while(rs.next());
         }
     }
-    
-    
+    public Vector getColumnNames(){return this.tableHead_;}
+    public Vector getData(){return this.data_;}
 }

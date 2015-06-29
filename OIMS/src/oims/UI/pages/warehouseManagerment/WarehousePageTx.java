@@ -5,6 +5,8 @@
  */
 package oims.UI.pages.warehouseManagerment;
 
+import oims.support.util.SqlDataTable;
+
 /**
  *
  * @author ezouyyi
@@ -14,4 +16,6 @@ public interface WarehousePageTx {
     public Boolean updateWareHouse(Integer wareHouseId, String wareHouseName, Integer keeperId,
             String addr);
     public Boolean deleteWareHouse(Integer wareHouseId);
+    public void    setRx(WarehousePageRx rx);
+    public SqlDataTable queryAllWarehouseInfo();
 }

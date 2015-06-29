@@ -16,6 +16,8 @@ import oims.systemManagement.SystemManager;
 import oims.UI.pages.initPage.Ui_initPage;
 import oims.UI.pages.mainMenu.Ui_mainMenuPage;
 import oims.UI.pages.StackManagerment.Ui_StackMangement;
+import oims.UI.pages.warehouseManagerment.Ui_WarehousePage;
+import oims.UI.pages.warehouseManagerment.WarehousePageTx;
 import oims.dataBase.Interfaces.dbStatus.DataBaseRx_dbStatus;
 import oims.dataBase.Interfaces.dbStatus.DataBaseTx_dbStatus;
 import oims.employeeManager.EmployeeManager;
@@ -147,11 +149,11 @@ public class UiManager   implements oims.systemManagement.Client,UiManagerRx, Da
                 }
                 break;
             }
-            case WAREHOUSE_PAGE:
+            case STACK_PAGE:
             {
-                if(itsPages_.containsKey(PageType.WAREHOUSE_PAGE))
+                if(itsPages_.containsKey(PageType.STACK_PAGE))
                 {
-                    pageWanted = itsPages_.get(PageType.WAREHOUSE_PAGE);
+                    pageWanted = itsPages_.get(PageType.STACK_PAGE);
                 }
                 else
                 {
@@ -160,16 +162,31 @@ public class UiManager   implements oims.systemManagement.Client,UiManagerRx, Da
                 }
                 break;
             }
+            case WAREHOUSE_PAGE:
+            {
+                if(itsPages_.containsKey(PageType.WAREHOUSE_PAGE))
+                {
+                    pageWanted = itsPages_.get(PageType.WAREHOUSE_PAGE);
+                }
+                else
+                {
+                    WarehousePageTx tempWM = (WarehousePageTx)itsSysManager_.getClient(SystemManager.clientType.WAREHOUSE_MANAGER);
+                    if(tempWM == null){break;}
+                    pageWanted = new Ui_WarehousePage(this,tempWM);
+                    itsPages_.put(PageType.INIT_PAGE, pageWanted);
+                }
+                break;
+            }
             case EMPLOYEE_PAGE:
             {
-                EmployeePageTx tempEM = (EmployeePageTx)itsSysManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
-                if(tempEM == null){break;}
                 if(itsPages_.containsKey(PageType.EMPLOYEE_PAGE))
                 {
                     pageWanted = itsPages_.get(PageType.EMPLOYEE_PAGE);
                 }
                 else
                 {
+                    EmployeePageTx tempEM = (EmployeePageTx)itsSysManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
+                    if(tempEM == null){break;}
                     pageWanted = new Ui_employeeManagerment(this, tempEM);
                     itsPages_.put(PageType.INIT_PAGE, pageWanted);
                 }

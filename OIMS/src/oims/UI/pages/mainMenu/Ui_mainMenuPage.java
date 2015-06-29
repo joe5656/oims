@@ -62,14 +62,19 @@ public class Ui_mainMenuPage extends BasePageClass{
             }
         });
 
-        jButton2.setText("仓库");
+        jButton2.setText("库存管理");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
 
-        jButton3.setText("单据");
+        jButton3.setText("仓库配置");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -82,7 +87,7 @@ public class Ui_mainMenuPage extends BasePageClass{
                 .addComponent(jButton2)
                 .addGap(18, 18, 18)
                 .addComponent(jButton3)
-                .addContainerGap(179, Short.MAX_VALUE))
+                .addContainerGap(131, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -133,8 +138,12 @@ public class Ui_mainMenuPage extends BasePageClass{
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        itsUiManager_.createAndShowPage(UiManagerRx.PageType.WAREHOUSE_PAGE, this);
+        itsUiManager_.createAndShowPage(UiManagerRx.PageType.STACK_PAGE, this);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        itsUiManager_.createAndShowPage(UiManagerRx.PageType.WAREHOUSE_PAGE, this);
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     public void toggleDbStatus(Boolean local, Boolean isOn)
     {

@@ -3,8 +3,24 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/JoeFolder/git/OIMS/src/oims/OIMS.java</file>
-            <file>file:/C:/JoeFolder/git/OIMS/src/oims/UI/UiManager.java</file>
+            <file>file:/D:/git/OIMS/src/oims/UI/pages/employeeManagerment/Ui_employeeManagerment.java</file>
+            <file>file:/D:/git/OIMS/src/oims/support/util/SqlDataTable.java</file>
+            <file>file:/D:/git/OIMS/src/oims/UI/pages/warehouseManagerment/Ui_WarehousePage.java</file>
+            <file>file:/D:/git/OIMS/src/oims/employeeManager/EmployeeManager.java</file>
+            <file>file:/D:/git/OIMS/src/oims/OIMS.java</file>
+            <file>file:/D:/git/OIMS/src/oims/UI/pages/BasePageClass.java</file>
+            <file>file:/D:/git/OIMS/src/oims/Tasks/DataBaseKeepAlive.java</file>
+            <file>file:/D:/git/OIMS/src/oims/warehouseManagemnet/WareHouseManager.java</file>
+            <file>file:/D:/git/OIMS/src/oims/UI/pages/warehouseManagerment/WarehouseListPage.java</file>
+            <file>file:/D:/git/OIMS/src/oims/UI/pages/warehouseManagerment/WarehousePageRx.java</file>
+            <file>file:/D:/git/OIMS/src/oims/UI/pages/employeeManagerment/NewEmployee.java</file>
+            <file>file:/D:/git/OIMS/src/oims/UI/UiManager.java</file>
+            <file>file:/D:/git/OIMS/src/oims/UI/pages/mainMenu/Ui_mainMenuPage.java</file>
+            <file>file:/D:/git/OIMS/src/oims/AppBuilder.java</file>
+            <file>file:/D:/git/OIMS/src/oims/dataBase/tables/WareHouseTable.java</file>
+            <file>file:/D:/git/OIMS/src/oims/UI/UiManagerRx.java</file>
+            <file>file:/D:/git/OIMS/src/oims/systemManagement/SystemManager.java</file>
+            <file>file:/D:/git/OIMS/src/oims/UI/pages/warehouseManagerment/WarehousePageTx.java</file>
         </group>
     </open-files>
 </project-private>

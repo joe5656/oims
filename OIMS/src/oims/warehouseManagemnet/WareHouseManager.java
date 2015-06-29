@@ -7,29 +7,62 @@ package oims.warehouseManagemnet;
 import oims.dataBase.tables.WareHouseTable;
 import com.google.common.collect.Maps;
 import java.util.Map;
+import oims.UI.pages.warehouseManagerment.WarehousePageRx;
 import oims.UI.pages.warehouseManagerment.WarehousePageTx;
 import oims.dataBase.DataBaseManager;
 import oims.systemManagement.SystemManager;
 import oims.stackManagement.StackManager;
+import oims.support.util.SqlDataTable;
 /**
  *
  * @author ezouyyi
  */
 public class WareHouseManager implements oims.systemManagement.Client, WarehousePageTx{
-    Map<Integer, String> wareHouses_;
-    WareHouseTable  itsWareHouseTable_;
-    SystemManager    itsSysManager_;
-    StackManager    itsStackManager_;
-    public WareHouseManager(SystemManager sm, DataBaseManager dbm)
+    private Map<Integer, String> wareHouses_;
+    private WareHouseTable  itsWareHouseTable_;
+    private SystemManager    itsSysManager_;
+    private StackManager    itsStackManager_;
+    private WarehousePageRx itsWarehousePageRx_;
+    public WareHouseManager(DataBaseManager dbm)
     {
         wareHouses_ = Maps.newHashMap();
-        itsSysManager_ = sm;
         itsWareHouseTable_ = new WareHouseTable(dbm);
     }
     
     @Override
     public Boolean systemStatusChangeNotify(SystemManager.systemStatus status)
-    {return Boolean.FALSE;}
+        {
+        switch(status)
+        {
+            case SYS_INIT:
+            {
+                itsSysManager_.statusChangeCompleted(Boolean.TRUE, "warehouse");
+                break;
+            }
+            case SYS_CONFIG:
+            {
+                
+                itsSysManager_.statusChangeCompleted(Boolean.TRUE, "warehouse");
+                break;
+            }
+            case SYS_REGISTER:
+            {
+                itsWareHouseTable_.registerToDbm();
+                break;
+            }
+            case SYS_START:
+            {
+                
+                break;
+            }
+            default:
+            {
+                itsSysManager_.statusChangeCompleted(Boolean.TRUE, "warehouse");
+                break;
+            }
+        }
+        return Boolean.TRUE;
+    }
     
     @Override
     public void setSystemManager(SystemManager sysManager)
@@ -78,6 +111,14 @@ public class WareHouseManager implements oims.systemManagement.Client, Warehouse
 
     @Override
     public Boolean updateWareHouse(Integer wareHouseId, String wareHouseName, Integer keeperId, String addr) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setRx(WarehousePageRx rx) {itsWarehousePageRx_=rx;}
+
+    @Override
+    public SqlDataTable queryAllWarehouseInfo() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

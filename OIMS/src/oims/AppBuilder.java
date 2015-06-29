@@ -33,6 +33,7 @@ public class AppBuilder {
         itsUiManager_ = new UiManager(itsDataBaseManager_);
         itsUiManager_.showStartingPage();
         itsEmployeeManger_ = new EmployeeManager(itsDataBaseManager_);
+        itsWareHouseManager_ = new WareHouseManager(itsDataBaseManager_);
         //itsTicketManager_ = new TicketManager(itsSystemManager_, itsDataBaseManager_);
         //itsWareHouseManager_ = new WareHouseManager(itsSystemManager_, itsDataBaseManager_);
         //itsLogManager_ = new LoggingManager(itsDataBaseManager_);
@@ -40,7 +41,7 @@ public class AppBuilder {
         itsSystemManager_.registerClient(SystemManager.clientType.UI_MANAGER, itsUiManager_);
         itsSystemManager_.registerClient(SystemManager.clientType.EMPLOYEE_MANAGER, itsEmployeeManger_);
         //itsSystemManager_.registerClient(SystemManager.clientType.TICKET_MANAGER, itsTicketManager_);
-        //itsSystemManager_.registerClient(SystemManager.clientType.WAREHOUSE_MANAGER,itsWareHouseManager_);
+        itsSystemManager_.registerClient(SystemManager.clientType.WAREHOUSE_MANAGER,itsWareHouseManager_);
     }
     public void run()
     {System.out.print("sys started");
