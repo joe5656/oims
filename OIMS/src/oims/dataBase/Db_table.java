@@ -277,4 +277,5 @@ public class Db_table {
     }
     
     public void translateColumnName(Vector col){}
+    public Boolean uploadL2CachedData(){return Boolean.TRUE;}
 }

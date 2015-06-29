@@ -129,7 +129,19 @@ public class DataBaseManager  implements oims.systemManagement.Client,DataBaseRx
     
     public Boolean isRemoteDbConnected(){return remoteDataBaseConnected_;}
     public Boolean islocalDbConnected(){return localDataBaseConnected_;}
-    public void    inforSycnerTableUpdated(Db_table table){this.itsSyncer_.tableUpdated(table);}
+    
+    public void    inforSycnerTableUpdated(Db_table table)
+    {
+        if(null != this.itsSyncer_)
+            this.itsSyncer_.tableUpdated(table);
+    }
+    
+    public void    cachL2Table(Db_table table)
+    {
+        if(null != this.itsSyncer_)
+            this.itsSyncer_.L2TableNeedToBeCached(table);
+    }
+        
     @Override
     public void setSystemManager(SystemManager sysManager)
     {

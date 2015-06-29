@@ -86,9 +86,13 @@ public class DbmReqHandler{
                                 insertLocal = Boolean.FALSE;
                             }
                         }
-                        if(insertLocal == Boolean.TRUE)
+                        if(Objects.equals(insertLocal, Boolean.TRUE))
                         {
                             result = itsDbm_.getLocalDataBase().insertRecord(entry_, itsTable_);
+                            if((Boolean)result == true)
+                            {
+                                this.itsDbm_.cachL2Table(itsTable_);
+                            }
                         }
                         break;
                     }
@@ -125,14 +129,14 @@ public class DbmReqHandler{
                     }
                     case TABLE_TYPE_MIRROR:
                     {
-                        if(itsDbm_.remoteDatabaseOk())
+                        if(itsDbm_.localDatabaseOk())
                         {
-                            result = itsDbm_.getRemoteDataBase().select(selectList, equalEntry_, greatThanEntry_, smallerThanEntry_, itsTable_);
+                            result = itsDbm_.getLocalDataBase().select(selectList, equalEntry_, greatThanEntry_, smallerThanEntry_, itsTable_);
                         }
                         
-                        if(result == null)
+                        if(result == null && itsDbm_.remoteDatabaseOk())
                         {
-                            result = itsDbm_.getLocalDataBase().insertRecord(entry_, itsTable_);
+                            result = itsDbm_.getRemoteDataBase().select(selectList, equalEntry_, greatThanEntry_, smallerThanEntry_, itsTable_);
                         }
                         break;
                     }

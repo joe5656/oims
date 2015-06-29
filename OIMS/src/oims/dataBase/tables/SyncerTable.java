@@ -57,6 +57,26 @@ public class SyncerTable  extends Db_table{
         return result;        
     }
     
+    private Boolean updateEntry(Db_table table)
+    {
+        Boolean result = Boolean.FALSE;
+        
+        TableEntry updateEntry = generateTableEntry();
+        Map<String, String> valueHolder = Maps.newHashMap();
+        valueHolder.put("versionTag", Long.toString(System.currentTimeMillis()));
+        
+        TableEntry equalEntry = generateTableEntry();
+        Map<String, String> valueHolder_eq = Maps.newHashMap();
+        valueHolder_eq.put("TableName", table.getName());
+        
+        if(updateEntry.fillInEntryValues(valueHolder) && 
+                equalEntry.fillInEntryValues(valueHolder_eq))
+        {
+            result = super.update(updateEntry, equalEntry, null, null);
+        }
+        return result;
+    }
+    
     public Set<String> compareSyncerTable(ResultSet lrs, ResultSet rrs)
     {
         Set<String> result = Sets.newConcurrentHashSet();
@@ -95,5 +115,17 @@ public class SyncerTable  extends Db_table{
         }
         
         return result;
+    }
+    
+    public void tableUpdated(Db_table table)
+    {
+        if(table.getTableType() == Table_Type.TABLE_TYPE_MIRROR)
+        {
+            if(!this.updateEntry(table))
+            {
+                /* try to insert one entry if update failed*/
+                this.newEntry(table.getName());
+            }
+        }
     }
 }

@@ -27,13 +27,23 @@ public class DataBaseSyncer implements Runnable{
     private DataBaseManager itsDbm_;
     private List<Db_table>  itsChangedTables_;
     private SyncerTable     itsSyncerTable_;
+    private List<Db_table>  itsL2CachingQuenen_;
     
     public DataBaseSyncer(DataBaseManager dbm, SyncerTable table)
     {
         itsDbm_ = dbm;
         isSyncerWorking_ = Boolean.TRUE;
         itsChangedTables_ = Lists.newArrayList();
+        itsL2CachingQuenen_ = Lists.newArrayList();
         itsSyncerTable_ = table;
+    }
+    
+    public void L2TableNeedToBeCached(Db_table table)
+    {
+        if(this.itsL2CachingQuenen_ != null)
+        {
+            this.itsL2CachingQuenen_.add(table);
+        }
     }
     
     public void tableUpdated(Db_table table)
@@ -81,12 +91,19 @@ public class DataBaseSyncer implements Runnable{
     public void run() 
     {
         while(isSyncerWorking_)
-        {System.out.print("\nthread is awake\n");
+        {
             try {
                 Thread.sleep(60000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(DataBaseSyncer.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
+            /*update table*/
+            for(Db_table table:this.itsChangedTables_)
+            {
+                this.itsSyncerTable_.tableUpdated(table);
+            }
+            
             /*prcess updated tables*/
             /*check syncerTable and process mirror tables*/
             Set<String> tableNeedDownload = checkSyncerTable();
@@ -110,6 +127,19 @@ public class DataBaseSyncer implements Runnable{
                 }
             }
             
+            /*process L2 tables*/
+            if(this.itsL2CachingQuenen_.size() > 0)
+            {
+                for(Db_table table:this.itsL2CachingQuenen_)
+                {
+                    /*process one table once*/
+                    if(table.uploadL2CachedData() == Boolean.TRUE)
+                    {
+                        this.itsL2CachingQuenen_.remove(table);
+                    }
+                    break;
+                }
+            }
         }
     }
     
