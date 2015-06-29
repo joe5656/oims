@@ -3,31 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/新店计划NEW%20ERAE/software/OIMS/src/oims/systemManagement/Client.java</file>
-            <file>file:/D:/新店计划NEW%20ERAE/software/OIMS/src/oims/dataBase/tables/RawMaterialTable.java</file>
-            <file>file:/D:/新店计划NEW%20ERAE/software/OIMS/src/oims/dataBase/MYSQL/Db_dataBase_MYSQL.java</file>
-            <file>file:/D:/新店计划NEW%20ERAE/software/OIMS/src/oims/config/ConfigManager.java</file>
-            <file>file:/D:/新店计划NEW%20ERAE/software/OIMS/src/oims/UI/UiManager.java</file>
-            <file>file:/D:/新店计划NEW%20ERAE/software/OIMS/src/oims/dataBase/Db_table.java</file>
-            <file>file:/D:/新店计划NEW%20ERAE/software/OIMS/src/oims/dataBase/tables/ProductTable.java</file>
-            <file>file:/D:/新店计划NEW%20ERAE/software/OIMS/src/oims/dataBase/tables/WareHouseTable.java</file>
-            <file>file:/D:/新店计划NEW%20ERAE/software/OIMS/src/oims/OIMS.java</file>
-            <file>file:/D:/新店计划NEW%20ERAE/software/OIMS/src/oims/dataBase/Db_db.java</file>
-            <file>file:/D:/新店计划NEW%20ERAE/software/OIMS/src/oims/dataBase/DataBaseManager.java</file>
-            <file>file:/D:/新店计划NEW%20ERAE/software/OIMS/src/oims/dataBase/Db_dataBase.java</file>
-            <file>file:/D:/新店计划NEW%20ERAE/software/OIMS/src/oims/dataBase/DataBaseFactory.java</file>
-            <file>file:/D:/新店计划NEW%20ERAE/software/OIMS/src/oims/dataBase/tables/DoughTypeTable.java</file>
-            <file>file:/D:/新店计划NEW%20ERAE/software/OIMS/src/oims/warehouseManagemnet/WareHouse.java</file>
-            <file>file:/D:/新店计划NEW%20ERAE/software/OIMS/src/oims/dataBase/ColumnSelector.java</file>
-            <file>file:/D:/新店计划NEW%20ERAE/software/OIMS/src/oims/systemManagement/SystemManager.java</file>
-            <file>file:/D:/新店计划NEW%20ERAE/software/OIMS/src/oims/dataBase/MYSQL/DataBaseFactory_MYSQL.java</file>
-            <file>file:/D:/新店计划NEW%20ERAE/software/OIMS/src/oims/warehouseManagemnet/WareHouseManager.java</file>
-            <file>file:/D:/新店计划NEW%20ERAE/software/OIMS/src/oims/dataBase/tables/StackTable.java</file>
-            <file>file:/D:/新店计划NEW%20ERAE/software/OIMS/src/oims/dataBase/MYSQL/Db_db_MYSQL.java</file>
-            <file>file:/D:/新店计划NEW%20ERAE/software/OIMS/src/oims/warehouseManagemnet/RawMaterial.java</file>
-            <file>file:/D:/新店计划NEW%20ERAE/software/OIMS/src/oims/AppBuilder.java</file>
-            <file>file:/D:/新店计划NEW%20ERAE/software/OIMS/src/oims/config/configFile.xsd</file>
-            <file>file:/D:/新店计划NEW%20ERAE/software/OIMS/src/oims/support/util/ConfigAttr.java</file>
+            <file>file:/C:/JoeFolder/git/OIMS/src/oims/OIMS.java</file>
+            <file>file:/C:/JoeFolder/git/OIMS/src/oims/UI/UiManager.java</file>
         </group>
     </open-files>
 </project-private>

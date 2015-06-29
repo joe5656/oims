@@ -5,33 +5,26 @@
  */
 package oims.warehouseManagemnet;
 import oims.dataBase.tables.WareHouseTable;
-import oims.dataBase.tables.RawMaterialTable;
 import com.google.common.collect.Maps;
 import java.util.Map;
-import java.util.Objects;
+import oims.UI.pages.warehouseManagerment.WarehousePageTx;
 import oims.dataBase.DataBaseManager;
-import oims.dataBase.tables.StackTable;
-import oims.support.util.CommonUnit;
-import oims.support.util.UnitQuantity;
 import oims.systemManagement.SystemManager;
+import oims.stackManagement.StackManager;
 /**
  *
  * @author ezouyyi
  */
-public class WareHouseManager implements oims.systemManagement.Client{
+public class WareHouseManager implements oims.systemManagement.Client, WarehousePageTx{
     Map<Integer, String> wareHouses_;
     WareHouseTable  itsWareHouseTable_;
-    RawMaterialTable itsRawMaterialTable_;
-    StackTable       itsStackTable_;
     SystemManager    itsSysManager_;
-   
+    StackManager    itsStackManager_;
     public WareHouseManager(SystemManager sm, DataBaseManager dbm)
     {
         wareHouses_ = Maps.newHashMap();
         itsSysManager_ = sm;
-        itsStackTable_ = new StackTable(dbm);
         itsWareHouseTable_ = new WareHouseTable(dbm);
-        itsRawMaterialTable_ = new RawMaterialTable(dbm);
     }
     
     @Override
@@ -44,12 +37,7 @@ public class WareHouseManager implements oims.systemManagement.Client{
         itsSysManager_ = sysManager;
     }
     
-    public Boolean registerNewWareHouse(String wareHouseName, String keeper,
-            String addr, String contact)
-    {
-        return Objects.equals(itsWareHouseTable_.NewEntry(wareHouseName, keeper, addr, contact), Boolean.TRUE); 
-    }
-    
+    /*
     public Boolean registerNewRawMaterial(String name, double normalPrice, CommonUnit priceUnit)
     {
         return Objects.equals(this.itsRawMaterialTable_.newEntry(normalPrice, priceUnit, name), Boolean.TRUE);
@@ -69,16 +57,27 @@ public class WareHouseManager implements oims.systemManagement.Client{
     
     public Boolean rawMaterialCheckOut(WareHouse wh, RawMaterial material, 
                         CommonUnit unit, Double quantity)
-    {return false;}
-    
+    {return false;}*/
+    @Override
     public Boolean deleteWareHouse(Integer warehouseId)
     {
         Boolean returnValue = Boolean.FALSE;
-        if(itsStackTable_.isStackEmptryForWarehouse(warehouseId))
+        if(itsStackManager_.isStackEmptryForWarehouse(warehouseId))
         {
             returnValue = itsWareHouseTable_.removeEntry(warehouseId);
             //itsStackTable_.removeStackRecordFromWarehouse(warehouseId);
         }
         return returnValue;
+    }
+
+    @Override
+    public String newWareHouse(String wareHouseName, Integer keeperId, String addr, String contact) {
+        itsWareHouseTable_.NewEntry(wareHouseName, keeperId.toString(), addr, contact); 
+        return "warehouseid";
+    }
+
+    @Override
+    public Boolean updateWareHouse(Integer wareHouseId, String wareHouseName, Integer keeperId, String addr) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

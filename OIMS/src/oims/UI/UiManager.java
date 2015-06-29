@@ -15,7 +15,7 @@ import oims.systemManagement.Client;
 import oims.systemManagement.SystemManager;
 import oims.UI.pages.initPage.Ui_initPage;
 import oims.UI.pages.mainMenu.Ui_mainMenuPage;
-import oims.UI.pages.warehouseManagerment.Ui_wareHouseMangement;
+import oims.UI.pages.StackManagerment.Ui_StackMangement;
 import oims.dataBase.Interfaces.dbStatus.DataBaseRx_dbStatus;
 import oims.dataBase.Interfaces.dbStatus.DataBaseTx_dbStatus;
 import oims.employeeManager.EmployeeManager;
@@ -155,7 +155,7 @@ public class UiManager   implements oims.systemManagement.Client,UiManagerRx, Da
                 }
                 else
                 {
-                    pageWanted = new Ui_wareHouseMangement(this);
+                    pageWanted = new Ui_StackMangement(this);
                     itsPages_.put(PageType.INIT_PAGE, pageWanted);
                 }
                 break;
