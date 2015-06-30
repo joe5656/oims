@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.Objects;
 import static oims.dataBase.Db_table.Table_Type.TABLE_TYPE_REMOTE;
+import oims.support.util.SqlResultInfo;
 
 /**
  *
@@ -50,14 +51,13 @@ public class DbmReqHandler{
         smallerThanEntry_ = entry;
     }
 
-    public Object execute()
+    public SqlResultInfo execute()
     {
-        Object result;
+        SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
         switch(reqType_)
         {
             case INSERT:
             {
-                result = false;
                 // type == insert, entry works as data to be inserted
                 switch(itsTable_.getTableType())
                 {
@@ -67,11 +67,15 @@ public class DbmReqHandler{
                         if(itsDbm_.remoteDatabaseOk())
                         {
                             result = itsDbm_.getRemoteDataBase().insertRecord(entry_, itsTable_);
-                            if((Boolean)result == true && 
+                            if(result.isSucceed() && 
                                     itsTable_.getTableType() == Db_table.Table_Type.TABLE_TYPE_MIRROR)
                             {
                                 this.itsDbm_.inforSycnerTableUpdated(itsTable_);
                             }
+                        }
+                        else
+                        {
+                            result.setErrInfo("远程数据库未连接，位置:DbmReqHandler.execute");
                         }
                         break;
                     }
@@ -80,16 +84,16 @@ public class DbmReqHandler{
                         Boolean insertLocal = Boolean.TRUE;
                         if(itsDbm_.remoteDatabaseOk())
                         {
-                            if(Objects.equals(itsDbm_.getRemoteDataBase().insertRecord(entry_, itsTable_), Boolean.TRUE))
+                            result = itsDbm_.getRemoteDataBase().insertRecord(entry_, itsTable_);
+                            if(result.isSucceed())
                             {
-                                result = Boolean.TRUE;
                                 insertLocal = Boolean.FALSE;
                             }
                         }
                         if(Objects.equals(insertLocal, Boolean.TRUE))
                         {
                             result = itsDbm_.getLocalDataBase().insertRecord(entry_, itsTable_);
-                            if((Boolean)result == true)
+                            if(result.isSucceed())
                             {
                                 this.itsDbm_.cachL2Table(itsTable_);
                             }
@@ -109,7 +113,6 @@ public class DbmReqHandler{
                 // be used as an equal clasus
                 // for instance: equalEntry_<"key", "value(not null)">
                 // then in sql "where key = value" will be added
-                result = null;
                 List<String> selectList = Lists.newArrayList();
                 if(entry_ != null)
                 {
@@ -125,6 +128,10 @@ public class DbmReqHandler{
                         {
                             return itsDbm_.getRemoteDataBase().select(selectList, equalEntry_, greatThanEntry_, smallerThanEntry_, itsTable_);
                         }
+                        else
+                        {
+                            result.setErrInfo("远程数据库未连接，位置:DbmReqHandler.execute");
+                        }
                         break;
                     }
                     case TABLE_TYPE_MIRROR:
@@ -134,7 +141,7 @@ public class DbmReqHandler{
                             result = itsDbm_.getLocalDataBase().select(selectList, equalEntry_, greatThanEntry_, smallerThanEntry_, itsTable_);
                         }
                         
-                        if(result == null && itsDbm_.remoteDatabaseOk())
+                        if(!result.isSucceed() && itsDbm_.remoteDatabaseOk())
                         {
                             result = itsDbm_.getRemoteDataBase().select(selectList, equalEntry_, greatThanEntry_, smallerThanEntry_, itsTable_);
                         }
@@ -147,16 +154,15 @@ public class DbmReqHandler{
             should not be updated initialtively it should be synced*/
             case UPDATE:
             {
-                result = false;
                 if(itsTable_.getTableType() == Db_table.Table_Type.TABLE_TYPE_2_LEVEL)
                 {
-                    // update for L2 table is forbiden
+                    result.setErrInfo("试图改写L2类型表");
                 }
                 else
                 {
                     result = itsDbm_.getRemoteDataBase().update(entry_, 
                             equalEntry_, greatThanEntry_, smallerThanEntry_, itsTable_);
-                    if((Boolean)result == true && 
+                    if(result.isSucceed()&& 
                             itsTable_.getTableType() == Db_table.Table_Type.TABLE_TYPE_MIRROR)
                     {
                         this.itsDbm_.inforSycnerTableUpdated(itsTable_);
@@ -168,7 +174,7 @@ public class DbmReqHandler{
             {
                 result = itsDbm_.getRemoteDataBase().delete(equalEntry_, greatThanEntry_, 
                         smallerThanEntry_, itsTable_);
-                if((Boolean)result == true && 
+                if(result.isSucceed() && 
                         itsTable_.getTableType() == Db_table.Table_Type.TABLE_TYPE_MIRROR)
                 {
                     this.itsDbm_.inforSycnerTableUpdated(itsTable_);

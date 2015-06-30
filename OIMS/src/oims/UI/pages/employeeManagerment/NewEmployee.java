@@ -35,7 +35,6 @@ public class NewEmployee extends javax.swing.JFrame {
     {
         Vector tmpV = new Vector();
         tmpV.addElement(createEmptyRow(tableHead));
-        tmpV.addElement(createEmptyRow(tableHead));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(tmpV,tableHead));
     }
     

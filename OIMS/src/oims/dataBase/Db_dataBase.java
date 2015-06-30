@@ -8,6 +8,7 @@ package oims.dataBase;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import oims.support.util.SqlResultInfo;
 
 /**
  *
@@ -25,11 +26,11 @@ public interface Db_dataBase {
     public Db_db createTable(Db_table tableToBeCreated);
     public void initDataBase(String user, String pw, String addr, String port);
     public Db_db selectDb(Db_db db);
-    public Boolean insertRecord(Db_table.TableEntry entry, Db_table table);
+    public SqlResultInfo insertRecord(Db_table.TableEntry entry, Db_table table);
     public Db_db currentDb();
-    public ResultSet select(List<String> selectList, Db_table.TableEntry entry_eq,Db_table.TableEntry entry_gr,Db_table.TableEntry entry_sml, Db_table table);
-    public Boolean  update(Db_table.TableEntry updateEntry, Db_table.TableEntry entry_eq,Db_table.TableEntry entry_gr,Db_table.TableEntry entry_sml, Db_table table);
-    public Boolean  delete(Db_table.TableEntry entry_eq,Db_table.TableEntry entry_gr,Db_table.TableEntry entry_sml, Db_table table);
+    public SqlResultInfo select(List<String> selectList, Db_table.TableEntry entry_eq,Db_table.TableEntry entry_gr,Db_table.TableEntry entry_sml, Db_table table);
+    public SqlResultInfo update(Db_table.TableEntry updateEntry, Db_table.TableEntry entry_eq,Db_table.TableEntry entry_gr,Db_table.TableEntry entry_sml, Db_table table);
+    public SqlResultInfo  delete(Db_table.TableEntry entry_eq,Db_table.TableEntry entry_gr,Db_table.TableEntry entry_sml, Db_table table);
     public void close();
     public void setDbm(DataBaseManager dbm);
     public Boolean testConnection();

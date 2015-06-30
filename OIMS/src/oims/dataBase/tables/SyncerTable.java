@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import oims.dataBase.DataBaseManager;
 import oims.dataBase.Db_table;
 import oims.support.util.Db_publicColumnAttribute;
+import oims.support.util.SqlResultInfo;
 
 /**
  *
@@ -37,9 +38,9 @@ public class SyncerTable  extends Db_table{
         super.registerColumn("tindex", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER, Boolean.TRUE, Boolean.TRUE,  Boolean.TRUE, null);
     }
     
-    public Boolean newEntry(String tableName)
+    public SqlResultInfo newEntry(String tableName)
     {
-        Boolean result = Boolean.FALSE;
+        SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
         
         TableEntry entryToBeInsert = generateTableEntry();
         Map<String, String> valueHolder = Maps.newHashMap();
@@ -48,10 +49,11 @@ public class SyncerTable  extends Db_table{
         
         if(entryToBeInsert.fillInEntryValues(valueHolder))
         {
-            if(super.insertRecord(entryToBeInsert))
-            {
-                result = Boolean.TRUE;
-            }
+            result = super.insertRecord(entryToBeInsert);
+        }
+        else
+        {
+            result.setErrInfo("插入库存信息错误，位置:WareHouseTable.NewEntry");
         }
         
         return result;        
@@ -72,7 +74,7 @@ public class SyncerTable  extends Db_table{
         if(updateEntry.fillInEntryValues(valueHolder) && 
                 equalEntry.fillInEntryValues(valueHolder_eq))
         {
-            result = super.update(updateEntry, equalEntry, null, null);
+            result = super.update(updateEntry, equalEntry, null, null).isSucceed();
         }
         return result;
     }

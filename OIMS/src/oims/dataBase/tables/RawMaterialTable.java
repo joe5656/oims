@@ -14,6 +14,7 @@ import oims.dataBase.Db_table;
 import oims.dataBase.DataBaseManager;
 import oims.support.util.CommonUnit;
 import oims.support.util.Db_publicColumnAttribute;
+import oims.support.util.SqlResultInfo;
 import oims.warehouseManagemnet.RawMaterial;
 
 /**
@@ -39,9 +40,9 @@ public class RawMaterialTable extends Db_table{
         super.registerColumn("materialId", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER, Boolean.TRUE, Boolean.TRUE,  Boolean.TRUE, null);
     }
     
-    public Boolean newEntry(Double normalPrice, CommonUnit pricingUnit, String name)
+    public SqlResultInfo newEntry(Double normalPrice, CommonUnit pricingUnit, String name)
     {
-        Boolean result = Boolean.FALSE;
+        SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
         TableEntry entryToBeInsert = generateTableEntry();
         Map<String, String> valueHolder = Maps.newHashMap();
         valueHolder.put("normalPrice", normalPrice.toString());
@@ -51,10 +52,11 @@ public class RawMaterialTable extends Db_table{
         
         if(entryToBeInsert.fillInEntryValues(valueHolder))
         {
-            if(super.insertRecord(entryToBeInsert))
-            {
-                result = Boolean.TRUE;
-            }
+            result = super.insertRecord(entryToBeInsert);
+        }
+        else
+        {
+            result.setErrInfo("插入库存信息错误，位置:ProductTable.NewEntry");
         }
         
         return result;        
@@ -83,7 +85,7 @@ public class RawMaterialTable extends Db_table{
         }
         where_eq.fillInEntryValues(valueHolder);
         
-        ResultSet returnSet = super.select(select, where_eq, null, null);
+        ResultSet returnSet = super.select(select, where_eq, null, null).getResultSet();
         
         if(returnSet.first())
         {
@@ -110,7 +112,7 @@ public class RawMaterialTable extends Db_table{
             where_eq.put("materialId", rm.getId().toString());
             where.fillInEntryValues(set_value);
             
-            returnValue = super.update(set, where, null, null);
+            returnValue = super.update(set, where, null, null).isSucceed();
             if(Objects.equals(Boolean.TRUE, returnValue))
             {
                 rm.setValid(Boolean.FALSE);
@@ -135,7 +137,7 @@ public class RawMaterialTable extends Db_table{
             where_eq.put("materialId", rm.getId().toString());
             where.fillInEntryValues(set_value);
             
-            returnValue = super.update(set, where, null, null);
+            returnValue = super.update(set, where, null, null).isSucceed();
             if(Objects.equals(Boolean.TRUE, returnValue))
             {
                 rm.setValid(Boolean.TRUE);

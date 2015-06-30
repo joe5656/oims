@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package oims.stackManagement;
+package oims.UI.pages.warehouseManagerment;
+
+import oims.support.util.SqlDataTable;
 
 /**
  *
- * @author ezouyyi
+ * @author freda
  */
-public class StackManager {
-    public Boolean isStackEmptryForWarehouse(Integer warehouseId){return Boolean.TRUE;}
+public interface WarehousePickerRx {
+    public void DataSelected(SqlDataTable dTable);
 }

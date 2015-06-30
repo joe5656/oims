@@ -15,6 +15,7 @@ import oims.dataBase.DataBaseManager;
 import oims.dataBase.Db_table;
 import oims.support.util.CommonUnit;
 import oims.support.util.Db_publicColumnAttribute;
+import oims.support.util.SqlResultInfo;
 import oims.support.util.UnitQuantity;
 
 /**
@@ -39,9 +40,9 @@ public class DoughTypeTable extends Db_table{
         super.registerColumn("index", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER, Boolean.TRUE, Boolean.TRUE,  Boolean.TRUE, null);
     }
     
-    public Boolean newEntry(String DoughName, String rawMaterial, UnitQuantity uq)
+    public SqlResultInfo newEntry(String DoughName, String rawMaterial, UnitQuantity uq)
     {
-        Boolean result = Boolean.FALSE;
+        SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
         TableEntry entryToBeInsert = generateTableEntry();
         Map<String, String> valueHolder = Maps.newHashMap();
         valueHolder.put("DoughName", DoughName);
@@ -51,12 +52,12 @@ public class DoughTypeTable extends Db_table{
         
         if(entryToBeInsert.fillInEntryValues(valueHolder))
         {
-            if(super.insertRecord(entryToBeInsert))
-            {
-                result = Boolean.TRUE;
-            }
+            result = super.insertRecord(entryToBeInsert);
         }
-        
+        else
+        {
+            result.setErrInfo("插入库存信息错误，位置:DoughTypeTable.NewEntry");
+        }
         return result;        
     }
     
@@ -70,7 +71,7 @@ public class DoughTypeTable extends Db_table{
         valueHolder.put("DoughName", "select");
         select.fillInEntryValues(valueHolder);
         
-        ResultSet result = super.select(select, null, null, null);
+        ResultSet result = super.select(select, null, null, null).getResultSet();
         if(result.first())
         {
             do
@@ -98,7 +99,7 @@ public class DoughTypeTable extends Db_table{
         eq.put("DoughName", doughName);
         where_eq.fillInEntryValues(eq);
         
-        ResultSet resultSet = super.select(select, where_eq, null, null);
+        ResultSet resultSet = super.select(select, where_eq, null, null).getResultSet();
         if(resultSet.first())
         {
             do

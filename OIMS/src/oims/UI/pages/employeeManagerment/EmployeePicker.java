@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package oims.UI.pages.warehouseManagerment;
+package oims.UI.pages.employeeManagerment;
 
-import java.util.Vector;
 import javax.swing.ListSelectionModel;
 import oims.support.util.SqlDataTable;
 import oims.support.util.UneditableTableModule;
@@ -14,28 +13,36 @@ import oims.support.util.UneditableTableModule;
  *
  * @author freda
  */
-public class WarehouseListPage extends javax.swing.JFrame {
-    private WarehousePickerRx pickerRx_;
+public class EmployeePicker extends javax.swing.JFrame {
     private SqlDataTable      itsSqlDTable_;
+    private EmployeePickerRx  pickerRx_;
     /**
-     * Creates new form WarehouseList
+     * Creates new form EmployeePicker
      */
-    public WarehouseListPage(SqlDataTable table, WarehousePickerRx pickerRx) {
+    public EmployeePicker(SqlDataTable table, EmployeePickerRx pickerRx) {
         initComponents();
-        
-        this.jTable1.setModel(new UneditableTableModule(table.getData(),table.getColumnNames()));
-        itsSqlDTable_ = table;
-        if(pickerRx != null)
+        if(table!=null)
         {
-            this.selectB.setEnabled(Boolean.TRUE);
-            pickerRx_ = pickerRx;
+            this.jTable1.setModel(new UneditableTableModule(table.getData(),table.getColumnNames()));
+            itsSqlDTable_ = table;
+            if(pickerRx != null)
+            {
+                this.selectB.setEnabled(Boolean.TRUE);
+                pickerRx_ = pickerRx;
+            }
+            else
+            {
+                this.selectB.setEnabled(Boolean.FALSE);
+            }
+            jTable1.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         }
         else
         {
+            jTable1.setVisible(Boolean.FALSE);
             this.selectB.setEnabled(Boolean.FALSE);
         }
-        jTable1.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    }
+        
+    }                                      
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -46,13 +53,13 @@ public class WarehouseListPage extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane2 = new javax.swing.JScrollPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         selectB = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("仓库信息"));
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("员工信息"));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -65,7 +72,7 @@ public class WarehouseListPage extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTable1);
 
         selectB.setText("选择");
         selectB.addActionListener(new java.awt.event.ActionListener() {
@@ -78,7 +85,7 @@ public class WarehouseListPage extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(selectB)
@@ -87,10 +94,10 @@ public class WarehouseListPage extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(selectB)
-                .addGap(0, 47, Short.MAX_VALUE))
+                .addGap(0, 15, Short.MAX_VALUE))
         );
 
         pack();
@@ -103,13 +110,13 @@ public class WarehouseListPage extends javax.swing.JFrame {
         {
             this.itsSqlDTable_.setRowSelected(row);
         }
-        this.pickerRx_.DataSelected(itsSqlDTable_);
+        this.pickerRx_.employeeDataSelected(itsSqlDTable_);
         this.dispose();
     }//GEN-LAST:event_selectBActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JButton selectB;
     // End of variables declaration//GEN-END:variables

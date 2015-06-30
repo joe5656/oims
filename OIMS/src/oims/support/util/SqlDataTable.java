@@ -5,10 +5,14 @@
  */
 package oims.support.util;
 
+import com.google.common.collect.Lists;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -18,32 +22,59 @@ public class SqlDataTable {
     private String     tableName_;
     private Vector     tableHead_;
     private Vector     data_;
+    private List<Integer> selectedRows_;
     
-    public SqlDataTable(ResultSet rs, String tableName) throws SQLException
+    public SqlDataTable(ResultSet rs, String tableName)
     {
         tableName_ = tableName;
         data_ = new Vector();
-        if(rs != null && rs.first())
-        {
-            ResultSetMetaData metaData = rs.getMetaData();
-            Integer loop = metaData.getColumnCount();
-            for(int i = 1; i <= loop; i++)
+        selectedRows_ = Lists.newArrayList();
+        tableHead_ = new Vector();
+        try {
+            if(rs != null && rs.first())
             {
-                tableHead_.add(metaData.getColumnName(i));
-            }
-            
-            rs.first();
-            do
-            {
-                Vector row = new Vector();
+                ResultSetMetaData metaData = rs.getMetaData();
+                Integer loop = metaData.getColumnCount();
                 for(int i = 1; i <= loop; i++)
                 {
-                    row.add(rs.getString(i));
+                    tableHead_.add(metaData.getColumnName(i));
                 }
-                data_.add(row);
-            }while(rs.next());
+                
+                rs.first();
+                do
+                {
+                    Vector row = new Vector();
+                    for(int i = 1; i <= loop; i++)
+                    {
+                        row.add(rs.getString(i));
+                    }
+                    data_.add(row);
+                }while(rs.next());
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SqlDataTable.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     public Vector getColumnNames(){return this.tableHead_;}
     public Vector getData(){return this.data_;}
+    public void   setRowSelected(Integer rowNum)
+    {
+        if(rowNum >= 0 && rowNum < this.data_.size())
+        {
+            this.selectedRows_.add(rowNum);
+        }
+    }
+    public void     setRowUnselected(Integer rowNum)
+    {
+        this.selectedRows_.remove(rowNum);
+    }
+    public Vector getSelectedRows()
+    {
+        Vector result = new Vector();
+        for(int i:this.selectedRows_)
+        {
+            result.add(data_.get(i));
+        }
+        return result;
+    }
 }

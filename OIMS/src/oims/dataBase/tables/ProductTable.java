@@ -5,12 +5,11 @@
  */
 package oims.dataBase.tables;
 import com.google.common.collect.Maps;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 import  oims.dataBase.Db_table;
 import oims.support.util.Db_publicColumnAttribute;
 import oims.dataBase.DataBaseManager;
+import oims.support.util.SqlResultInfo;
 /**
  *
  * @author ezouyyi
@@ -36,10 +35,10 @@ public class ProductTable extends Db_table{
         super.registerColumn("productId", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER, Boolean.TRUE, Boolean.TRUE,  Boolean.TRUE, null);
     }
     
-    public Boolean newEntry(String produtName, Double price, Double vipPrice, Integer catId,
+    public SqlResultInfo newEntry(String produtName, Double price, Double vipPrice, Integer catId,
                             String picUrl, String nameAbbr, Double cost)
     {
-        Boolean result = Boolean.FALSE;
+        SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
         
         TableEntry entryToBeInsert = generateTableEntry();
         Map<String, String> valueHolder = Maps.newHashMap();
@@ -54,10 +53,11 @@ public class ProductTable extends Db_table{
         
         if(entryToBeInsert.fillInEntryValues(valueHolder))
         {
-            if(super.insertRecord(entryToBeInsert))
-            {
-                result = Boolean.TRUE;
-            }
+            result = super.insertRecord(entryToBeInsert);
+        }
+        else
+        {
+            result.setErrInfo("插入库存信息错误，位置:ProductTable.NewEntry");
         }
         
         return result;        

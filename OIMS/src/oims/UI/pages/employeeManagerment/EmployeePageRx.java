@@ -10,5 +10,5 @@ package oims.UI.pages.employeeManagerment;
  * @author ezouyyi
  */
 public interface EmployeePageRx {
-    
+    public void showEmployeePicker(EmployeePickerRx rx);
 }

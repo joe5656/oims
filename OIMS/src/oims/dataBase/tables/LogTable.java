@@ -13,6 +13,7 @@ import oims.dataBase.DataBaseManager;
 import oims.dataBase.Db_table;
 import oims.support.util.CommonUnit;
 import oims.support.util.Db_publicColumnAttribute;
+import oims.support.util.SqlResultInfo;
 
 /**
  *
@@ -33,9 +34,9 @@ public class LogTable extends Db_table {
         super.registerColumn("logId", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER, Boolean.TRUE, Boolean.TRUE,  Boolean.TRUE, null);
     }
     
-    public Boolean newEntry(String cat, String content)
+    public SqlResultInfo newEntry(String cat, String content)
     {
-        Boolean result = Boolean.FALSE;
+        SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String dateTime = sdf.format(new Date(System.currentTimeMillis()));
         TableEntry entryToBeInsert = generateTableEntry();
@@ -46,10 +47,11 @@ public class LogTable extends Db_table {
         
         if(entryToBeInsert.fillInEntryValues(valueHolder))
         {
-            if(super.insertRecord(entryToBeInsert))
-            {
-                result = Boolean.TRUE;
-            }
+            result = super.insertRecord(entryToBeInsert);
+        }
+        else
+        {
+            result.setErrInfo("插入库存信息错误，位置:LogTable.NewEntry");
         }
         
         return result;        

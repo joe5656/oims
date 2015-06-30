@@ -16,6 +16,7 @@ import oims.systemManagement.SystemManager;
 import oims.UI.pages.initPage.Ui_initPage;
 import oims.UI.pages.mainMenu.Ui_mainMenuPage;
 import oims.UI.pages.StackManagerment.Ui_StackMangement;
+import oims.UI.pages.employeeManagerment.EmployeePageRx;
 import oims.UI.pages.warehouseManagerment.Ui_WarehousePage;
 import oims.UI.pages.warehouseManagerment.WarehousePageTx;
 import oims.dataBase.Interfaces.dbStatus.DataBaseRx_dbStatus;
@@ -171,8 +172,9 @@ public class UiManager   implements oims.systemManagement.Client,UiManagerRx, Da
                 else
                 {
                     WarehousePageTx tempWM = (WarehousePageTx)itsSysManager_.getClient(SystemManager.clientType.WAREHOUSE_MANAGER);
-                    if(tempWM == null){break;}
-                    pageWanted = new Ui_WarehousePage(this,tempWM);
+                    EmployeePageRx tempEmPg = (EmployeePageRx)itsPages_.get(PageType.EMPLOYEE_PAGE);
+                    if(tempWM == null || tempEmPg == null){break;}
+                    pageWanted = new Ui_WarehousePage(this,tempWM, tempEmPg);
                     itsPages_.put(PageType.INIT_PAGE, pageWanted);
                 }
                 break;

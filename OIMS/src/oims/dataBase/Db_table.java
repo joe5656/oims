@@ -16,6 +16,7 @@ import java.util.Vector;
 import oims.support.util.Db_publicColumnAttribute;
 import oims.support.util.Db_publicColumnAttribute.ATTRIBUTE_NAME;
 import oims.support.util.Db_tableColumn;
+import oims.support.util.SqlResultInfo;
 /**
  *
  * @author freda
@@ -117,12 +118,12 @@ public class Db_table {
                 if(loop < entryContent_.size())
                 {
                     clist += entry.getKey()+",";
-                    vlist += (entry.getValue() == ""?"null":"'"+entry.getValue()+"'")+",";
+                    vlist += (entry.getValue() == null?"null":"'"+entry.getValue()+"'")+",";
                 }
                 else
                 {
                     clist += entry.getKey();
-                    vlist += "'"+(entry.getValue() == ""?"null":entry.getValue())+"'";
+                    vlist += (entry.getValue() == null?"null":"'"+entry.getValue()+"'");
                 }
                 
                 
@@ -203,19 +204,20 @@ public class Db_table {
     
     public Table_Type getTableType(){return dbType_;}
     public String getName(){return tableName_;}
-    public Boolean insertRecord(TableEntry enryToBeInsert)
+    public SqlResultInfo insertRecord(TableEntry enryToBeInsert)
     {
+        SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
         DbmReqHandler handler = this.itsDataBaseManager_.insertReq(this);
         if(handler == null)
         {
-            return Boolean.FALSE;
+            result.setErrInfo("无法创建数据库连接请求，位置Db_table.insertRecord");
         }
         
         handler.fillInData(enryToBeInsert);
-        return (Boolean)handler.execute();
+        return handler.execute();
     }
     
-    public ResultSet select(TableEntry entry_select, TableEntry entry_equal, TableEntry entry_gr, TableEntry entry_sml)
+    public SqlResultInfo select(TableEntry entry_select, TableEntry entry_equal, TableEntry entry_gr, TableEntry entry_sml)
     {
         DbmReqHandler handler = this.itsDataBaseManager_.selectReq(this);
         if(handler == null)
@@ -226,10 +228,10 @@ public class Db_table {
         handler.fillInEqData(entry_equal);
         handler.fillInGrData(entry_gr);
         handler.fillInSmlData(entry_sml);
-        return (ResultSet)handler.execute();
+        return handler.execute();
     }
     
-    public Boolean update(TableEntry entry_update, TableEntry entry_equal, 
+    public SqlResultInfo update(TableEntry entry_update, TableEntry entry_equal, 
             TableEntry entry_gr, TableEntry entry_sml)
     {
          DbmReqHandler handler = this.itsDataBaseManager_.updateReq(this);
@@ -242,10 +244,10 @@ public class Db_table {
         handler.fillInEqData(entry_equal);
         handler.fillInGrData(entry_gr);
         handler.fillInSmlData(entry_sml);
-        return (Boolean)handler.execute();       
+        return handler.execute();       
     }
     
-    public Boolean delete(TableEntry entry_equal, 
+    public SqlResultInfo delete(TableEntry entry_equal, 
             TableEntry entry_gr, TableEntry entry_sml)
     {
          DbmReqHandler handler = this.itsDataBaseManager_.deleteReq(this);
@@ -257,7 +259,7 @@ public class Db_table {
         handler.fillInEqData(entry_equal);
         handler.fillInGrData(entry_gr);
         handler.fillInSmlData(entry_sml);
-        return (Boolean)handler.execute();          
+        return handler.execute();          
     }
     
     public Boolean registerToDbm()

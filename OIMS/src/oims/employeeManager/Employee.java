@@ -29,8 +29,12 @@ public class Employee {
         valid_ = Boolean.TRUE;
         name_ = "Doe John";
         depId_ = 1;
+        birthDate_ = "1900-1-1";
+        nationalId_ = "12345";
         contact_ = "0000000";
+        gender_ = "male";
         positionId_ = 0;
+        url_ = "NA";
     }
     
     public Integer getId(){return id_;}

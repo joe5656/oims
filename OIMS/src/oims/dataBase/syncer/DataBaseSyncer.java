@@ -70,7 +70,7 @@ public class DataBaseSyncer implements Runnable{
         Boolean result = Boolean.TRUE;
         for(String table:MirrorTables_)
         {
-            result = result && this.itsSyncerTable_.newEntry(table);
+            result = result && this.itsSyncerTable_.newEntry(table).isSucceed();
         }
         return result;
     }

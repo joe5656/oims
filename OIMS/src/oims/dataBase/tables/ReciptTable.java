@@ -49,7 +49,7 @@ public class ReciptTable extends Db_table {
         
         if(entryToBeInsert.fillInEntryValues(valueHolder))
         {
-            if(super.insertRecord(entryToBeInsert))
+            if(super.insertRecord(entryToBeInsert).isSucceed())
             {
                 result = Boolean.TRUE;
             }

@@ -26,6 +26,7 @@ import oims.dataBase.*;
 import oims.dataBase.Db_table.TableEntry;
 import oims.dataBase.tables.SyncerTable;
 import oims.support.util.Db_tableColumn;
+import oims.support.util.SqlResultInfo;
 /**
  *
  * @author freda
@@ -214,9 +215,9 @@ public class Db_dataBase_MYSQL implements Db_dataBase{
      * @return 
      */
     @Override
-    public Boolean insertRecord(Db_table.TableEntry entry, Db_table table)
+    public SqlResultInfo insertRecord(Db_table.TableEntry entry, Db_table table)
     {
-        Boolean result = Boolean.FALSE;
+        SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
         if(this.curConnection_ != null && entry != null && entry.containsNotNullEntry())
         {
             try{
@@ -224,13 +225,23 @@ public class Db_dataBase_MYSQL implements Db_dataBase{
                 String query = "insert into " + table.getName() + buildSql[0]
                         + " values " + buildSql[1] + " ;";
                 
-                try (Statement sm = curConnection_.createStatement()) {
-                    if(0 < sm.executeUpdate(query))
-                    {
-                        result = Boolean.TRUE;
-                    }
+                
+                Statement sm = curConnection_.createStatement();
+                sm.executeUpdate(query);
+                result.setSucceed();
+             
+            }catch(SQLException  e)
+            {
+                result.setErrInfo(e);
+                if(e.getClass() == SQLTimeoutException.class)
+                {
+                    this.CurConnectionFailed();
                 }
-            }catch(SQLException e){this.CurConnectionFailed();}
+            }
+        }
+        else
+        {
+            result.setErrInfo("数据库无可用连接");
         }
         return result;
     }
@@ -301,107 +312,132 @@ public class Db_dataBase_MYSQL implements Db_dataBase{
     public Db_db currentDb(){return curDb_;};
     
     @Override
-    public ResultSet  select(List<String> selectList, TableEntry entry_eq,
+    public SqlResultInfo  select(List<String> selectList, TableEntry entry_eq,
             TableEntry entry_gr, TableEntry entry_sml, Db_table table)
     {
+        SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
         ResultSet resultValue = null;
         if(this.curConnection_ != null && selectList != null)
         {
-            try{
-                String query = "select ";
-                if(selectList.isEmpty())
+            
+            String query = "select ";
+            if(selectList.isEmpty())
+            {
+                query = query + " count(*) ";
+            }
+            else
+            {
+                for(Integer i=0; i<selectList.size();i++)
                 {
-                    query = query + " count(*) ";
-                }
-                else
-                {
-                    for(Integer i=0; i<selectList.size();i++)
+                    if(i != 0)
                     {
-                        if(i != 0)
-                        {
-                            query = query + ", ";
-                        }
-                        query = query + selectList.get(i);
+                        query = query + ", ";
                     }
+                    query = query + selectList.get(i);
                 }
-                
-                // from
-                query = query + " from " + table.getName() + 
-                        this.generateQuery_where(entry_eq, entry_gr, entry_sml);
-                
-                try (Statement sm = curConnection_.createStatement()) {
-                    resultValue = sm.executeQuery(query);
+            }
+
+            // from
+            query = query + " from " + table.getName() + 
+                    this.generateQuery_where(entry_eq, entry_gr, entry_sml);
+            
+            try{    
+                Statement sm = curConnection_.createStatement();
+                resultValue = sm.executeQuery(query);
+                if(resultValue != null)
+                {
+                    result.setResultSet(resultValue);
+                    result.setSucceed();
                 }
-            }catch(SQLException e){this.CurConnectionFailed();}
+            }catch(SQLException  e)
+            {
+                result.setErrInfo(e);
+                if(e.getClass() == SQLTimeoutException.class)
+                {
+                    this.CurConnectionFailed();
+                }
+            }
         }
-        return resultValue;
+        else
+        {
+            result.setErrInfo("数据库无可用连接");
+        }
+        return result;
     };
     
     @Override
-    public Boolean  update(Db_table.TableEntry updateEntry, Db_table.TableEntry entry_eq,Db_table.TableEntry entry_gr,Db_table.TableEntry entry_sml, Db_table table)
+    public SqlResultInfo  update(Db_table.TableEntry updateEntry, Db_table.TableEntry entry_eq,Db_table.TableEntry entry_gr,Db_table.TableEntry entry_sml, Db_table table)
     {
-        Boolean resultValue = Boolean.FALSE;
+        SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
         if(this.curConnection_ != null && updateEntry != null && updateEntry.containsNotNullEntry())
         {
-            try{
-                String query = "update " + table.getName() + " set ";
-                Set<Entry<String,String>> entrySet = updateEntry.getEntrySet();
-                Iterator<Entry<String,String>> itr = entrySet.iterator();
-                Boolean firstLoop = Boolean.TRUE;
-                while(itr.hasNext())
+            
+            String query = "update " + table.getName() + " set ";
+            Set<Entry<String,String>> entrySet = updateEntry.getEntrySet();
+            Iterator<Entry<String,String>> itr = entrySet.iterator();
+            Boolean firstLoop = Boolean.TRUE;
+            while(itr.hasNext())
+            {
+                Entry<String,String> tmpEntry = itr.next();
+                if(tmpEntry.getValue() != null)
                 {
-                    Entry<String,String> tmpEntry = itr.next();
-                    if(tmpEntry.getValue() != null)
+                    if(Objects.equals(firstLoop, Boolean.TRUE))
                     {
-                        if(Objects.equals(firstLoop, Boolean.TRUE))
-                        {
-                            firstLoop = Boolean.FALSE;
-                            query = query + tmpEntry.getKey() + "=" +
-                                tmpEntry.getValue();
-                        }
-                        else
-                        {
-                            query = query + ", " + tmpEntry.getKey() + "=" +
-                                tmpEntry.getValue();
-                        }
+                        firstLoop = Boolean.FALSE;
+                        query = query + tmpEntry.getKey() + "=" +
+                            tmpEntry.getValue();
+                    }
+                    else
+                    {
+                        query = query + ", " + tmpEntry.getKey() + "=" +
+                            tmpEntry.getValue();
                     }
                 }
-                
-                // where
-                query += this.generateQuery_where(entry_eq, entry_gr, entry_sml);
-                
-                try (Statement sm = curConnection_.createStatement()) {
-                    if(0 <= sm.executeUpdate(query))
-                    {
-                        resultValue = Boolean.TRUE;
-                    }
+            }
+
+            // where
+            query += this.generateQuery_where(entry_eq, entry_gr, entry_sml);
+            try{
+                Statement sm = curConnection_.createStatement();
+                sm.executeUpdate(query);
+                result.setSucceed();
+            }catch(SQLException  e)
+            {
+                result.setErrInfo(e);
+                if(e.getClass() == SQLTimeoutException.class)
+                {
+                    this.CurConnectionFailed();
                 }
-            }catch(SQLException e){this.CurConnectionFailed();}
+            }
         }
-        return resultValue;
+        return result;
     };
     
     @Override
-    public Boolean delete(Db_table.TableEntry entry_eq,Db_table.TableEntry entry_gr,Db_table.TableEntry entry_sml, Db_table table)
+    public SqlResultInfo delete(Db_table.TableEntry entry_eq,Db_table.TableEntry entry_gr,Db_table.TableEntry entry_sml, Db_table table)
     {
-        Boolean resultValue = Boolean.FALSE;
+        SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
         if(this.curConnection_ != null && 
                 ((entry_gr != null && entry_gr.containsNotNullEntry()) ||
                 (entry_eq != null && entry_eq.containsNotNullEntry()) || 
                 (entry_sml != null && entry_sml.containsNotNullEntry())))
         {
-            try{
                 String query = "delete from " + table.getName() + " " + this.generateQuery_where(entry_eq, entry_gr, entry_sml);
                                
-                try (Statement sm = curConnection_.createStatement()) {
-                    if(0 <= sm.executeUpdate(query))
-                    {
-                        resultValue = Boolean.TRUE;
-                    }
+                try {
+                    Statement sm = curConnection_.createStatement();
+                    sm.executeUpdate(query);
+                    result.setSucceed();
+            }catch(SQLException  e)
+            {
+                result.setErrInfo(e);
+                if(e.getClass() == SQLTimeoutException.class)
+                {
+                    this.CurConnectionFailed();
                 }
-            }catch(SQLException e){this.CurConnectionFailed();}
+            }
         }
-        return resultValue;
+        return result;
     };
     
     public String generateQuery_where(Db_table.TableEntry entry_eq,Db_table.TableEntry entry_gr,Db_table.TableEntry entry_sml)
@@ -431,7 +467,7 @@ public class Db_dataBase_MYSQL implements Db_dataBase{
                     query = query + " and ";
                 }
 
-                query = query + entry.getKey() + "=" + entry.getValue();
+                query = query + entry.getKey() + "='" + entry.getValue()+"'";
             }
         }
 
@@ -456,7 +492,7 @@ public class Db_dataBase_MYSQL implements Db_dataBase{
                     query = query + " and ";
                 }
 
-                query = query + entry.getKey() + ">" + entry.getValue();
+                query = query + entry.getKey() + ">'" + entry.getValue()+"'";
             }
         }
 
@@ -481,7 +517,7 @@ public class Db_dataBase_MYSQL implements Db_dataBase{
                     query = query + " and ";
                 }
 
-                query = query + entry.getKey() + "<" + entry.getValue();
+                query = query + entry.getKey() + "<'" + entry.getValue()+"'";
             }
         }
         return query;

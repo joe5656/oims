@@ -12,6 +12,7 @@ import oims.UI.UiManager;
 import oims.UI.pages.BasePageClass;
 import oims.UI.pages.Page;
 import oims.employeeManager.Employee;
+import oims.support.util.SqlDataTable;
 
 /**
  *
@@ -123,8 +124,6 @@ public class Ui_employeeManagerment extends BasePageClass implements EmployeePag
 
         jLabel1.setText("员工号码");
 
-        jTextField1.setText("jTextField1");
-
         jButton3.setText("查询");
 
         jButton4.setText("清空查询结果");
@@ -203,7 +202,7 @@ public class Ui_employeeManagerment extends BasePageClass implements EmployeePag
     
     public Boolean newEmployee(Employee employees)
     {
-        return this.itsEmployeePageTx_.createNewEmploye(employees);
+        return this.itsEmployeePageTx_.createNewEmploye(employees).isSucceed();
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -221,4 +220,10 @@ public class Ui_employeeManagerment extends BasePageClass implements EmployeePag
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void showEmployeePicker(EmployeePickerRx rx) {
+        EmployeePicker picker = new EmployeePicker(this.itsEmployeePageTx_.queryGenerallEmployeeInfo(), rx);
+        picker.setVisible(Boolean.TRUE);
+    }
 }

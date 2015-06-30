@@ -17,6 +17,8 @@ import oims.dataBase.DataBaseManager;
 import oims.dataBase.Db_table;
 import oims.employeeManager.Employee;
 import oims.support.util.Db_publicColumnAttribute;
+import oims.support.util.SqlDataTable;
+import oims.support.util.SqlResultInfo;
 
 /**
  *
@@ -45,27 +47,33 @@ public class EmployeeTable extends Db_table{
     }
     
     
-    public Boolean newEntry(Employee employee)
+    public SqlResultInfo newEntry(Employee employee)
     {
         SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
-         Date date = new Date(); 
+        SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
+        Date date = new Date(); 
         try {
             date = timeFormat.parse(employee.getBirthDay());
         } catch (ParseException ex) {
             Logger.getLogger(EmployeeTable.class.getName()).log(Level.SEVERE, null, ex);
+            result.setErrInfo(ex.toString());
+            return result;
         }
         return this.newEntry(employee.getName(), employee.getNationId(), 
                 employee.getUrl(), employee.getContact(), date,
                 employee.getPositionId(), employee.getDepId(), employee.getGender());
     }
     
-    public Boolean newEntry(String name, String NationalId, String picurl, String contact,
+    public SqlResultInfo newEntry(String name, String NationalId, String picurl, String contact,
                             Date birthDate, Integer posi,
                             Integer deptId, String gender)
     {
-        Boolean result = Boolean.FALSE;
+        SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
         if(!"male".equals(gender) && !"female".equals(gender))
-        {return result;}
+        {
+            result.setErrInfo("员工信息不合法，性别请填写“男/女”");
+            return result;
+        }
         
         SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
         String enroll = timeFormat.format(new Date(System.currentTimeMillis()));
@@ -85,16 +93,17 @@ public class EmployeeTable extends Db_table{
         
         if(entryToBeInsert.fillInEntryValues(valueHolder))
         {
-            if(super.insertRecord(entryToBeInsert))
-            {
-                result = Boolean.TRUE;
-            }
+            result = super.insertRecord(entryToBeInsert);
+        }
+        else
+        {
+            result.setErrInfo("数据库连接请求失败，位置: EmployeeTable.newEntry");
         }
         
         return result;        
     }
     
-    private String EnToCh(String en)
+    static private String EnToCh(String en)
     {
         switch(en)
         {
@@ -164,4 +173,37 @@ public class EmployeeTable extends Db_table{
             col.setElementAt(EnToCh((String)col.elementAt(i)), i);
         }
     }
+    
+    public SqlResultInfo queryAllEmployeeGeneralInfo()
+    {
+        SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
+        TableEntry select = generateTableEntry();
+        Map<String, String> valueHolder = Maps.newHashMap();
+        valueHolder.put("EmployeeId", "select");
+        valueHolder.put("gender", "select");
+        valueHolder.put("valid", "1");
+        valueHolder.put("contact", "select");
+        valueHolder.put("name", "select");
+        
+        TableEntry eq = generateTableEntry();
+        Map<String, String> valueHoldereq = Maps.newHashMap();
+        valueHoldereq.put("valid", "1");
+        
+        if(select.fillInEntryValues(valueHolder)
+                && eq.fillInEntryValues(valueHoldereq))
+        {
+            result = super.select(select, eq, null, null);
+        }
+        else
+        {
+            result.setErrInfo("数据库连接请求失败，位置: EmployeeTable.newEntry");
+        }
+        
+        return result;        
+    }
+    
+    static public String getPrimaryKeyColNameInCh(){return EnToCh("EmployeeId");} 
+    static public String getPrimaryKeyColNameInEng(){return "EmployeeId";}
+    static public String getEmployeeNameColNameInCh(){return EnToCh("name");} 
+    static public String getEmployeeNameColNameInEng(){return "name";}
 }

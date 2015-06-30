@@ -13,6 +13,7 @@ import oims.dataBase.DataBaseManager;
 import oims.systemManagement.SystemManager;
 import oims.stackManagement.StackManager;
 import oims.support.util.SqlDataTable;
+import oims.support.util.SqlResultInfo;
 /**
  *
  * @author ezouyyi
@@ -23,10 +24,11 @@ public class WareHouseManager implements oims.systemManagement.Client, Warehouse
     private SystemManager    itsSysManager_;
     private StackManager    itsStackManager_;
     private WarehousePageRx itsWarehousePageRx_;
-    public WareHouseManager(DataBaseManager dbm)
+    public WareHouseManager(DataBaseManager dbm, StackManager stackM)
     {
         wareHouses_ = Maps.newHashMap();
         itsWareHouseTable_ = new WareHouseTable(dbm);
+        itsStackManager_ = stackM;
     }
     
     @Override
@@ -92,21 +94,23 @@ public class WareHouseManager implements oims.systemManagement.Client, Warehouse
                         CommonUnit unit, Double quantity)
     {return false;}*/
     @Override
-    public Boolean deleteWareHouse(Integer warehouseId)
+    public SqlResultInfo deleteWareHouse(Integer warehouseId)
     {
-        Boolean returnValue = Boolean.FALSE;
+        SqlResultInfo returnValue = new SqlResultInfo(Boolean.FALSE);
         if(itsStackManager_.isStackEmptryForWarehouse(warehouseId))
         {
             returnValue = itsWareHouseTable_.removeEntry(warehouseId);
-            //itsStackTable_.removeStackRecordFromWarehouse(warehouseId);
+        }
+        else
+        {
+            returnValue.setErrInfo("仓库库存不为空");
         }
         return returnValue;
     }
 
     @Override
-    public String newWareHouse(String wareHouseName, Integer keeperId, String addr, String contact) {
-        itsWareHouseTable_.NewEntry(wareHouseName, keeperId.toString(), addr, contact); 
-        return "warehouseid";
+    public SqlResultInfo newWareHouse(String wareHouseName, Integer keeperId, String addr, String contact) {
+        return itsWareHouseTable_.NewEntry(wareHouseName, keeperId.toString(), addr, contact); 
     }
 
     @Override
@@ -119,6 +123,9 @@ public class WareHouseManager implements oims.systemManagement.Client, Warehouse
 
     @Override
     public SqlDataTable queryAllWarehouseInfo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        SqlResultInfo rs = this.itsWareHouseTable_.query(null, null, null, null, null);
+        SqlDataTable  dTable = new SqlDataTable(rs.getResultSet(),this.itsWareHouseTable_.getName());
+        this.itsWareHouseTable_.translateColumnName(dTable.getColumnNames());
+        return dTable;
     }
 }

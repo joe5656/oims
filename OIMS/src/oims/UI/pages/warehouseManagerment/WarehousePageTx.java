@@ -6,16 +6,17 @@
 package oims.UI.pages.warehouseManagerment;
 
 import oims.support.util.SqlDataTable;
+import oims.support.util.SqlResultInfo;
 
 /**
  *
  * @author ezouyyi
  */
 public interface WarehousePageTx {
-    public String newWareHouse(String wareHouseName, Integer keeperId, String addr, String contact);
+    public SqlResultInfo newWareHouse(String wareHouseName, Integer keeperId, String addr, String contact);
     public Boolean updateWareHouse(Integer wareHouseId, String wareHouseName, Integer keeperId,
             String addr);
-    public Boolean deleteWareHouse(Integer wareHouseId);
+    public SqlResultInfo deleteWareHouse(Integer wareHouseId);
     public void    setRx(WarehousePageRx rx);
     public SqlDataTable queryAllWarehouseInfo();
 }

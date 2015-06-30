@@ -54,7 +54,7 @@ public class StackTable extends Db_table{
         whereClause_gr.put("storageQuantity", "0");
         entry_gr.fillInEntryValues(whereClause_gr);
         
-        ResultSet queryResult = super.select(null, entry_equal, entry_gr, null);
+        ResultSet queryResult = super.select(null, entry_equal, entry_gr, null).getResultSet();
         
         try {
             queryResult.first();
@@ -82,7 +82,7 @@ public class StackTable extends Db_table{
         whereClause_equal.put("materialId", rawMaterialId.toString());
         entry_equal.fillInEntryValues(whereClause_equal);
         
-        ResultSet queryResult = super.select(entry_select, entry_equal, null, null);
+        ResultSet queryResult = super.select(entry_select, entry_equal, null, null).getResultSet();
         try {
             if(queryResult.first())
             {
@@ -118,7 +118,7 @@ public class StackTable extends Db_table{
             TableEntry entry_eq = super.generateTableEntry();
             entry_eq.fillInEntryValues(prepare);
 
-            returnValue = super.update(entry_update, entry_eq, null, null);
+            returnValue = super.update(entry_update, entry_eq, null, null).isSucceed();
         }
         else
         {
@@ -132,7 +132,7 @@ public class StackTable extends Db_table{
 
             TableEntry entryToBeInserted = super.generateTableEntry();
             entryToBeInserted.fillInEntryValues(prepare);
-            returnValue = super.insertRecord(entryToBeInserted);
+            returnValue = super.insertRecord(entryToBeInserted).isSucceed();
         }
         
         return returnValue;
@@ -159,7 +159,7 @@ public class StackTable extends Db_table{
             TableEntry entry_eq = super.generateTableEntry();
             entry_eq.fillInEntryValues(prepare);
 
-            returnValue = super.update(entry_update, entry_eq, null, null);            
+            returnValue = super.update(entry_update, entry_eq, null, null).isSucceed();            
         }
         return returnValue;
     }

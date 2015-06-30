@@ -10,6 +10,8 @@ import oims.UI.pages.employeeManagerment.EmployeePageRx;
 import oims.UI.pages.employeeManagerment.EmployeePageTx;
 import oims.dataBase.DataBaseManager;
 import oims.dataBase.tables.EmployeeTable;
+import oims.support.util.SqlDataTable;
+import oims.support.util.SqlResultInfo;
 import oims.systemManagement.SystemManager;
 
 /**
@@ -25,7 +27,7 @@ public class EmployeeManager implements oims.systemManagement.Client,EmployeePag
         itsEmployeeTable_ = new EmployeeTable(dbm);
     }
     
-    public Boolean createNewEmployee(Employee employee)
+    public SqlResultInfo createNewEmployee(Employee employee)
     {
         return this.itsEmployeeTable_.newEntry(employee);
     }
@@ -73,10 +75,10 @@ public class EmployeeManager implements oims.systemManagement.Client,EmployeePag
     public void setRx(EmployeePageRx rx) {itsPageRx_ = rx;}
 
     @Override
-    public Boolean createNewEmploye(Employee employee) {return this.itsEmployeeTable_.newEntry(employee);}
+    public SqlResultInfo createNewEmploye(Employee employee) {return this.itsEmployeeTable_.newEntry(employee);}
 
     @Override
-    public Boolean changeEmployeeInformation(Employee employee) {
+    public SqlResultInfo changeEmployeeInformation(Employee employee) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -90,5 +92,16 @@ public class EmployeeManager implements oims.systemManagement.Client,EmployeePag
         Vector returnVector = this.itsEmployeeTable_.getColumns();
         this.itsEmployeeTable_.translateColumnName(returnVector);
         return returnVector;
+    }
+
+    @Override
+    public SqlDataTable queryGenerallEmployeeInfo() {
+        SqlResultInfo rs = this.itsEmployeeTable_.queryAllEmployeeGeneralInfo();
+        SqlDataTable dTable = null;
+        if(rs.isSucceed())
+        {
+            dTable = new SqlDataTable(rs.getResultSet(),EmployeeTable.getDerivedTableName());
+        }
+        return dTable;
     }
 }

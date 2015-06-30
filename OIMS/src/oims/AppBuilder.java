@@ -10,6 +10,7 @@ import oims.UI.UiManager;
 import oims.dataBase.DataBaseManager;
 import oims.employeeManager.EmployeeManager;
 import oims.loggingManagement.LoggingManager;
+import oims.stackManagement.StackManager;
 import oims.systemManagement.SystemManager;
 import oims.ticketSystem.TicketManager;
 import oims.warehouseManagemnet.WareHouseManager;
@@ -26,6 +27,7 @@ public class AppBuilder {
     UiManager        itsUiManager_;
     LoggingManager   itsLogManager_;
     EmployeeManager  itsEmployeeManger_;
+    StackManager     itsStackManager_;
     public AppBuilder()
     {
         itsSystemManager_ = new SystemManager();
@@ -33,7 +35,8 @@ public class AppBuilder {
         itsUiManager_ = new UiManager(itsDataBaseManager_);
         itsUiManager_.showStartingPage();
         itsEmployeeManger_ = new EmployeeManager(itsDataBaseManager_);
-        itsWareHouseManager_ = new WareHouseManager(itsDataBaseManager_);
+        itsStackManager_   = new StackManager();
+        itsWareHouseManager_ = new WareHouseManager(itsDataBaseManager_,itsStackManager_);
         //itsTicketManager_ = new TicketManager(itsSystemManager_, itsDataBaseManager_);
         //itsWareHouseManager_ = new WareHouseManager(itsSystemManager_, itsDataBaseManager_);
         //itsLogManager_ = new LoggingManager(itsDataBaseManager_);

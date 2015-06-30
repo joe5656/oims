@@ -62,7 +62,7 @@ public class TicketTable extends Db_table {
         valueHolder.put("status", status);
         if(entryToBeInsert.fillInEntryValues(valueHolder))
         {
-            if(super.insertRecord(entryToBeInsert))
+            if(super.insertRecord(entryToBeInsert).isSucceed())
             {
                 result = Boolean.TRUE;
             }
@@ -89,7 +89,7 @@ public class TicketTable extends Db_table {
         eq.put("ticketId", ticketId.toString());
         wehre_eq.fillInEntryValues(eq);
         
-        return super.update(entryToBeUpdate, wehre_eq, null, null);
+        return super.update(entryToBeUpdate, wehre_eq, null, null).isSucceed();
     }
     
     public void serializeTicketInstanceByResultSet(ResultSet rs, Ticket t) throws SQLException
@@ -130,7 +130,7 @@ public class TicketTable extends Db_table {
         eq.put("ticketId", t.getId().toString());
         wehre_eq.fillInEntryValues(eq);
         
-        ResultSet rs = super.select(entryToBeSelect, wehre_eq, null, null);
+        ResultSet rs = super.select(entryToBeSelect, wehre_eq, null, null).getResultSet();
         if(rs.first())
         {
             t.setId(rs.getInt("ticketId"));
@@ -173,7 +173,7 @@ public class TicketTable extends Db_table {
         eq.put("currentOwnerName", owner.getName());
         wehre_eq.fillInEntryValues(eq);
         
-        return super.select(entryToBeSelect, wehre_eq, null, null);
+        return super.select(entryToBeSelect, wehre_eq, null, null).getResultSet();
     }
     
     public ResultSet lookupByTicketId(Integer ticketId)
@@ -198,6 +198,6 @@ public class TicketTable extends Db_table {
         eq.put("ticketId", ticketId.toString());
         wehre_eq.fillInEntryValues(eq);
         
-        return super.select(entryToBeSelect, wehre_eq, null, null);
+        return super.select(entryToBeSelect, wehre_eq, null, null).getResultSet();
     }
 }

@@ -55,7 +55,7 @@ public class ProducingPlanTable extends Db_table{
         eq.put("PlanDate", timeFormat.format(date));
         where.fillInEntryValues(valueHolder);
         
-        ResultSet result = super.select(select, where, null, null);
+        ResultSet result = super.select(select, where, null, null).getResultSet();
         if(result.first())
         {
             do
@@ -80,7 +80,7 @@ public class ProducingPlanTable extends Db_table{
             valueHolder.put("quantity", entry.getValue().toString());
             valueHolder.put("PlanDate", timeFormat.format(planDate));
             entryToBeInsert.fillInEntryValues(valueHolder);
-            result |= super.insertRecord(entryToBeInsert);
+            result |= super.insertRecord(entryToBeInsert).isSucceed();
         }
         return result;
     }
@@ -109,11 +109,11 @@ public class ProducingPlanTable extends Db_table{
             where_eq.fillInEntryValues(valueHolder);
             if(delete)
             {
-                result |= super.delete(null, where_eq, null);
+                result |= super.delete(null, where_eq, null).isSucceed();
             }
             else
             {
-                result |= super.update(entryToBeInsert, where_eq, null, null);
+                result |= super.update(entryToBeInsert, where_eq, null, null).isSucceed();
             }
         }
         return result;

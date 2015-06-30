@@ -5,13 +5,18 @@
  */
 package oims.dataBase.tables;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 import oims.dataBase.DataBaseManager;
 import oims.dataBase.Db_table;
 import oims.support.util.Db_publicColumnAttribute;
+import oims.support.util.SqlDataTable;
+import oims.support.util.SqlResultInfo;
 import oims.warehouseManagemnet.WareHouse;
 
 /**
@@ -36,10 +41,37 @@ public class WareHouseTable extends Db_table{
         super.registerColumn("wareHouseId", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER, Boolean.TRUE, Boolean.TRUE,  Boolean.TRUE, null);
     }      
     
-    public Boolean NewEntry(String wareHouseName, String keeper,
+    public SqlResultInfo query(String warehouseId, String keeper, String addr, 
+            String contact, String warehouseName)
+    {
+        SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
+        TableEntry selectEntry = generateTableEntry();
+        Map<String, String> valueHolderSel = Maps.newHashMap();
+        valueHolderSel.put("wareHouseId", "select");
+        valueHolderSel.put("wareHouseName", "select");
+        valueHolderSel.put("keeperEmployeeId", "select");
+        valueHolderSel.put("addr", "select");
+        valueHolderSel.put("contact", "select");
+        selectEntry.fillInEntryValues(valueHolderSel);
+        
+        TableEntry Entry_eq = generateTableEntry();
+        Map<String, String> valueHoldereq = Maps.newHashMap();
+        valueHoldereq.put("wareHouseId", warehouseId);
+        valueHoldereq.put("wareHouseName", warehouseName);
+        valueHoldereq.put("keeperEmployeeId", keeper);
+        valueHoldereq.put("addr", addr);
+        valueHoldereq.put("contact", contact);
+        Entry_eq.fillInEntryValues(valueHoldereq);
+        
+        result = super.select(selectEntry, Entry_eq, null, null);
+        
+        return result;
+    }
+    
+    public SqlResultInfo NewEntry(String wareHouseName, String keeper,
             String addr, String contact)
     {
-        Boolean result = Boolean.FALSE;
+        SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
         TableEntry entryToBeInsert = generateTableEntry();
         Map<String, String> valueHolder = Maps.newHashMap();
         valueHolder.put("wareHouseName", wareHouseName);
@@ -48,19 +80,33 @@ public class WareHouseTable extends Db_table{
         valueHolder.put("contact", contact);
         if(entryToBeInsert.fillInEntryValues(valueHolder))
         {
-            if(super.insertRecord(entryToBeInsert))
-            {
-                result = Boolean.TRUE;
-            }
+            result = super.insertRecord(entryToBeInsert);
+        }
+        else
+        {
+            result.setErrInfo("插入库存信息错误，位置:WareHouseTable.NewEntry");
         }
         
         return result;
     }
     
-    public Boolean removeEntry(Integer warehouseId)
+    public SqlResultInfo removeEntry(Integer warehouseId)
     {
+        SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
+        TableEntry eq = generateTableEntry();
+        Map<String, String> valueHolder = Maps.newHashMap();
+        valueHolder.put("wareHouseId", warehouseId.toString());
+        if(eq.fillInEntryValues(valueHolder))
+        {
+            result = super.delete(eq, null, null);
+        }
+        else
+        {
+            result.setErrInfo("插入库存信息错误，位置:WareHouseTable.NewEntry");
+        }
         
-        return Boolean.FALSE;
+        
+        return result;
     }
     
     public void serializeWareHouseInstance(WareHouse wh) throws SQLException
@@ -86,7 +132,7 @@ public class WareHouseTable extends Db_table{
         }
         where_eq.fillInEntryValues(valueHolder);
         
-        ResultSet returnSet = super.select(select, where_eq, null, null);
+        ResultSet returnSet = super.select(select, where_eq, null, null).getResultSet();
         
         if(returnSet.first())
         {
@@ -98,5 +144,53 @@ public class WareHouseTable extends Db_table{
             wh.setSyncd();
         }
     }
+    static private String EnToCh(String en)
+    {
+        switch(en)
+        {
+            case "WareHouse":
+            {
+                return "仓库信息表";
+            }
+            case "wareHouseId":
+            {
+                return "仓库编码";
+            }       
+            case "addr":
+            {
+                return "地址";
+            }       
+            case "keeperEmployeeId":
+            {
+                return "管理员号码";
+            }   
+            case "wareHouseName":
+            {
+                return "仓库名称";
+            }   
+            case "contact":
+            {
+                return "仓库电话";
+            }   
+            default:
+            {
+                return "错误";
+            }
+        }
+    }
+    @Override
+    public void translateColumnName(Vector col)
+    {
+        for(int i = 0; i<col.size();i++)
+        {
+            col.setElementAt(EnToCh((String)col.elementAt(i)), i);
+        }
+    }
     
+    static public String getAddreessColName(){return "addr";}
+    static public String getAddreessColNameInCh(){return EnToCh("addr");}
+    static public String getWarehouseNameColName(){return "wareHouseName";}
+    static public String getWarehouseNameColNameInCh(){return EnToCh("wareHouseName");}   
+    static public String getPrimaryKeyColName(){return "wareHouseId";}
+    static public String getPrimaryKeyColNameInCh(){return EnToCh("wareHouseId");}   
 }
