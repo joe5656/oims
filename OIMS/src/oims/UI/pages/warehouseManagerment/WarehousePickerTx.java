@@ -11,6 +11,6 @@ import oims.support.util.SqlDataTable;
  *
  * @author freda
  */
-public interface WarehousePickerRx {
+public interface WarehousePickerTx {
     public void DataSelected(SqlDataTable dTable);
 }

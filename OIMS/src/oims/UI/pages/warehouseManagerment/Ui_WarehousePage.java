@@ -10,7 +10,7 @@ import oims.UI.UiManager;
 import oims.UI.pages.BasePageClass;
 import oims.UI.pages.Page;
 import oims.UI.pages.employeeManagerment.EmployeePageRx;
-import oims.UI.pages.employeeManagerment.EmployeePickerRx;
+import oims.UI.pages.employeeManagerment.EmployeePickerTx;
 import oims.dataBase.tables.EmployeeTable;
 import oims.dataBase.tables.WareHouseTable;
 import oims.support.util.SqlDataTable;
@@ -20,7 +20,7 @@ import oims.support.util.SqlResultInfo;
  *
  * @author ezouyyi
  */
-public class Ui_WarehousePage extends BasePageClass implements WarehousePageRx,WarehousePickerRx,EmployeePickerRx{
+public class Ui_WarehousePage extends BasePageClass implements WarehousePageRx,WarehousePickerTx,EmployeePickerTx{
     private WarehousePageTx   itsWarehousePageTx_;
     private SqlDataTable      tempTable_;
     private String            tempKey_;
@@ -434,6 +434,8 @@ public class Ui_WarehousePage extends BasePageClass implements WarehousePageRx,W
             this.toggleCreateArea(Boolean.FALSE);
             this.clearCreateArea();
             this.createStatus.setText("创建成功，可以继续创建或返回");
+            this.tempEmployeeKey_= null;
+            itsEmloyeeTmpDTable_ = null;
         }
         else
         {
@@ -565,8 +567,8 @@ public class Ui_WarehousePage extends BasePageClass implements WarehousePageRx,W
         }
     }
 
-    @Override
-    public void showWarehousePicker(WarehousePickerRx rx) {
+    
+    private void showWarehousePicker(WarehousePickerTx rx) {
         WarehouseListPage page = new WarehouseListPage(this.itsWarehousePageTx_.queryAllWarehouseInfo(), rx);
         page.setVisible(Boolean.TRUE);
     }

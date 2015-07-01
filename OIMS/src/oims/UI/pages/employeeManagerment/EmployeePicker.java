@@ -15,20 +15,20 @@ import oims.support.util.UneditableTableModule;
  */
 public class EmployeePicker extends javax.swing.JFrame {
     private SqlDataTable      itsSqlDTable_;
-    private EmployeePickerRx  pickerRx_;
+    private EmployeePickerTx  pickerTx_;
     /**
      * Creates new form EmployeePicker
      */
-    public EmployeePicker(SqlDataTable table, EmployeePickerRx pickerRx) {
+    public EmployeePicker(SqlDataTable table, EmployeePickerTx pickerTx) {
         initComponents();
         if(table!=null)
         {
             this.jTable1.setModel(new UneditableTableModule(table.getData(),table.getColumnNames()));
             itsSqlDTable_ = table;
-            if(pickerRx != null)
+            if(pickerTx != null)
             {
                 this.selectB.setEnabled(Boolean.TRUE);
-                pickerRx_ = pickerRx;
+                pickerTx_ = pickerTx;
             }
             else
             {
@@ -110,7 +110,7 @@ public class EmployeePicker extends javax.swing.JFrame {
         {
             this.itsSqlDTable_.setRowSelected(row);
         }
-        this.pickerRx_.employeeDataSelected(itsSqlDTable_);
+        this.pickerTx_.employeeDataSelected(itsSqlDTable_);
         this.dispose();
     }//GEN-LAST:event_selectBActionPerformed
 

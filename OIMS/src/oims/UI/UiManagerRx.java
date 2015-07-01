@@ -6,6 +6,9 @@
 package oims.UI;
 
 import oims.UI.pages.Page;
+import oims.UI.pages.employeeManagerment.EmployeePickerTx;
+import oims.UI.pages.warehouseManagerment.WarehousePickerTx;
+import oims.support.util.SqlDataTable;
 
 /**
  *
@@ -22,4 +25,6 @@ public interface UiManagerRx {
     };
     public Page getPage(PageType pt);
     public void showPage(Integer pageId);
+    public void showEmployeePicker(SqlDataTable table, EmployeePickerTx tx);
+    public void showWarehousePicer(SqlDataTable table, WarehousePickerTx tx);
 }

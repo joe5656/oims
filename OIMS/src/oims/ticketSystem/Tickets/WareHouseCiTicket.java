@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import oims.dataBase.tables.TicketTable;
+import oims.dataBase.tables.CiCoTicketTable;
 import oims.employeeManager.Employee;
 import static oims.ticketSystem.Ticket.TicketType;
 import oims.support.util.UnitQuantity;
@@ -56,7 +56,7 @@ public class WareHouseCiTicket extends Ticket {
         public Boolean isCheckedIn(){return checkedIn_;}
     }
     
-    public WareHouseCiTicket(TicketTable table)
+    public WareHouseCiTicket(CiCoTicketTable table)
     {
         super(table, TicketType.WAREHOUSETICKET_CI);
         rawMaterialList_ = Maps.newHashMap();

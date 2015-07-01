@@ -7,8 +7,10 @@ package oims.warehouseManagemnet;
 import oims.dataBase.tables.WareHouseTable;
 import com.google.common.collect.Maps;
 import java.util.Map;
+import oims.UI.UiManager;
 import oims.UI.pages.warehouseManagerment.WarehousePageRx;
 import oims.UI.pages.warehouseManagerment.WarehousePageTx;
+import oims.UI.pages.warehouseManagerment.WarehousePickerTx;
 import oims.dataBase.DataBaseManager;
 import oims.systemManagement.SystemManager;
 import oims.stackManagement.StackManager;
@@ -127,5 +129,16 @@ public class WareHouseManager implements oims.systemManagement.Client, Warehouse
         SqlDataTable  dTable = new SqlDataTable(rs.getResultSet(),this.itsWareHouseTable_.getName());
         this.itsWareHouseTable_.translateColumnName(dTable.getColumnNames());
         return dTable;
+    }
+    
+    public void needWarehousePicker(WarehousePickerTx tx)
+    {
+        UiManager tempUiM = (UiManager)itsSysManager_.getClient(SystemManager.clientType.UI_MANAGER);
+        tempUiM.showWarehousePicer(this.queryAllWarehouseInfo(), tx);
+    }
+    
+    public Integer getKeeperId(Integer whId)
+    {
+        return 3;
     }
 }

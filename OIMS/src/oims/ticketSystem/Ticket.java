@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import oims.dataBase.tables.TicketTable;
+import oims.dataBase.tables.CiCoTicketTable;
 import oims.employeeManager.Employee;
 
 /**
@@ -19,7 +19,7 @@ import oims.employeeManager.Employee;
  */
 public class Ticket {
     protected Integer ticketId_;
-    protected String  ticketName_;
+    protected String  ticketTitle_;
     protected TicketType ticketType_;
     protected String     specifiedArea_;
     protected Integer    ownerId_;
@@ -27,11 +27,44 @@ public class Ticket {
     protected Integer    submitorId_;
     protected String     submitorName_;
     protected Boolean    syncd_;
-    protected TicketTable itsTable_;
+    protected CiCoTicketTable itsTable_;
     protected Boolean    needToUpdate_;
     protected String     history_;
     
-    public Ticket(TicketTable table, TicketType tt)
+    public Ticket(TicketType tt, Integer ticketId)
+    {
+        
+    }
+    
+    public Boolean verifyNextStep(CiTicketStatus nextStep)
+    {
+        Boolean canGo = Boolean.FALSE;
+        if(this.ticketType_ != TicketType.WAREHOUSETICKET_CI)
+        {
+            return canGo;
+        }
+        
+        canGo = true;
+        
+        return canGo;
+    }
+    
+    public Boolean verifyNextStep(CoTicketStatus nextStep)
+    {
+        Boolean canGo = Boolean.FALSE;
+        if(this.ticketType_ != TicketType.WAREHOUSETICKET_CO)
+        {
+            return canGo;
+        }
+        
+        canGo = true;
+        
+        return canGo;
+    }
+    
+    public CiTicketStatus getCurrentCiStep()
+    {return CiTicketStatus.CI_CANCLED;}
+    public Ticket(CiCoTicketTable table, TicketType tt)
     {
         needToUpdate_ = Boolean.FALSE;
         syncd_ = Boolean.FALSE;
@@ -44,8 +77,27 @@ public class Ticket {
         WAREHOUSETICKET_CO
     }
     
+    public enum CiTicketStatus
+    {
+        CI_NONE,
+        CI_SUBMITTED,
+        CI_PAYED,
+        CI_CHECKEDIN,
+        CI_CLOSE,
+        CI_CANCLED
+    }
+    
+    public enum CoTicketStatus
+    {
+        CO_NONE,
+        CO_SUMITTED,
+        CO_REQUESTSENT,
+        CO_CHECKEDOUT,
+        CO_CLOSE
+    }
+    
     public Integer getId(){return ticketId_;}
-    public String  getTicketName(){return ticketName_;}
+    public String  getTicketTitle(){return ticketTitle_;}
     public TicketType getTicketType(){return ticketType_;}
     public Integer getOwnerId(){return ownerId_;}
     public String  getOwnerName(){return ownerName_; }
@@ -57,7 +109,7 @@ public class Ticket {
     public String  getHist(){return history_;}
     
     public void  setId(Integer ticketId){ ticketId_ = ticketId;}
-    public void  setTicketName(String ticketName){ ticketName_ = ticketName;}
+    public void  setTicketTitle(String ticketTitle){ ticketTitle_ = ticketTitle;}
     public void  setTicketType(String ticketType)
     { 
         switch(ticketType)

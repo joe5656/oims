@@ -6,8 +6,10 @@
 package oims.employeeManager;
 
 import java.util.Vector;
+import oims.UI.UiManager;
 import oims.UI.pages.employeeManagerment.EmployeePageRx;
 import oims.UI.pages.employeeManagerment.EmployeePageTx;
+import oims.UI.pages.employeeManagerment.EmployeePickerTx;
 import oims.dataBase.DataBaseManager;
 import oims.dataBase.tables.EmployeeTable;
 import oims.support.util.SqlDataTable;
@@ -103,5 +105,16 @@ public class EmployeeManager implements oims.systemManagement.Client,EmployeePag
             dTable = new SqlDataTable(rs.getResultSet(),EmployeeTable.getDerivedTableName());
         }
         return dTable;
+    }
+    
+    public void needEmployeePicker(EmployeePickerTx tx)
+    {
+        UiManager tempUiM = (UiManager)itsSysManager_.getClient(SystemManager.clientType.UI_MANAGER);
+        tempUiM.showEmployeePicker(this.queryGenerallEmployeeInfo(), tx);
+    }
+    
+    public String getEmployeeName(Integer id)
+    {
+        return "na";
     }
 }

@@ -17,11 +17,16 @@ import oims.UI.pages.initPage.Ui_initPage;
 import oims.UI.pages.mainMenu.Ui_mainMenuPage;
 import oims.UI.pages.StackManagerment.Ui_StackMangement;
 import oims.UI.pages.employeeManagerment.EmployeePageRx;
+import oims.UI.pages.employeeManagerment.EmployeePicker;
+import oims.UI.pages.employeeManagerment.EmployeePickerTx;
 import oims.UI.pages.warehouseManagerment.Ui_WarehousePage;
+import oims.UI.pages.warehouseManagerment.WarehouseListPage;
 import oims.UI.pages.warehouseManagerment.WarehousePageTx;
+import oims.UI.pages.warehouseManagerment.WarehousePickerTx;
 import oims.dataBase.Interfaces.dbStatus.DataBaseRx_dbStatus;
 import oims.dataBase.Interfaces.dbStatus.DataBaseTx_dbStatus;
 import oims.employeeManager.EmployeeManager;
+import oims.support.util.SqlDataTable;
 /**
  *
  * @author ezouyyi
@@ -255,5 +260,18 @@ public class UiManager   implements oims.systemManagement.Client,UiManagerRx, Da
             Ui_mainMenuPage page = (Ui_mainMenuPage)itsPages_.get(PageType.MAIN_PAGE);
             page.toggleDbStatus(Boolean.TRUE, Boolean.FALSE);
         }
+    }
+
+    @Override
+    public void showEmployeePicker(SqlDataTable table, EmployeePickerTx tx) 
+    {
+        EmployeePicker page = new EmployeePicker(table, tx);
+        page.setVisible(true);
+    }
+
+    @Override
+    public void showWarehousePicer(SqlDataTable table, WarehousePickerTx rx) 
+    {
+        WarehouseListPage page = new WarehouseListPage(table, rx);
     }
 }

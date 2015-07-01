@@ -9,7 +9,7 @@ import com.google.common.collect.Maps;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import oims.dataBase.tables.TicketTable;
+import oims.dataBase.tables.CiCoTicketTable;
 import oims.employeeManager.Employee;
 import oims.support.util.UnitQuantity;
 import oims.ticketSystem.Ticket;
@@ -22,7 +22,7 @@ public class WareHouseCoTicket  extends Ticket {
     Map<Integer, groupedRMInfo> rawMaterialList_;
     Status      st_;
 
-    public WareHouseCoTicket(TicketTable table) {
+    public WareHouseCoTicket(CiCoTicketTable table) {
         super(table, TicketType.WAREHOUSETICKET_CO);
         rawMaterialList_ = Maps.newHashMap();
     }

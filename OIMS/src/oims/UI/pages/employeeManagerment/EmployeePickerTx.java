@@ -11,6 +11,6 @@ import oims.support.util.SqlDataTable;
  *
  * @author freda
  */
-public interface EmployeePickerRx {
+public interface EmployeePickerTx {
     public void employeeDataSelected(SqlDataTable rx);
 }

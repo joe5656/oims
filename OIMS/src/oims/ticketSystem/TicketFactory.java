@@ -5,7 +5,7 @@
  */
 package oims.ticketSystem;
 
-import oims.dataBase.tables.TicketTable;
+import oims.dataBase.tables.CiCoTicketTable;
 import static oims.ticketSystem.Ticket.TicketType;
 import oims.ticketSystem.Tickets.WareHouseCiTicket;
 import oims.ticketSystem.Tickets.WareHouseCoTicket;
@@ -15,9 +15,9 @@ import oims.ticketSystem.Tickets.WareHouseCoTicket;
  * @author ezouyyi
  */
 public class TicketFactory {
-    TicketTable itsTable_;
+    CiCoTicketTable itsTable_;
     
-    public TicketFactory(TicketTable table)
+    public TicketFactory(CiCoTicketTable table)
     {
         itsTable_ =  table;
     }

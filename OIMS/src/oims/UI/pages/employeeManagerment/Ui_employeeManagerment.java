@@ -222,7 +222,7 @@ public class Ui_employeeManagerment extends BasePageClass implements EmployeePag
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void showEmployeePicker(EmployeePickerRx rx) {
+    public void showEmployeePicker(EmployeePickerTx rx) {
         EmployeePicker picker = new EmployeePicker(this.itsEmployeePageTx_.queryGenerallEmployeeInfo(), rx);
         picker.setVisible(Boolean.TRUE);
     }

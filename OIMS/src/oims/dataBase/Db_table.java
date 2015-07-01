@@ -204,7 +204,7 @@ public class Db_table {
     
     public Table_Type getTableType(){return dbType_;}
     public String getName(){return tableName_;}
-    public SqlResultInfo insertRecord(TableEntry enryToBeInsert)
+    protected SqlResultInfo insertRecord(TableEntry enryToBeInsert)
     {
         SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
         DbmReqHandler handler = this.itsDataBaseManager_.insertReq(this);
@@ -217,7 +217,7 @@ public class Db_table {
         return handler.execute();
     }
     
-    public SqlResultInfo select(TableEntry entry_select, TableEntry entry_equal, TableEntry entry_gr, TableEntry entry_sml)
+    protected SqlResultInfo select(TableEntry entry_select, TableEntry entry_equal, TableEntry entry_gr, TableEntry entry_sml)
     {
         DbmReqHandler handler = this.itsDataBaseManager_.selectReq(this);
         if(handler == null)
@@ -231,7 +231,7 @@ public class Db_table {
         return handler.execute();
     }
     
-    public SqlResultInfo update(TableEntry entry_update, TableEntry entry_equal, 
+    protected SqlResultInfo update(TableEntry entry_update, TableEntry entry_equal, 
             TableEntry entry_gr, TableEntry entry_sml)
     {
          DbmReqHandler handler = this.itsDataBaseManager_.updateReq(this);
@@ -247,7 +247,7 @@ public class Db_table {
         return handler.execute();       
     }
     
-    public SqlResultInfo delete(TableEntry entry_equal, 
+    protected SqlResultInfo delete(TableEntry entry_equal, 
             TableEntry entry_gr, TableEntry entry_sml)
     {
          DbmReqHandler handler = this.itsDataBaseManager_.deleteReq(this);
