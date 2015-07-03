@@ -10,6 +10,7 @@ import oims.UI.UiManager;
 import oims.dataBase.DataBaseManager;
 import oims.employeeManager.EmployeeManager;
 import oims.loggingManagement.LoggingManager;
+import oims.rawMaterialManagement.RawMaterialManager;
 import oims.stackManagement.StackManager;
 import oims.systemManagement.SystemManager;
 import oims.ticketSystem.TicketManager;
@@ -28,6 +29,8 @@ public class AppBuilder {
     LoggingManager   itsLogManager_;
     EmployeeManager  itsEmployeeManger_;
     StackManager     itsStackManager_;
+    RawMaterialManager itsRawMManager_;
+    
     public AppBuilder()
     {
         itsSystemManager_ = new SystemManager();
@@ -37,6 +40,7 @@ public class AppBuilder {
         itsEmployeeManger_ = new EmployeeManager(itsDataBaseManager_);
         itsStackManager_   = new StackManager();
         itsWareHouseManager_ = new WareHouseManager(itsDataBaseManager_,itsStackManager_);
+        itsRawMManager_      = new RawMaterialManager(itsDataBaseManager_);
         //itsTicketManager_ = new TicketManager(itsSystemManager_, itsDataBaseManager_);
         //itsWareHouseManager_ = new WareHouseManager(itsSystemManager_, itsDataBaseManager_);
         //itsLogManager_ = new LoggingManager(itsDataBaseManager_);
@@ -45,6 +49,7 @@ public class AppBuilder {
         itsSystemManager_.registerClient(SystemManager.clientType.EMPLOYEE_MANAGER, itsEmployeeManger_);
         //itsSystemManager_.registerClient(SystemManager.clientType.TICKET_MANAGER, itsTicketManager_);
         itsSystemManager_.registerClient(SystemManager.clientType.WAREHOUSE_MANAGER,itsWareHouseManager_);
+        itsSystemManager_.registerClient(SystemManager.clientType.WAREHOUSE_MANAGER,itsRawMManager_);
     }
     public void run()
     {System.out.print("sys started");

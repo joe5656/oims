@@ -20,6 +20,7 @@ import oims.support.util.SqlDataTable;
 import oims.support.util.SqlResultInfo;
 import oims.support.util.UnitQuantity;
 import oims.systemManagement.SystemManager;
+import oims.ticketSystem.Ticket.CiTicketStatus;
 import oims.ticketSystem.Ticket.TicketType;
 import oims.warehouseManagemnet.WareHouseManager;
 
@@ -30,7 +31,6 @@ import oims.warehouseManagemnet.WareHouseManager;
 public class TicketManager implements oims.systemManagement.Client{
     CiCoTicketTable itsTicketTable_;
     SystemManager itsSystemManager_;
-    TicketFactory itsTicketFactory_;
     
     public enum TicketAction
     {
@@ -40,44 +40,7 @@ public class TicketManager implements oims.systemManagement.Client{
     
     public TicketManager(DataBaseManager dbm)
     {
-        itsTicketFactory_ = new TicketFactory(itsTicketTable_);
         itsTicketTable_ = new CiCoTicketTable(dbm);
-    }
-    
-    public Map<Integer, Ticket> ListTicket(TicketType tt, Employee owner)
-    {
-        ResultSet rs = itsTicketTable_.lookupByOwner(tt, owner);
-        Map<Integer, Ticket> result = Maps.newHashMap();
-        try {
-            if(rs.first())
-            {
-                do
-                {
-                    Ticket t = itsTicketFactory_.genTicket(tt);
-                    itsTicketTable_.serializeTicketInstanceByResultSet(rs, t);
-                    result.put(t.getId(), t);
-                }while(rs.next());
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(TicketManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return result;
-    }
-    
-    public Ticket ListTicket(TicketType tt, Integer ticketId)
-    {
-        Ticket result = null;
-        ResultSet rs = itsTicketTable_.lookupByTicketId(ticketId);
-        try {
-            if(rs.first())
-            {
-                result = itsTicketFactory_.genTicket(tt);
-                itsTicketTable_.serializeTicketInstanceByResultSet(rs, result);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(TicketManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return result;
     }
     
     public SqlResultInfo createTicket(Ticket.TicketType ticketType, Integer submitorId, String submitorName,
@@ -89,106 +52,179 @@ public class TicketManager implements oims.systemManagement.Client{
     }
 
     public SqlDataTable ticketQuery(Ticket.TicketType ticketType, Integer owner, 
-            Integer submitor, Boolean queryBySubmitor, Boolean queryByOwner, 
-            Ticket.CiTicketStatus ciStatus, Ticket.CoTicketStatus coStatus)
+            Integer submitor, Ticket.CiTicketStatus ciStatus, Ticket.CoTicketStatus coStatus)
     {
-        SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
-        result = this.itsTicketTable_.query();
+        SqlResultInfo result;
+        result = this.itsTicketTable_.query(ticketType, owner, submitor, ciStatus, coStatus);
         SqlDataTable dTable = new SqlDataTable(result.getResultSet(),this.itsTicketTable_.getName());
         return dTable;
     }
     
     public Ticket CiTicketGotoNextStep(Integer ticketId, TicketAction action)
     {
-        Ticket ticket = new Ticket(Ticket.TicketType.WAREHOUSETICKET_CI, ticketId);
+        Ticket ticket = new Ticket(ticketId);
         try {
             this.itsTicketTable_.serializeTicketInstance(ticket);
-            Ticket.CiTicketStatus nextStep = CiTicketNextStep(ticket, action);
-            if(ticket.verifyNextStep(nextStep))
+            if(ticket.getTicketType() == Ticket.TicketType.WAREHOUSETICKET_CI)
             {
-                switch(ticket.getCurrentCiStep())
+                Ticket.CiTicketStatus nextStep = Ticket.CiTicketNextStep(ticket.getCurrentCiStep(), action);
+                if(ticket.verifyNextStep(nextStep))
                 {
-                    case CI_SUBMITTED:
+                    switch(ticket.getCurrentCiStep())
                     {
-                        if(nextStep == Ticket.CiTicketStatus.CI_PAYED)
+                        case CI_SUBMITTED:
                         {
-                            // CI ticket: for is warehouse ID, need to find keeper
-                            Integer warehouseId = ticket.getfor();
-                            WareHouseManager whm = 
-                                    (WareHouseManager)this.itsSystemManager_.getClient(SystemManager.clientType.WAREHOUSE_MANAGER);
-                            Integer nextOwnerId = whm.getKeeperId(warehouseId);
-                            EmployeeManager eyM = 
-                                    (EmployeeManager)this.itsSystemManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
-                            String nextOwnerName = eyM.getEmployeeName(nextOwnerId);
-                            this.itsTicketTable_.update(ticket, nextOwnerId, nextOwnerName, nextStep.toString());
+                            if(nextStep == Ticket.CiTicketStatus.CI_PAYED)
+                            {
+                                // CI ticket: for is warehouse ID, need to find keeper
+                                Integer warehouseId = ticket.getFor();
+                                WareHouseManager whm = 
+                                        (WareHouseManager)this.itsSystemManager_.getClient(SystemManager.clientType.WAREHOUSE_MANAGER);
+                                Integer nextOwnerId = whm.getKeeperId(warehouseId);
+                                EmployeeManager eyM = 
+                                        (EmployeeManager)this.itsSystemManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
+                                String nextOwnerName = eyM.getEmployeeName(nextOwnerId);
+                                this.itsTicketTable_.update(ticket, nextOwnerId, nextOwnerName, nextStep.toString());
+                            }
+                            else if(nextStep == Ticket.CiTicketStatus.CI_CANCLED)
+                            {
+                                EmployeeManager eyM = 
+                                        (EmployeeManager)this.itsSystemManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
+                                Integer employeeId = eyM.getInvalidEmployeeId();
+                                this.itsTicketTable_.update(ticket, employeeId, "noName", nextStep.toString());
+                            }
+                            break;
                         }
-                        else if(nextStep == Ticket.CiTicketStatus.CI_CANCLED)
+                        case CI_PAYED:
                         {
-                            
+                            if(nextStep == Ticket.CiTicketStatus.CI_CHECKEDIN)
+                            {
+                                //TODO: should go to financial responser set to nobody for now
+                                EmployeeManager eyM = 
+                                        (EmployeeManager)this.itsSystemManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
+                                Integer employeeId = eyM.getInvalidEmployeeId();
+                                this.itsTicketTable_.update(ticket, employeeId, "noName", nextStep.toString());
+                            }
+                            else if(nextStep == Ticket.CiTicketStatus.CI_CANCLED)
+                            {
+                                EmployeeManager eyM = 
+                                        (EmployeeManager)this.itsSystemManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
+                                Integer employeeId = eyM.getInvalidEmployeeId();
+                                this.itsTicketTable_.update(ticket, employeeId, "noName", nextStep.toString());
+                            }
+                            break;
                         }
-                        break;
+                        case CI_CHECKEDIN:
+                        {
+                            if(nextStep == Ticket.CiTicketStatus.CI_CLOSE)
+                            {
+                                EmployeeManager eyM = 
+                                        (EmployeeManager)this.itsSystemManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
+                                Integer employeeId = eyM.getInvalidEmployeeId();
+                                this.itsTicketTable_.update(ticket, employeeId, "noName", nextStep.toString());
+                            }
+                            else if(nextStep == Ticket.CiTicketStatus.CI_CANCLED)
+                            {
+                                // NOT ALLOWED Financial should check this ticket
+                                // and close it. 
+                            }
+                            break;
+                        }
+                        default:
+                        {
+                            //do nothing
+                        }
                     }
-                    case CI_PAYED:
-                    {
-                        if(nextStep == Ticket.CiTicketStatus.CI_PAYED)
-                        {
-                            
-                        }
-                        else if(nextStep == Ticket.CiTicketStatus.CI_CANCLED)
-                        break;
-                    }
-                    case CI_CHECKEDIN:
-                    {
-                        if(nextStep == Ticket.CiTicketStatus.CI_PAYED)
-                        {
-                            
-                        }
-                        else if(nextStep == Ticket.CiTicketStatus.CI_CANCLED)
-                        break;
-                    }
-                    case CI_CLOSE:
-                    {
-                        if(nextStep == Ticket.CiTicketStatus.CI_PAYED)
-                        {
-                            
-                        }
-                        else if(nextStep == Ticket.CiTicketStatus.CI_CANCLED)
-                        break;
-                    }
-                    case CI_CANCLED:
-                    {
-                        break;
-                    } 
+
+                    // reload ticket content
+                    this.itsTicketTable_.serializeTicketInstance(ticket);
                 }
             }
         } catch (SQLException ex) {
             ticket = null;
             Logger.getLogger(TicketManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+            
         return ticket;
     }
     
-    private Ticket.CiTicketStatus CiTicketNextStep(Ticket ticket, TicketAction action)
+    public Ticket CoTicketGotoNextStep(Integer ticketId, TicketAction action)
     {
-        Ticket.CiTicketStatus nextStep;
-        switch(action)
-        {
-            case ACTION_NEXTSTEP:
+        Ticket ticket = new Ticket(ticketId);
+        try {
+            this.itsTicketTable_.serializeTicketInstance(ticket);
+            if(ticket.getTicketType() == Ticket.TicketType.WAREHOUSETICKET_CO)
             {
-                break;
+                Ticket.CoTicketStatus nextStep = Ticket.CoTicketNextStep(ticket.getCurrentCoStep(), action);
+                if(ticket.verifyNextStep(nextStep))
+                {
+                    switch(ticket.getCurrentCoStep())
+                    {
+                        case CO_SUMITTED:
+                        {
+                            if(nextStep == Ticket.CoTicketStatus.CO_REQUESTSENT)
+                            {
+                                // CO ticket: for is warehouse ID, need to find keeper
+                                Integer warehouseId = ticket.getFor();
+                                WareHouseManager whm = 
+                                        (WareHouseManager)this.itsSystemManager_.getClient(SystemManager.clientType.WAREHOUSE_MANAGER);
+                                Integer nextOwnerId = whm.getKeeperId(warehouseId);
+                                EmployeeManager eyM = 
+                                        (EmployeeManager)this.itsSystemManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
+                                String nextOwnerName = eyM.getEmployeeName(nextOwnerId);
+                                this.itsTicketTable_.update(ticket, nextOwnerId, nextOwnerName, nextStep.toString());
+                            }
+                            else if(nextStep == Ticket.CoTicketStatus.CO_CANCLED)
+                            {
+                                EmployeeManager eyM = 
+                                        (EmployeeManager)this.itsSystemManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
+                                Integer employeeId = eyM.getInvalidEmployeeId();
+                                this.itsTicketTable_.update(ticket, employeeId, "noName", nextStep.toString());
+                            }
+                            break;
+                        }
+                        case CO_REQUESTSENT:
+                        {
+                            if(nextStep == Ticket.CoTicketStatus.CO_CHECKEDOUT)
+                            {
+                                this.itsTicketTable_.update(ticket, ticket.getSubmitorId(), ticket.getSubmitorName(), nextStep.toString());
+                            }
+                            else if(nextStep == Ticket.CoTicketStatus.CO_CANCLED)
+                            {
+                                EmployeeManager eyM = 
+                                        (EmployeeManager)this.itsSystemManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
+                                Integer employeeId = eyM.getInvalidEmployeeId();
+                                this.itsTicketTable_.update(ticket, employeeId, "noName", nextStep.toString());
+                            }
+                            break;
+                        }
+                        case CO_CHECKEDOUT:
+                        {
+                            if(nextStep == Ticket.CoTicketStatus.CO_CLOSE || 
+                                    nextStep == Ticket.CoTicketStatus.CO_CANCLED)
+                            {
+                                EmployeeManager eyM = 
+                                        (EmployeeManager)this.itsSystemManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
+                                Integer employeeId = eyM.getInvalidEmployeeId();
+                                this.itsTicketTable_.update(ticket, employeeId, "noName", nextStep.toString());
+                            }
+                            break;
+                        }
+                        default:
+                        {
+                            //do nothing
+                        }
+                    }
+
+                    // reload ticket content
+                    this.itsTicketTable_.serializeTicketInstance(ticket);
+                }
             }
-            case ACTION_CANCEL:
-            {
-                break;
-            }
-            default:
-            {
-                break;
-            }
+        } catch (SQLException ex) {
+            ticket = null;
+            Logger.getLogger(TicketManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return nextStep;
-        
+        return ticket;
     }
     
     @Override

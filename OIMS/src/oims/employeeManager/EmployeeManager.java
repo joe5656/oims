@@ -7,9 +7,9 @@ package oims.employeeManager;
 
 import java.util.Vector;
 import oims.UI.UiManager;
-import oims.UI.pages.employeeManagerment.EmployeePageRx;
-import oims.UI.pages.employeeManagerment.EmployeePageTx;
-import oims.UI.pages.employeeManagerment.EmployeePickerTx;
+import oims.UI.pages.employeePage.EmployeePageRx;
+import oims.UI.pages.employeePage.EmployeePageTx;
+import oims.UI.pages.employeePage.EmployeePickerTx;
 import oims.dataBase.DataBaseManager;
 import oims.dataBase.tables.EmployeeTable;
 import oims.support.util.SqlDataTable;
@@ -117,4 +117,6 @@ public class EmployeeManager implements oims.systemManagement.Client,EmployeePag
     {
         return "na";
     }
+    
+    static public Integer getInvalidEmployeeId(){return 99999999;}
 }

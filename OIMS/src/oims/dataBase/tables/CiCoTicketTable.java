@@ -8,12 +8,15 @@ package oims.dataBase.tables;
 import com.google.common.collect.Maps;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import oims.dataBase.DataBaseManager;
 import oims.dataBase.Db_table;
-import oims.employeeManager.Employee;
 import oims.support.util.Db_publicColumnAttribute;
 import oims.support.util.SqlResultInfo;
 import oims.support.util.UnitQuantity;
@@ -49,6 +52,7 @@ public class CiCoTicketTable extends Db_table {
         super.registerColumn("for", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER,  Boolean.FALSE,   Boolean.FALSE,  Boolean.FALSE, null);
         super.registerColumn("rawMaterialId", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
         super.registerColumn("submitorId", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER,  Boolean.FALSE,   Boolean.FALSE,  Boolean.FALSE, null);
+        super.registerColumn("ticketType", Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR60, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
         super.registerColumn("status", Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR60, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
         super.registerColumn("ticketId", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER, Boolean.TRUE, Boolean.TRUE,  Boolean.TRUE, null);
     }   
@@ -94,14 +98,60 @@ public class CiCoTicketTable extends Db_table {
         return result;
     }    
     
-    public void ticketNextStep()
-    {
-        
-    }
-    
-    public SqlResultInfo query()
+    public SqlResultInfo query(Ticket.TicketType ticketType, Integer owner, 
+            Integer submitor, Ticket.CiTicketStatus ciStatus, Ticket.CoTicketStatus coStatus)
     {
         SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
+        
+        if(ticketType != null)
+        {
+            TableEntry entryToBeUpdate = generateTableEntry();
+            Map<String, String> valueHolder = Maps.newHashMap();
+            
+            valueHolder.put("ticketHistory", "selected");
+            valueHolder.put("ticketType",  "selected");
+            valueHolder.put("requestDate", "selected");          
+            valueHolder.put("delvieryFee", "selected");          
+            valueHolder.put("totalPrice", "selected");          
+            valueHolder.put("unitPrice", "selected");          
+            valueHolder.put("Unit", "selected");              
+            valueHolder.put("Quantity", "selected");        
+            valueHolder.put("rawMaterialName", "selected");   
+            valueHolder.put("currentOwnerName", "selected"); 
+            valueHolder.put("submitorName", "selected");        
+            valueHolder.put("currentOwnerId" , "selected");       
+            valueHolder.put("for", "selected");                   
+            valueHolder.put("rawMaterialId", "selected");         
+            valueHolder.put("submitorId", "selected");            
+            valueHolder.put("status", "selected");                
+            valueHolder.put("ticketId", "selected");    
+            
+            //where
+            TableEntry whereeq = generateTableEntry();
+            Map<String, String> valueHoldereq = Maps.newHashMap();
+            if(owner!=null){valueHoldereq.put("currentOwnerId", owner.toString());} 
+            if(submitor!=null){valueHoldereq.put("submitorId", submitor.toString());}
+            switch(ticketType)
+            {
+                case WAREHOUSETICKET_CI:
+                {
+                    if(ciStatus!=null){valueHoldereq.put("status", ciStatus.toString());}
+                    break;
+                }
+                case WAREHOUSETICKET_CO:
+                {
+                    if(coStatus!=null){valueHoldereq.put("status", coStatus.toString());}
+                    break;
+                }
+            }
+            
+            if(entryToBeUpdate.fillInEntryValues(valueHolder) && 
+                    whereeq.fillInEntryValues(valueHoldereq))
+            {
+                result = super.select(entryToBeUpdate, whereeq, null, null);
+            }
+            
+        }
         return result;
     }
     
@@ -111,13 +161,13 @@ public class CiCoTicketTable extends Db_table {
         Map<String, String> valueHolder = Maps.newHashMap();
         SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
         
-        String newHistory = ticket.getHist() + "\n\n--------------------\nTicket updated at "
+        String newHistory = ticket.getHistory()+ "\n\n--------------------\nTicket updated at "
                 +timeFormat.format(new Date(System.currentTimeMillis()));
         
         if(ownerId != null && ownerName != null)
         {
             newHistory += "\n============OwnerUpdated============";
-            newHistory += "\nOldOwner: " + ticket.getOwnerName();
+            newHistory += "\nOldOwner: " + ticket.getCurrentOwnerName();
             newHistory += "\nNewOwner: " + ownerName;
             valueHolder.put("currentOwnerId", ownerId.toString());
             valueHolder.put("currentOwnerName", ownerName);
@@ -137,25 +187,10 @@ public class CiCoTicketTable extends Db_table {
         // where 
         TableEntry wehre_eq = generateTableEntry();
         Map<String, String> eq = Maps.newHashMap();
-        eq.put("ticketId", ticket.getId().toString());
+        eq.put("ticketId", ticket.getTicketId().toString());
         wehre_eq.fillInEntryValues(eq);
         
         return super.update(entryToBeUpdate, wehre_eq, null, null).isSucceed();
-    }
-    
-    public void serializeTicketInstanceByResultSet(ResultSet rs, Ticket t) throws SQLException
-    {
-        t.setId(rs.getInt("ticketId"));
-        t.setOwnerId(rs.getInt("currentOwnerId"));
-        t.setOwnerName(rs.getString("currentOwnerName"));
-        t.setSpecifiedContent(rs.getString("ticketSpecifiedContent"));
-        t.explain();
-        t.setStatus(rs.getString("status"));
-        t.setSubmitorId(rs.getInt("submitorId"));
-        t.setSubmitorName(rs.getString("submitorName"));
-        t.setTicketTitle(rs.getString("tickettitle"));
-        t.setTicketType(rs.getString("ticketType"));
-        t.setSyncd(Boolean.TRUE);
     }
     
     public Boolean serializeTicketInstance(Ticket t) throws SQLException
@@ -163,92 +198,95 @@ public class CiCoTicketTable extends Db_table {
         Boolean result = Boolean.FALSE;
         TableEntry entryToBeSelect = generateTableEntry();
         Map<String, String> valueHolder = Maps.newHashMap();
-        valueHolder.put("ticketId", "select");
-        valueHolder.put("tickettitle", "select");
-        valueHolder.put("status", "select");
-        valueHolder.put("submitorId", "select");
-        valueHolder.put("ticketType", "select");
-        valueHolder.put("currentOwnerId", "select");
-        valueHolder.put("submitorName", "select");
-        valueHolder.put("currentOwnerName", "select");
-        valueHolder.put("ticketSpecifiedContent", "select");
-        valueHolder.put("ticketHistory", "select");
+        valueHolder.put("ticketHistory", "selected");
+        valueHolder.put("ticketType",  "selected");
+        valueHolder.put("requestDate", "selected");          
+        valueHolder.put("delvieryFee", "selected");          
+        valueHolder.put("totalPrice", "selected");          
+        valueHolder.put("unitPrice", "selected");          
+        valueHolder.put("Unit", "selected");              
+        valueHolder.put("Quantity", "selected");        
+        valueHolder.put("rawMaterialName", "selected");   
+        valueHolder.put("currentOwnerName", "selected"); 
+        valueHolder.put("submitorName", "selected");        
+        valueHolder.put("currentOwnerId" , "selected");       
+        valueHolder.put("for", "selected");                   
+        valueHolder.put("rawMaterialId", "selected");         
+        valueHolder.put("submitorId", "selected");            
+        valueHolder.put("status", "selected");                
+        valueHolder.put("ticketId", "selected");    
         entryToBeSelect.fillInEntryValues(valueHolder);
         
         // where 
         TableEntry wehre_eq = generateTableEntry();
         Map<String, String> eq = Maps.newHashMap();
-        eq.put("ticketId", t.getId().toString());
+        eq.put("ticketId", t.getTicketId().toString());
         wehre_eq.fillInEntryValues(eq);
         
         ResultSet rs = super.select(entryToBeSelect, wehre_eq, null, null).getResultSet();
         if(rs.first())
         {
-            t.setId(rs.getInt("ticketId"));
-            t.setOwnerId(rs.getInt("currentOwnerId"));
-            t.setOwnerName(rs.getString("currentOwnerName"));
-            t.setSpecifiedContent(rs.getString("ticketSpecifiedContent"));
-            t.setStatus(rs.getString("status"));
-            t.setSubmitorId(rs.getInt("submitorId"));
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd ");
+            try {
+                t.setRequestDate(sdf.parse(rs.getString("requestDate")));
+            } catch (ParseException ex) {
+                t.setRequestDate(new Date(0));
+                Logger.getLogger(CiCoTicketTable.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            t.setDelvieryFee(Double.parseDouble(rs.getString("delvieryFee")));
+            t.setTotalPrice(Double.parseDouble(rs.getString("totalPrice")));      
+            t.setUnitPrice(Double.parseDouble(rs.getString("unitPrice")));           
+            t.setRawMaterialName(rs.getString("rawMaterialName")); 
+            t.setCurrentOwnerName(rs.getString("currentOwnerName"));
             t.setSubmitorName(rs.getString("submitorName"));
-            t.setTicketTitle(rs.getString("tickettitle"));
-            t.setTicketType(rs.getString("ticketType"));
+            t.setCurrentOwnerId(rs.getInt("currentOwnerId"));
+            t.setFor(rs.getInt("for"));
+            t.setRawMaterialId(rs.getInt("rawMaterialId"));     
+            t.setSubmitorId(rs.getInt("submitorId"));
+            t.setStatus(rs.getString("status"));
             t.setHistory(rs.getString("ticketHistory"));
-            t.setSyncd(Boolean.TRUE);
+            t.setTicketType(rs.getString("ticketType"));
+            t.setQuantity(new UnitQuantity(rs.getString("Unit"),Double.parseDouble(rs.getString("Quantity"))));
             result = Boolean.TRUE;
         }
         return result;
     }
     
-    public ResultSet lookupByOwner(TicketType tt, Employee owner)
+    static private String EnToCh(String en)
     {
-        TableEntry entryToBeSelect = generateTableEntry();
-        Map<String, String> valueHolder = Maps.newHashMap();
-        valueHolder.put("ticketId", "select");
-        valueHolder.put("tickettitle", "select");
-        valueHolder.put("status", "select");
-        valueHolder.put("submitorId", "select");
-        valueHolder.put("ticketType", "select");
-        valueHolder.put("currentOwnerId", "select");
-        valueHolder.put("submitorName", "select");
-        valueHolder.put("currentOwnerName", "select");
-        valueHolder.put("ticketSpecifiedContent", "select");
-        valueHolder.put("ticketHistory", "select");
-        entryToBeSelect.fillInEntryValues(valueHolder);
-        
-        // where 
-        TableEntry wehre_eq = generateTableEntry();
-        Map<String, String> eq = Maps.newHashMap();
-        eq.put("ticketType", tt.toString());
-        eq.put("currentOwnerId", owner.getId().toString());
-        eq.put("currentOwnerName", owner.getName());
-        wehre_eq.fillInEntryValues(eq);
-        
-        return super.select(entryToBeSelect, wehre_eq, null, null).getResultSet();
+        switch(en)
+        {
+            case "ticketHistory":{return "历史信息";}          
+            case "ticketType":{return "单据类型";} 
+            case "requestDate":{return "期望日期";}          
+            case "delvieryFee":{return "运输费用";}          
+            case "totalPrice":{return "总价（不含运输费用）";}          
+            case "unitPrice":{return "单价";}          
+            case "Unit":{return "数量单位";}              
+            case "Quantity":{return "数量";}        
+            case "rawMaterialName":{return "原料名";}   
+            case "currentOwnerName":{return "责任人";} 
+            case "submitorName":{return "提交人";}        
+            case "currentOwnerId" :{return "责任人编号";}       
+            case "for":{return "接收单位";}                   
+            case "rawMaterialId":{return "原料编号";}         
+            case "submitorId":{return "提交人编号";}            
+            case "status":{return "状态";}                
+            case "ticketId":{return "单据编号";} 
+            default:{return "错误";}
+        }
     }
     
-    public ResultSet lookupByTicketId(Integer ticketId)
+    @Override
+    public void translateColumnName(Vector col)
     {
-        TableEntry entryToBeSelect = generateTableEntry();
-        Map<String, String> valueHolder = Maps.newHashMap();
-        valueHolder.put("ticketId", "select");
-        valueHolder.put("tickettitle", "select");
-        valueHolder.put("status", "select");
-        valueHolder.put("submitorId", "select");
-        valueHolder.put("ticketType", "select");
-        valueHolder.put("currentOwnerId", "select");
-        valueHolder.put("submitorName", "select");
-        valueHolder.put("currentOwnerName", "select");
-        valueHolder.put("ticketSpecifiedContent", "select");
-        valueHolder.put("ticketHistory", "select");
-        entryToBeSelect.fillInEntryValues(valueHolder);
-        
-        // where 
-        TableEntry wehre_eq = generateTableEntry();
-        Map<String, String> eq = Maps.newHashMap();
-        eq.put("ticketId", ticketId.toString());
-        wehre_eq.fillInEntryValues(eq);
-        
-        return super.select(entryToBeSelect, wehre_eq, null, null).getResultSet();
+        for(int i = 0; i<col.size();i++)
+        {
+            col.setElementAt(EnToCh((String)col.elementAt(i)), i);
+        }
     }
+    static public String getPrimaryKeyColNameInCh(){return EnToCh("ticketId");} 
+    static public String getPrimaryKeyColNameInEng(){return "ticketId";}
+    static public String getHistoryColNameInCh(){return EnToCh("name");} 
+    static public String getHistoryColNameInEng(){return "name";}
 }

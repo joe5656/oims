@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package oims.UI.pages.employeeManagerment;
+package oims.UI.pages.employeePage;
 
 import java.util.Vector;
 import javax.swing.JDialog;

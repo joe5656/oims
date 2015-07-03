@@ -35,7 +35,7 @@ public class WareHouseManager implements oims.systemManagement.Client, Warehouse
     
     @Override
     public Boolean systemStatusChangeNotify(SystemManager.systemStatus status)
-        {
+    {
         switch(status)
         {
             case SYS_INIT:
@@ -134,7 +134,7 @@ public class WareHouseManager implements oims.systemManagement.Client, Warehouse
     public void needWarehousePicker(WarehousePickerTx tx)
     {
         UiManager tempUiM = (UiManager)itsSysManager_.getClient(SystemManager.clientType.UI_MANAGER);
-        tempUiM.showWarehousePicer(this.queryAllWarehouseInfo(), tx);
+        tempUiM.showWarehousePicker(this.queryAllWarehouseInfo(), tx);
     }
     
     public Integer getKeeperId(Integer whId)

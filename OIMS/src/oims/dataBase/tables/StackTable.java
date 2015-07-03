@@ -16,7 +16,7 @@ import oims.dataBase.DataBaseManager;
 import oims.support.util.CommonUnit;
 import oims.support.util.Db_publicColumnAttribute;
 import oims.support.util.UnitQuantity;
-import oims.warehouseManagemnet.RawMaterial;
+import oims.rawMaterialManagement.RawMaterial;
 import oims.warehouseManagemnet.WareHouse;
 
 /**

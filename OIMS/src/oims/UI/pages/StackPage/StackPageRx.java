@@ -3,14 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package oims.UI.pages.employeeManagerment;
-
-import oims.support.util.SqlDataTable;
+package oims.UI.pages.StackPage;
 
 /**
  *
- * @author freda
+ * @author ezouyyi
  */
-public interface EmployeePickerTx {
-    public void employeeDataSelected(SqlDataTable rx);
+public interface StackPageRx {
+    
 }

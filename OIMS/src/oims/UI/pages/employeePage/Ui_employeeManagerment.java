@@ -3,16 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package oims.UI.pages.employeeManagerment;
+package oims.UI.pages.employeePage;
 
-import java.util.List;
 import java.util.Vector;
-import javax.swing.JFrame;
 import oims.UI.UiManager;
 import oims.UI.pages.BasePageClass;
 import oims.UI.pages.Page;
 import oims.employeeManager.Employee;
-import oims.support.util.SqlDataTable;
 
 /**
  *

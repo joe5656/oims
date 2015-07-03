@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package oims.UI.pages.StackManagerment;
+package oims.UI.pages.StackPage;
 
 import oims.support.util.SqlDataTable;
 import oims.support.util.UnitQuantity;

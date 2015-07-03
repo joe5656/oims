@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package oims.UI.pages.employeeManagerment;
+package oims.UI.pages.rawMaterialPage;
+
+import oims.support.util.SqlDataTable;
 
 /**
  *
  * @author ezouyyi
  */
-public interface EmployeePageRx {
-    public void showEmployeePicker(EmployeePickerTx rx);
+public interface RawMaterialPickerTx {
+    public void RawMaterialDataSelected(SqlDataTable table);
 }

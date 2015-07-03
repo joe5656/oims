@@ -10,12 +10,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Vector;
 import oims.dataBase.Db_table;
 import oims.dataBase.DataBaseManager;
 import oims.support.util.CommonUnit;
 import oims.support.util.Db_publicColumnAttribute;
 import oims.support.util.SqlResultInfo;
-import oims.warehouseManagemnet.RawMaterial;
+import oims.rawMaterialManagement.RawMaterial;
 
 /**
  *
@@ -31,7 +32,7 @@ public class RawMaterialTable extends Db_table{
         super("RawMaterial", dbm, Table_Type.TABLE_TYPE_MIRROR);
         // auto managed material can not be checked out from any warehouse manually
         // they are maintained by system
-        super.registerColumn("isAutoManageMaterial", Db_publicColumnAttribute.ATTRIBUTE_NAME.FLOAT,  Boolean.FALSE,    Boolean.FALSE,   Boolean.FALSE, null);
+        super.registerColumn("materialCat", Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR60,  Boolean.FALSE,    Boolean.FALSE,   Boolean.FALSE, null);
         super.registerColumn("normalPrice", Db_publicColumnAttribute.ATTRIBUTE_NAME.FLOAT,  Boolean.FALSE,    Boolean.FALSE,   Boolean.FALSE, null);
         super.registerColumn("pricingUnit", Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR60,  Boolean.FALSE,   Boolean.FALSE,  Boolean.FALSE, null);
         // not valid raw material means this material is not allowed to be brought any more
@@ -93,57 +94,97 @@ public class RawMaterialTable extends Db_table{
             rm.setPricingUnit(new CommonUnit(returnSet.getString("pricingUnit")));
             rm.setName("materialName");
             rm.setNormaiPrice(returnSet.getDouble("normalPrice"));
-            rm.setSyncd();
         }
     }
     
-    public Boolean disableRawMaterial(RawMaterial rm)
+    public SqlResultInfo updateEntry(Integer id, String name, CommonUnit unit, 
+            Boolean valid, Double price)
     {
-        Boolean returnValue = Boolean.FALSE;
-        if(rm.isSyncd())
+        SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
+        if(id != null)
         {
-            TableEntry set = generateTableEntry();
-            Map<String, String> set_value = Maps.newHashMap();
-            set_value.put("isvalid", "0");
-            set.fillInEntryValues(set_value);
+            TableEntry select = generateTableEntry();
+            Map<String, String> valueHolder = Maps.newHashMap();
+            if(price != null){valueHolder.put("normalPrice", price.toString());}
+            if(unit != null){valueHolder.put("pricingUnit", unit.getUnitName());}
+            if(name != null){valueHolder.put("materialName", name);}
+            if(valid != null){valueHolder.put("isvalid", valid==true?"1":"0");}
             
-            TableEntry where = generateTableEntry();
-            Map<String, String> where_eq = Maps.newHashMap();
-            where_eq.put("materialId", rm.getId().toString());
-            where.fillInEntryValues(set_value);
+            // where
+            TableEntry wh = generateTableEntry();
+            Map<String, String> valueHoldereq = Maps.newHashMap();
+            valueHoldereq.put("materialId", id.toString());
             
-            returnValue = super.update(set, where, null, null).isSucceed();
-            if(Objects.equals(Boolean.TRUE, returnValue))
+            if(wh.fillInEntryValues(valueHoldereq) && select.fillInEntryValues(valueHolder))
             {
-                rm.setValid(Boolean.FALSE);
+                result = super.update(select, wh, null, null);
             }
         }
-        
-        return returnValue;
+        return result;
     }
     
-    public Boolean enableRawMaterial(RawMaterial rm)
+    public SqlResultInfo query(Integer id, Boolean valid)
     {
-        Boolean returnValue = Boolean.FALSE;
-        if(rm.isSyncd())
+        SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
+        
+        TableEntry select = generateTableEntry();
+        Map<String, String> valueHolder = Maps.newHashMap();
+        valueHolder.put("normalPrice", "select");
+        valueHolder.put("pricingUnit", "select");
+        valueHolder.put("materialName", "select");
+        valueHolder.put("isvalid", "select");
+        valueHolder.put("materialId", "select");
+        
+        // where
+        TableEntry wh = generateTableEntry();
+        Boolean whereNec = Boolean.FALSE;
+        Map<String, String> valueHoldereq = Maps.newHashMap();
+        if(id != null){valueHoldereq.put("materialId", id.toString());whereNec=true;}
+        if(valid != null){valueHoldereq.put("isvalid", valid==true?"1":"0");whereNec=true;}
+        
+        if(wh.fillInEntryValues(valueHoldereq) && select.fillInEntryValues(valueHolder))
         {
-            TableEntry set = generateTableEntry();
-            Map<String, String> set_value = Maps.newHashMap();
-            set_value.put("isvalid", "1");
-            set.fillInEntryValues(set_value);
-            
-            TableEntry where = generateTableEntry();
-            Map<String, String> where_eq = Maps.newHashMap();
-            where_eq.put("materialId", rm.getId().toString());
-            where.fillInEntryValues(set_value);
-            
-            returnValue = super.update(set, where, null, null).isSucceed();
-            if(Objects.equals(Boolean.TRUE, returnValue))
+            result = super.select(select, whereNec?wh:null, null, null);
+        }
+        return result;
+    }
+    
+    static private String EnToCh(String en)
+    {
+        switch(en)
+        {
+            case "normalPrice":
             {
-                rm.setValid(Boolean.TRUE);
+                return "参考单位价格";
+            }
+            case "pricingUnit":
+            {
+                return "计价单位";
+            }       
+            case "materialName":
+            {
+                return "原材料名称";
+            }       
+            case "isvalid":
+            {
+                return "是否可用";
+            }   
+            case "materialId":
+            {
+                return "原材料编码";
+            }
+            default:
+            {
+                return "错误";
             }
         }
-        
-        return returnValue;
+    }
+    @Override
+    public void translateColumnName(Vector col)
+    {
+        for(int i = 0; i<col.size();i++)
+        {
+            col.setElementAt(EnToCh((String)col.elementAt(i)), i);
+        }
     }
 }

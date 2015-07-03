@@ -8,17 +8,19 @@ package oims.UI;
 import com.google.common.collect.Maps;
 import java.util.Map;
 import oims.UI.pages.Page;
-import oims.UI.pages.employeeManagerment.EmployeePageTx;
-import oims.UI.pages.employeeManagerment.Ui_employeeManagerment;
+import oims.UI.pages.employeePage.EmployeePageTx;
+import oims.UI.pages.employeePage.Ui_employeeManagerment;
 import oims.dataBase.DataBaseManager;
 import oims.systemManagement.Client;
 import oims.systemManagement.SystemManager;
 import oims.UI.pages.initPage.Ui_initPage;
 import oims.UI.pages.mainMenu.Ui_mainMenuPage;
-import oims.UI.pages.StackManagerment.Ui_StackMangement;
-import oims.UI.pages.employeeManagerment.EmployeePageRx;
-import oims.UI.pages.employeeManagerment.EmployeePicker;
-import oims.UI.pages.employeeManagerment.EmployeePickerTx;
+import oims.UI.pages.StackPage.Ui_StackMangement;
+import oims.UI.pages.employeePage.EmployeePageRx;
+import oims.UI.pages.employeePage.EmployeePicker;
+import oims.UI.pages.employeePage.EmployeePickerTx;
+import oims.UI.pages.rawMaterialPage.RawMaterialPicker;
+import oims.UI.pages.rawMaterialPage.RawMaterialPickerTx;
 import oims.UI.pages.warehouseManagerment.Ui_WarehousePage;
 import oims.UI.pages.warehouseManagerment.WarehouseListPage;
 import oims.UI.pages.warehouseManagerment.WarehousePageTx;
@@ -270,8 +272,14 @@ public class UiManager   implements oims.systemManagement.Client,UiManagerRx, Da
     }
 
     @Override
-    public void showWarehousePicer(SqlDataTable table, WarehousePickerTx rx) 
+    public void showWarehousePicker(SqlDataTable table, WarehousePickerTx tx) 
     {
-        WarehouseListPage page = new WarehouseListPage(table, rx);
+        WarehouseListPage page = new WarehouseListPage(table, tx);
+    }
+
+    @Override
+    public void showRawMaterialPicker(SqlDataTable table, RawMaterialPickerTx tx) 
+    {
+        RawMaterialPicker page = new RawMaterialPicker(table, tx);
     }
 }
