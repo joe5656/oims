@@ -22,6 +22,13 @@ public class RawMaterial {
     String  name_;
     Double  normalPrice_;
     Boolean isvalid_;
+    RawMaterialType itsType_;
+    
+    public enum RawMaterialType
+    {
+        PRECISE_MANAGED,
+        UNPRECISE_MANAGED
+    }
     
     private RawMaterial(){};
     public RawMaterial(Integer id)
@@ -37,11 +44,23 @@ public class RawMaterial {
     public Boolean    isValid(){return isvalid_;}
     public CommonUnit getPricingUnit(){return pricingUnit_;}
     public Double     getNormalPrice(){return normalPrice_;}
+    public RawMaterialType getType(){return this.itsType_;}
     
     public void setId(Integer id){id_ = id;}
     public void setName(String name){name_ = name;}
     public void setValid(Boolean v){isvalid_ = v;}
     public void setPricingUnit(CommonUnit u){pricingUnit_ = u;}
     public void setNormaiPrice(Double price){normalPrice_ = price;}
+    public void setType(String type)
+    {
+        if(type == "PRECISE_MANAGED")
+        {
+            itsType_ = RawMaterialType.PRECISE_MANAGED;
+        }
+        else
+        {
+            itsType_ = RawMaterialType.UNPRECISE_MANAGED;
+        }
+    }
 
 }

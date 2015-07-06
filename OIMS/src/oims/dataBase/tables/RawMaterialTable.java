@@ -33,6 +33,7 @@ public class RawMaterialTable extends Db_table{
         // auto managed material can not be checked out from any warehouse manually
         // they are maintained by system
         super.registerColumn("materialCat", Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR60,  Boolean.FALSE,    Boolean.FALSE,   Boolean.FALSE, null);
+        super.registerColumn("materialType", Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR60,  Boolean.FALSE,    Boolean.FALSE,   Boolean.FALSE, null);
         super.registerColumn("normalPrice", Db_publicColumnAttribute.ATTRIBUTE_NAME.FLOAT,  Boolean.FALSE,    Boolean.FALSE,   Boolean.FALSE, null);
         super.registerColumn("pricingUnit", Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR60,  Boolean.FALSE,   Boolean.FALSE,  Boolean.FALSE, null);
         // not valid raw material means this material is not allowed to be brought any more
@@ -41,11 +42,12 @@ public class RawMaterialTable extends Db_table{
         super.registerColumn("materialId", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER, Boolean.TRUE, Boolean.TRUE,  Boolean.TRUE, null);
     }
     
-    public SqlResultInfo newEntry(Double normalPrice, CommonUnit pricingUnit, String name)
+    public SqlResultInfo newEntry(Double normalPrice, CommonUnit pricingUnit, String name, String type)
     {
         SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
         TableEntry entryToBeInsert = generateTableEntry();
         Map<String, String> valueHolder = Maps.newHashMap();
+        valueHolder.put("materialType", type);
         valueHolder.put("normalPrice", normalPrice.toString());
         valueHolder.put("isvalid", "1");
         valueHolder.put("pricingUnit", pricingUnit.getUnitName());
@@ -67,6 +69,7 @@ public class RawMaterialTable extends Db_table{
     {
         TableEntry select = generateTableEntry();
         Map<String, String> valueHolder = Maps.newHashMap();
+        valueHolder.put("materialType", "select");
         valueHolder.put("normalPrice", "select");
         valueHolder.put("pricingUnit", "select");
         valueHolder.put("materialName", "select");
@@ -129,6 +132,7 @@ public class RawMaterialTable extends Db_table{
         
         TableEntry select = generateTableEntry();
         Map<String, String> valueHolder = Maps.newHashMap();
+        valueHolder.put("materialType", "select");
         valueHolder.put("normalPrice", "select");
         valueHolder.put("pricingUnit", "select");
         valueHolder.put("materialName", "select");
@@ -153,30 +157,13 @@ public class RawMaterialTable extends Db_table{
     {
         switch(en)
         {
-            case "normalPrice":
-            {
-                return "参考单位价格";
-            }
-            case "pricingUnit":
-            {
-                return "计价单位";
-            }       
-            case "materialName":
-            {
-                return "原材料名称";
-            }       
-            case "isvalid":
-            {
-                return "是否可用";
-            }   
-            case "materialId":
-            {
-                return "原材料编码";
-            }
-            default:
-            {
-                return "错误";
-            }
+            case "normalPrice":{return "参考单位价格";}
+            case "pricingUnit":{return "计价单位";}   
+            case "materialName":{return "原材料名称";}   
+            case "isvalid":{return "是否可用";}   
+            case "materialId":{return "原材料编码";}   
+            case "materialType":{return "原材料类型";}
+            default:{return "错误";}
         }
     }
     @Override

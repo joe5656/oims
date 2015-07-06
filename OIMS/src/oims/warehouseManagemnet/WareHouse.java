@@ -9,7 +9,7 @@ import oims.rawMaterialManagement.RawMaterial;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import oims.dataBase.tables.StackTable;
+import oims.dataBase.tables.StockTable;
 import oims.dataBase.tables.WareHouseTable;
 import oims.support.util.UnitQuantity;
 
@@ -24,7 +24,6 @@ public class WareHouse {
     String  addr_;
     String  contact_;
     WareHouseTable itsWareHouseTable_;
-    StackTable     itsStackTable_;
     Boolean syncd_;
     
     private WareHouse(){};
@@ -35,20 +34,18 @@ public class WareHouse {
         syncd_ = Boolean.FALSE;
     };
     
-    public WareHouse(Integer id, WareHouseTable WareHouseTable, StackTable  stack)
+    public WareHouse(Integer id, WareHouseTable WareHouseTable)
     {
         defaultWareHouse();
         id_ = id;
         itsWareHouseTable_ = WareHouseTable;
-        itsStackTable_ = stack;
     };
     
-    public WareHouse(String name, WareHouseTable WareHouseTable, StackTable  stack)
+    public WareHouse(String name, WareHouseTable WareHouseTable)
     {
         defaultWareHouse();
         name_ = name;
         itsWareHouseTable_ = WareHouseTable;
-        itsStackTable_ = stack;
     };
     
 
@@ -75,15 +72,5 @@ public class WareHouse {
         }
     }
     
-    public Boolean checkIn(RawMaterial rm, UnitQuantity uq)
-    {
-        return itsStackTable_.rawMaterialCheckIn(this, rm, uq);
-    }
- 
-    public Boolean checkOut(RawMaterial rm, UnitQuantity uq)
-    {
-        return itsStackTable_.rawMaterialCheckOut(this, rm, uq);
-    }
- 
     public Boolean closeWareHouse(){return Boolean.FALSE;}
 }

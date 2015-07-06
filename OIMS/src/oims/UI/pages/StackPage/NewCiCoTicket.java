@@ -7,6 +7,7 @@ package oims.UI.pages.StackPage;
 
 import oims.UI.pages.employeePage.EmployeePickerTx;
 import oims.UI.pages.rawMaterialPage.RawMaterialPickerTx;
+import oims.support.util.SqlDataTable;
 
 /**
  *
@@ -314,4 +315,14 @@ public class NewCiCoTicket extends javax.swing.JFrame implements RawMaterialPick
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void RawMaterialDataSelected(SqlDataTable table) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void employeeDataSelected(SqlDataTable rx) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

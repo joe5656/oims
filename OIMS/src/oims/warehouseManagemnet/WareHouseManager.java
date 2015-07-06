@@ -13,7 +13,7 @@ import oims.UI.pages.warehouseManagerment.WarehousePageTx;
 import oims.UI.pages.warehouseManagerment.WarehousePickerTx;
 import oims.dataBase.DataBaseManager;
 import oims.systemManagement.SystemManager;
-import oims.stackManagement.StackManager;
+import oims.stockManagement.SockManager;
 import oims.support.util.SqlDataTable;
 import oims.support.util.SqlResultInfo;
 /**
@@ -24,9 +24,9 @@ public class WareHouseManager implements oims.systemManagement.Client, Warehouse
     private Map<Integer, String> wareHouses_;
     private WareHouseTable  itsWareHouseTable_;
     private SystemManager    itsSysManager_;
-    private StackManager    itsStackManager_;
+    private SockManager    itsStackManager_;
     private WarehousePageRx itsWarehousePageRx_;
-    public WareHouseManager(DataBaseManager dbm, StackManager stackM)
+    public WareHouseManager(DataBaseManager dbm, SockManager stackM)
     {
         wareHouses_ = Maps.newHashMap();
         itsWareHouseTable_ = new WareHouseTable(dbm);
@@ -141,4 +141,6 @@ public class WareHouseManager implements oims.systemManagement.Client, Warehouse
     {
         return 3;
     }
+    
+    static public Integer getDumpingWarehouseId(){return 999999;}
 }

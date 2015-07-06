@@ -6,16 +6,15 @@
 package oims.dataBase.tables;
 
 import com.google.common.collect.Maps;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Vector;
 import oims.dataBase.DataBaseManager;
 import oims.dataBase.Db_table;
 import oims.support.util.Db_publicColumnAttribute;
+import oims.support.util.ProductPlanDataTable;
+import oims.support.util.SqlResultInfo;
 
 /**
  *
@@ -29,93 +28,130 @@ public class ProducingPlanTable extends Db_table{
     public ProducingPlanTable(DataBaseManager dbm)
     {
         super("ProducingPlanTable", dbm, Table_Type.TABLE_TYPE_MIRROR);
-        // DoughTypeId:Factor;DoughTypeId:Factor;DoughTypeId:Factor;
-        // eg: [1:1][3:0.5]
-        super.registerColumn("quantity", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
-        super.registerColumn("ProductId", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER,  Boolean.FALSE,   Boolean.FALSE,  Boolean.FALSE, null);
-        super.registerColumn("PlanDate", Db_publicColumnAttribute.ATTRIBUTE_NAME.DATE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
-        super.registerColumn("index", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER, Boolean.TRUE, Boolean.TRUE,  Boolean.TRUE, null);
+        super.registerColumn("lockerName", Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR60, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
+        super.registerColumn("lockerId", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
+        super.registerColumn("planerName", Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR60, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
+        super.registerColumn("planerId", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
+        super.registerColumn("lockTime", Db_publicColumnAttribute.ATTRIBUTE_NAME.TIME, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
+        super.registerColumn("locked", Db_publicColumnAttribute.ATTRIBUTE_NAME.BIT, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
+        // serialized plan detail format:
+        // storeId1:productId1:quantity|storeId1:productId2:quantity|...|storeIdN:productIdN:quantity
+        super.registerColumn("serializedPlanDetail", Db_publicColumnAttribute.ATTRIBUTE_NAME.TEXT,  Boolean.FALSE,   Boolean.FALSE,  Boolean.FALSE, null);
+        super.registerColumn("PlanDate", Db_publicColumnAttribute.ATTRIBUTE_NAME.DATE, Boolean.FALSE, Boolean.TRUE, Boolean.FALSE, null);
+        super.registerColumn("tindex", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER, Boolean.TRUE, Boolean.TRUE,  Boolean.TRUE, null);
     }
     
-    public Map<Integer, Integer> planForDate(Date date) throws SQLException
+    public SqlResultInfo newPlan(Date planDate, ProductPlanDataTable detail, Integer planerId,
+            String planerName )
     {
-        Map<Integer, Integer> productList = Maps.newHashMap();
+        SqlResultInfo result = new SqlResultInfo(false);
         SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
         
-        //select productId, quantity
-        TableEntry select = generateTableEntry();
+        TableEntry entryToBeInsert = generateTableEntry();
         Map<String, String> valueHolder = Maps.newHashMap();
-        valueHolder.put("ProductId", "select");
-        valueHolder.put("quantity", "select");
-        select.fillInEntryValues(valueHolder);
+        valueHolder.put("planerId", planerId.toString());
+        valueHolder.put("planerName", planerName);
+        valueHolder.put("locked", "0");
+        valueHolder.put("serializedPlanDetail", detail.getSerilizedInfo());
+        valueHolder.put("PlanDate", timeFormat.format(planDate));
         
-        // where PlanDate = date
-        TableEntry where = generateTableEntry();
-        Map<String, String> eq = Maps.newHashMap();
-        eq.put("PlanDate", timeFormat.format(date));
-        where.fillInEntryValues(valueHolder);
+        if(entryToBeInsert.fillInEntryValues(valueHolder))
+        {
+            result = super.insertRecord(entryToBeInsert);
+        }
         
-        ResultSet result = super.select(select, where, null, null).getResultSet();
-        if(result.first())
-        {
-            do
-            {
-                productList.put(result.getInt("ProductId"), result.getInt("quantity"));
-            }while(result.next());
-        }
-        return productList;
-    }
-    
-    public Boolean newPlan(Date planDate, Map<Integer, Integer> productList)
-    {
-        Boolean result = Boolean.FALSE;
-        Iterator<Entry<Integer, Integer>> itr = productList.entrySet().iterator();
-        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
-        if(itr.hasNext())
-        {
-            Entry<Integer, Integer> entry = itr.next();
-            TableEntry entryToBeInsert = generateTableEntry();
-            Map<String, String> valueHolder = Maps.newHashMap();
-            valueHolder.put("ProductId", entry.getKey().toString());
-            valueHolder.put("quantity", entry.getValue().toString());
-            valueHolder.put("PlanDate", timeFormat.format(planDate));
-            entryToBeInsert.fillInEntryValues(valueHolder);
-            result |= super.insertRecord(entryToBeInsert).isSucceed();
-        }
         return result;
     }
     
-    public Boolean modifyPlan(Date planDate, Map<Integer, Integer> needToModify, Boolean delete)
+    public SqlResultInfo update(Date planDate, ProductPlanDataTable detail, Boolean lock,
+            Integer lockerId, String lockerName)
     {
-        Boolean result = Boolean.FALSE;
-        if(!planDate.before(new Date(System.currentTimeMillis()))) {
+        SqlResultInfo result = new SqlResultInfo(false);
+        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        if(lock == true && (lockerId == null || lockerName == null))
+        {
             return result;
         }
         
-        Iterator<Entry<Integer, Integer>> itr = needToModify.entrySet().iterator();
-        if(itr.hasNext())
+        if(!planDate.before(new Date(System.currentTimeMillis()))) 
         {
-            // modify quantity
-            Entry<Integer, Integer> entry = itr.next();
-            TableEntry entryToBeInsert = generateTableEntry();
-            Map<String, String> valueHolder = Maps.newHashMap();
-            valueHolder.put("quantity", entry.getValue().toString());
-            entryToBeInsert.fillInEntryValues(valueHolder);
-            
-            // where index=index
-            TableEntry where_eq = generateTableEntry();
-            Map<String, String> eq = Maps.newHashMap();
-            eq.put("index", entry.getKey().toString());
-            where_eq.fillInEntryValues(valueHolder);
-            if(delete)
-            {
-                result |= super.delete(null, where_eq, null).isSucceed();
-            }
-            else
-            {
-                result |= super.update(entryToBeInsert, where_eq, null, null).isSucceed();
-            }
+            return result;
+        }
+        
+        TableEntry updateEntry = generateTableEntry();
+        Map<String, String> valueHolder = Maps.newHashMap();
+        if(lock == true)
+        {
+            valueHolder.put("locked", "1");
+            valueHolder.put("lockerId", lockerId.toString());
+            valueHolder.put("lockerName", lockerName);
+            valueHolder.put("lockTime", timeFormat.format(new Date(System.currentTimeMillis())));
+        }
+        else
+        {
+            valueHolder.put("serializedPlanDetail", detail.getSerilizedInfo());
+        }
+        
+        // where
+        TableEntry whereeq = generateTableEntry();
+        Map<String, String> valueHoldereq = Maps.newHashMap();
+        valueHoldereq.put("PlanDate", timeFormat.format(planDate));
+        
+        if(whereeq.fillInEntryValues(valueHoldereq) && updateEntry.fillInEntryValues(valueHolder))
+        {
+            result = super.update(updateEntry, whereeq, null, null);
         }
         return result;
+    }
+    
+    public SqlResultInfo query(Date planDate)
+    {
+        SqlResultInfo result = new SqlResultInfo(false);
+        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
+        
+        TableEntry select = generateTableEntry();
+        Map<String, String> valueHolder = Maps.newHashMap();
+        valueHolder.put("planerId", "selected");
+        valueHolder.put("planerName", "selected");
+        valueHolder.put("locked", "selected");
+        valueHolder.put("serializedPlanDetail", "selected");
+        valueHolder.put("lockerName", "selected");
+        valueHolder.put("lockerId", "selected");
+        valueHolder.put("lockTime", "selected");
+        
+        // where
+        TableEntry where = generateTableEntry();
+        Map<String, String> valueHoldereq = Maps.newHashMap();
+        valueHoldereq.put("PlanDate", timeFormat.format(planDate));
+        
+        if(where.fillInEntryValues(valueHoldereq) && select.fillInEntryValues(valueHolder))
+        {
+            result = super.select(select, where, null, null);
+        }
+        return result;
+    }
+    
+    static private String EnToCh(String en)
+    {
+        switch(en)
+        {
+            case "planerId":{return "计划人编号";}
+            case "planerName":{ return "计划人";}       
+            case "locked":{return "是否锁定";}       
+            case "serializedPlanDetail":{return "详细信息";}   
+            case "lockerName":{return "锁定人";}   
+            case "lockerId":{return "锁定人编号";}
+            case "lockTime":{return "锁定时间";}
+            default:{return "错误";}
+        }
+    }
+    
+    @Override
+    public void translateColumnName(Vector col)
+    {
+        for(int i = 0; i<col.size();i++)
+        {
+            col.setElementAt(EnToCh((String)col.elementAt(i)), i);
+        }
     }
 }

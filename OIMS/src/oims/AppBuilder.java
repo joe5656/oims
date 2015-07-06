@@ -11,7 +11,7 @@ import oims.dataBase.DataBaseManager;
 import oims.employeeManager.EmployeeManager;
 import oims.loggingManagement.LoggingManager;
 import oims.rawMaterialManagement.RawMaterialManager;
-import oims.stackManagement.StackManager;
+import oims.stockManagement.SockManager;
 import oims.systemManagement.SystemManager;
 import oims.ticketSystem.TicketManager;
 import oims.warehouseManagemnet.WareHouseManager;
@@ -28,7 +28,7 @@ public class AppBuilder {
     UiManager        itsUiManager_;
     LoggingManager   itsLogManager_;
     EmployeeManager  itsEmployeeManger_;
-    StackManager     itsStackManager_;
+    SockManager     itsStackManager_;
     RawMaterialManager itsRawMManager_;
     
     public AppBuilder()
@@ -38,7 +38,7 @@ public class AppBuilder {
         itsUiManager_ = new UiManager(itsDataBaseManager_);
         itsUiManager_.showStartingPage();
         itsEmployeeManger_ = new EmployeeManager(itsDataBaseManager_);
-        itsStackManager_   = new StackManager();
+        itsStackManager_   = new SockManager();
         itsWareHouseManager_ = new WareHouseManager(itsDataBaseManager_,itsStackManager_);
         itsRawMManager_      = new RawMaterialManager(itsDataBaseManager_);
         //itsTicketManager_ = new TicketManager(itsSystemManager_, itsDataBaseManager_);

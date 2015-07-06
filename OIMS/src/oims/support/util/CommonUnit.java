@@ -15,10 +15,14 @@ public class CommonUnit {
     
     public enum UNITS
     {
+        none,
         gram,
         kilogram,
         lit,
         mlit,
+        bottle,
+        unit,
+        bag
     }
     
     public CommonUnit(String unit)
@@ -41,8 +45,20 @@ public class CommonUnit {
             case "毫升":
                 unit_ = UNITS.mlit;
                 break;
+            case "bag":
+            case "袋":
+                unit_ = UNITS.bag;
+                break;
+            case "bottle":
+            case "瓶":
+                unit_ = UNITS.bottle;
+                break;
+            case "unit":
+            case "个":
+                unit_ = UNITS.unit;
+                break;
             default:
-                unit_ = UNITS.gram;
+                unit_ = UNITS.none;
                 break;
         }
         else
@@ -61,7 +77,7 @@ public class CommonUnit {
     
     public Double getUnitChanageFactor(UNITS changeTo)
     {
-        Double returnValue = 0.0;
+        Double returnValue = -1.0;
         switch(changeTo)
         {
             case gram:
@@ -139,6 +155,21 @@ public class CommonUnit {
             case mlit:
             {
                 returnValue = "毫升";
+                break;
+            }
+            case bottle:
+            {
+                returnValue = "瓶";
+                break;
+            }
+            case bag:
+            {
+                returnValue = "袋";
+                break;
+            }
+            case unit:
+            {
+                returnValue = "个";
                 break;
             }
             default:

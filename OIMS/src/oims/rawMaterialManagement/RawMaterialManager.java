@@ -67,8 +67,8 @@ public class RawMaterialManager implements oims.systemManagement.Client{
     @Override
     public void setSystemManager(SystemManager sysManager) {itsSysManager_ = sysManager;}
     
-    public SqlResultInfo newRawMaterial(String name, CommonUnit unit, Double price) {
-        return this.itsRawMaterialTable_.newEntry(price, unit, name);
+    public SqlResultInfo newRawMaterial(String name, CommonUnit unit, Double price, String type) {
+        return this.itsRawMaterialTable_.newEntry(price, unit, name, type);
     }
     
     public SqlResultInfo udpate(Integer id, CommonUnit unit, String name, Double price, Boolean valid) {
