@@ -27,6 +27,13 @@ public class RawMaterialManager implements oims.systemManagement.Client{
     public RawMaterialManager(DataBaseManager dbm)
     {
         itsRawMaterialTable_ = new RawMaterialTable(dbm);
+        itsdbm_  = dbm;
+    }
+    
+    static public String[] getRawMaterialList()
+    {
+        String[] result = {"精确管理", "非精确管理"};
+        return result;
     }
     
     @Override

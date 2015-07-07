@@ -21,6 +21,7 @@ import oims.UI.pages.employeePage.EmployeePicker;
 import oims.UI.pages.employeePage.EmployeePickerTx;
 import oims.UI.pages.rawMaterialPage.RawMaterialPicker;
 import oims.UI.pages.rawMaterialPage.RawMaterialPickerTx;
+import oims.UI.pages.rawMaterialPage.Ui_rawMaterialPage;
 import oims.UI.pages.warehouseManagerment.Ui_WarehousePage;
 import oims.UI.pages.warehouseManagerment.WarehouseListPage;
 import oims.UI.pages.warehouseManagerment.WarehousePageTx;
@@ -28,6 +29,7 @@ import oims.UI.pages.warehouseManagerment.WarehousePickerTx;
 import oims.dataBase.Interfaces.dbStatus.DataBaseRx_dbStatus;
 import oims.dataBase.Interfaces.dbStatus.DataBaseTx_dbStatus;
 import oims.employeeManager.EmployeeManager;
+import oims.rawMaterialManagement.RawMaterialManager;
 import oims.support.util.SqlDataTable;
 /**
  *
@@ -197,6 +199,21 @@ public class UiManager   implements oims.systemManagement.Client,UiManagerRx, Da
                     EmployeePageTx tempEM = (EmployeePageTx)itsSysManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
                     if(tempEM == null){break;}
                     pageWanted = new Ui_employeeManagerment(this, tempEM);
+                    itsPages_.put(PageType.INIT_PAGE, pageWanted);
+                }
+                break;
+            }
+            case RAWMATERIAL_PAGE:
+            {
+                if(itsPages_.containsKey(PageType.RAWMATERIAL_PAGE))
+                {
+                    pageWanted = itsPages_.get(PageType.RAWMATERIAL_PAGE);
+                }
+                else
+                {
+                    RawMaterialManager tempRM = (RawMaterialManager)itsSysManager_.getClient(SystemManager.clientType.RAWMATERIAL_MANAGER);
+                    if(tempRM == null){break;}
+                    pageWanted = new Ui_rawMaterialPage(this, tempRM);
                     itsPages_.put(PageType.INIT_PAGE, pageWanted);
                 }
                 break;

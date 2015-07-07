@@ -49,7 +49,7 @@ public class AppBuilder {
         itsSystemManager_.registerClient(SystemManager.clientType.EMPLOYEE_MANAGER, itsEmployeeManger_);
         //itsSystemManager_.registerClient(SystemManager.clientType.TICKET_MANAGER, itsTicketManager_);
         itsSystemManager_.registerClient(SystemManager.clientType.WAREHOUSE_MANAGER,itsWareHouseManager_);
-        itsSystemManager_.registerClient(SystemManager.clientType.WAREHOUSE_MANAGER,itsRawMManager_);
+        itsSystemManager_.registerClient(SystemManager.clientType.RAWMATERIAL_MANAGER,itsRawMManager_);
     }
     public void run()
     {System.out.print("sys started");

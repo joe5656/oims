@@ -25,6 +25,11 @@ public class CommonUnit {
         bag
     }
     
+    static public String[] getUnitListStringChn()
+    {
+        String[] result = {"千克", "克", "袋", "瓶", "升", "毫升", "个"};
+        return result;
+    }
     public CommonUnit(String unit)
     {
         if(null != unit)

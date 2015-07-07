@@ -22,7 +22,8 @@ public interface UiManagerRx {
         MAIN_PAGE,
         WAREHOUSE_PAGE,
         EMPLOYEE_PAGE,
-        STACK_PAGE
+        STACK_PAGE,
+        RAWMATERIAL_PAGE
     };
     public Page getPage(PageType pt);
     public void showPage(Integer pageId);

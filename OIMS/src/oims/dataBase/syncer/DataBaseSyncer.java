@@ -99,10 +99,9 @@ public class DataBaseSyncer implements Runnable{
             }
             
             /*update table*/
-            for(Db_table table:this.itsChangedTables_)
-            {
+            this.itsChangedTables_.stream().forEach((table) -> {
                 this.itsSyncerTable_.tableUpdated(table);
-            }
+            });
             
             /*prcess updated tables*/
             /*check syncerTable and process mirror tables*/

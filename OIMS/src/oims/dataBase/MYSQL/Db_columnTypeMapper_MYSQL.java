@@ -26,7 +26,7 @@ public class Db_columnTypeMapper_MYSQL implements Db_columnTypeMapper{
         attributeMap_ = new String[Db_publicColumnAttribute.ATTRIBUTE_NAME.NUMBER_OF_ATTRIBUTE_NAME.ordinal()];
         
         // should always include a SPACE at the end of the rh string
-        attributeMap_[Db_publicColumnAttribute.ATTRIBUTE_NAME.BIT.ordinal()] = "BIT "; 
+        attributeMap_[Db_publicColumnAttribute.ATTRIBUTE_NAME.BIT.ordinal()] = "INTEGER ZEROFILL "; 
         attributeMap_[Db_publicColumnAttribute.ATTRIBUTE_NAME.SMALL_INTEGER.ordinal()] = "SMALLINT ZEROFILL ";
         attributeMap_[Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER.ordinal()] = "INTEGER ZEROFILL ";
         attributeMap_[Db_publicColumnAttribute.ATTRIBUTE_NAME.DOUBLE.ordinal()] = "DOUBLE ZEROFILL ";
