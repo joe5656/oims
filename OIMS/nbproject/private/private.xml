@@ -24,11 +24,13 @@
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/dataBase/tables/StockTable.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/employeeManager/EmployeeManager.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/ticketSystem/Ticket.java</file>
+            <file>file:/C:/JoeFolder/git/OIMS/src/oims/dataBase/tables/ProductReciptTable.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/dataBase/syncer/DataBaseSyncer.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/dataBase/Db_table.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/warehouseManagemnet/WareHouseManager.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/AppBuilder.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/UI/pages/warehouseManagerment/WarehousePickerTx.java</file>
+            <file>file:/C:/JoeFolder/git/OIMS/src/oims/dataBase/tables/DoughTypeTable.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/dataBase/tables/EmployeeTable.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/dataBase/tables/WareHouseTable.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/support/util/SqlDataTable.java</file>
