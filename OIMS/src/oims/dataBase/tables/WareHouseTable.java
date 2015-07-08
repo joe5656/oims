@@ -23,9 +23,7 @@ import oims.warehouseManagemnet.WareHouse;
  *
  * @author ezouyyi
  */
-public class WareHouseTable extends Db_table{
-    
-    
+public class WareHouseTable extends Db_table{ 
     static public String getDerivedTableName()
     {
         return "WareHouse";

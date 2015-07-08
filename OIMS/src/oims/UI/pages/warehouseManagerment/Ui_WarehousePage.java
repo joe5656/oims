@@ -30,11 +30,10 @@ public class Ui_WarehousePage extends BasePageClass implements WarehousePageRx,W
     /**
      * Creates new form Ui_WarehouseManagerment
      */
-    public Ui_WarehousePage(UiManager uiM,WarehousePageTx itsWarehousePageTx,EmployeePageRx employeePgRx) {
+    public Ui_WarehousePage(UiManager uiM,WarehousePageTx itsWarehousePageTx) {
         super(uiM,Page.PAGE_TYPE.SUB_PAGE);
         itsWarehousePageTx_ = itsWarehousePageTx;
         itsWarehousePageTx_.setRx(this);
-        itsEmployeePgRx_ = employeePgRx;
         initComponents();
     }
 
@@ -483,7 +482,7 @@ public class Ui_WarehousePage extends BasePageClass implements WarehousePageRx,W
     }//GEN-LAST:event_DelSelBActionPerformed
 
     private void selEmployeeBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selEmployeeBActionPerformed
-        itsEmployeePgRx_.showEmployeePicker(this);
+        //itsEmployeePgRx_.showEmployeePicker(this);
     }//GEN-LAST:event_selEmployeeBActionPerformed
     
     private void toggleDelArea(Boolean on)

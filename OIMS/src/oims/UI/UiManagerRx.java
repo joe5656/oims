@@ -23,7 +23,8 @@ public interface UiManagerRx {
         WAREHOUSE_PAGE,
         EMPLOYEE_PAGE,
         STACK_PAGE,
-        RAWMATERIAL_PAGE
+        RAWMATERIAL_PAGE,
+        STORE_PAGE
     };
     public Page getPage(PageType pt);
     public void showPage(Integer pageId);

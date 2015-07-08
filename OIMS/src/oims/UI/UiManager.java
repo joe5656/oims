@@ -22,6 +22,7 @@ import oims.UI.pages.employeePage.EmployeePickerTx;
 import oims.UI.pages.rawMaterialPage.RawMaterialPicker;
 import oims.UI.pages.rawMaterialPage.RawMaterialPickerTx;
 import oims.UI.pages.rawMaterialPage.Ui_rawMaterialPage;
+import oims.UI.pages.storeManagementPage.Ui_storeManagePage;
 import oims.UI.pages.warehouseManagerment.Ui_WarehousePage;
 import oims.UI.pages.warehouseManagerment.WarehouseListPage;
 import oims.UI.pages.warehouseManagerment.WarehousePageTx;
@@ -155,7 +156,7 @@ public class UiManager   implements oims.systemManagement.Client,UiManagerRx, Da
                 else
                 {
                     pageWanted = new Ui_mainMenuPage(this, itsDbm_.islocalDbConnected(),itsDbm_.isRemoteDbConnected());
-                    itsPages_.put(PageType.INIT_PAGE, pageWanted);
+                    itsPages_.put(PageType.MAIN_PAGE, pageWanted);
                 }
                 break;
             }
@@ -168,7 +169,7 @@ public class UiManager   implements oims.systemManagement.Client,UiManagerRx, Da
                 else
                 {
                     pageWanted = new Ui_StackMangement(this);
-                    itsPages_.put(PageType.INIT_PAGE, pageWanted);
+                    itsPages_.put(PageType.STACK_PAGE, pageWanted);
                 }
                 break;
             }
@@ -181,10 +182,9 @@ public class UiManager   implements oims.systemManagement.Client,UiManagerRx, Da
                 else
                 {
                     WarehousePageTx tempWM = (WarehousePageTx)itsSysManager_.getClient(SystemManager.clientType.WAREHOUSE_MANAGER);
-                    EmployeePageRx tempEmPg = (EmployeePageRx)itsPages_.get(PageType.EMPLOYEE_PAGE);
-                    if(tempWM == null || tempEmPg == null){break;}
-                    pageWanted = new Ui_WarehousePage(this,tempWM, tempEmPg);
-                    itsPages_.put(PageType.INIT_PAGE, pageWanted);
+                    if(tempWM == null){break;}
+                    pageWanted = new Ui_WarehousePage(this,tempWM);
+                    itsPages_.put(PageType.WAREHOUSE_PAGE, pageWanted);
                 }
                 break;
             }
@@ -199,7 +199,7 @@ public class UiManager   implements oims.systemManagement.Client,UiManagerRx, Da
                     EmployeePageTx tempEM = (EmployeePageTx)itsSysManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
                     if(tempEM == null){break;}
                     pageWanted = new Ui_employeeManagerment(this, tempEM);
-                    itsPages_.put(PageType.INIT_PAGE, pageWanted);
+                    itsPages_.put(PageType.EMPLOYEE_PAGE, pageWanted);
                 }
                 break;
             }
@@ -214,7 +214,22 @@ public class UiManager   implements oims.systemManagement.Client,UiManagerRx, Da
                     RawMaterialManager tempRM = (RawMaterialManager)itsSysManager_.getClient(SystemManager.clientType.RAWMATERIAL_MANAGER);
                     if(tempRM == null){break;}
                     pageWanted = new Ui_rawMaterialPage(this, tempRM);
-                    itsPages_.put(PageType.INIT_PAGE, pageWanted);
+                    itsPages_.put(PageType.RAWMATERIAL_PAGE, pageWanted);
+                }
+                break;
+            }
+            case STORE_PAGE:
+            {
+                if(itsPages_.containsKey(PageType.STORE_PAGE))
+                {
+                    pageWanted = itsPages_.get(PageType.STORE_PAGE);
+                }
+                else
+                {
+                    //RawMaterialManager tempRM = (RawMaterialManager)itsSysManager_.getClient(SystemManager.clientType.RAWMATERIAL_MANAGER);
+                    //if(tempRM == null){break;}
+                    pageWanted = new Ui_storeManagePage(this);
+                    itsPages_.put(PageType.STORE_PAGE, pageWanted);
                 }
                 break;
             }

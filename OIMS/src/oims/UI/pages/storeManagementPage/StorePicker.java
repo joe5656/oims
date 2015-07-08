@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package oims.UI.pages.rawMaterialPage;
+package oims.UI.pages.storeManagementPage;
 
 import javax.swing.ListSelectionModel;
 import oims.support.util.SqlDataTable;
@@ -11,16 +11,15 @@ import oims.support.util.UneditableTableModule;
 
 /**
  *
- * @author ezouyyi
+ * @author freda
  */
-public class RawMaterialPicker extends javax.swing.JFrame{
-    private RawMaterialPickerTx itsTx_;
-    private SqlDataTable        itsSqlDTable_;
+public class StorePicker extends javax.swing.JFrame {
+    private StorePickerTx itsTx_;
+    private SqlDataTable  itsSqlDTable_;
     /**
-     * Creates new form RawMaterialPicker
+     * Creates new form StorePicker
      */
-    public RawMaterialPicker(SqlDataTable table, RawMaterialPickerTx pickerTx) {
-        itsTx_ = pickerTx;
+    public StorePicker(SqlDataTable table, StorePickerTx pickerTx) {
         initComponents();
         if(table!=null)
         {
@@ -86,15 +85,15 @@ public class RawMaterialPicker extends javax.swing.JFrame{
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(selectB)
-                .addGap(40, 40, 40))
+                .addGap(31, 31, 31))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(selectB)
-                .addGap(0, 13, Short.MAX_VALUE))
+                .addGap(0, 10, Short.MAX_VALUE))
         );
 
         pack();
@@ -107,7 +106,7 @@ public class RawMaterialPicker extends javax.swing.JFrame{
         {
             this.itsSqlDTable_.setRowSelected(row);
         }
-        this.itsTx_.RawMaterialDataSelected(itsSqlDTable_);
+        this.itsTx_.StorePickerDataSelected(itsSqlDTable_);
         this.dispose();
     }//GEN-LAST:event_selectBActionPerformed
 
