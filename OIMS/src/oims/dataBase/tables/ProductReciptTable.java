@@ -27,6 +27,9 @@ public class ProductReciptTable  extends Db_table{
     {
         super("ProductReciptTable", dbm, Table_Type.TABLE_TYPE_MIRROR);
         super.registerColumn("workingHours", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
+        super.registerColumn("fillingProcessByCK", Db_publicColumnAttribute.ATTRIBUTE_NAME.BIT, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
+        super.registerColumn("toppingProcessByCK", Db_publicColumnAttribute.ATTRIBUTE_NAME.BIT, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
+        super.registerColumn("mainReciptProcessByCK", Db_publicColumnAttribute.ATTRIBUTE_NAME.BIT, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
         super.registerColumn("fillingReciptName", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
         super.registerColumn("toppingReciptName", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
         super.registerColumn("mainReciptName", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
@@ -37,7 +40,8 @@ public class ProductReciptTable  extends Db_table{
     }
     
     public SqlResultInfo newEntry(Integer pid, String pName, Integer number, String mainName,
-            String topName, String fillingName, Integer workinghours)
+            String topName, String fillingName, Integer workinghours, Boolean mainReciptByCK,
+            Boolean toppingByCK, Boolean fillingByCk)
     {
         SqlResultInfo result = new SqlResultInfo(false);
         TableEntry entryToBeInsert = generateTableEntry();
@@ -45,6 +49,9 @@ public class ProductReciptTable  extends Db_table{
         valueHolder.put("productId", pid.toString());
         valueHolder.put("productName", pName);
         valueHolder.put("numberOfPieces", number.toString());
+        valueHolder.put("mainReciptName", mainReciptByCK==true?"1":"0");
+        valueHolder.put("toppingReciptName", toppingByCK==true?"1":"0");
+        valueHolder.put("fillingReciptName", fillingByCk==true?"1":"0");
         valueHolder.put("mainReciptName", mainName);
         valueHolder.put("toppingReciptName", topName);
         valueHolder.put("fillingReciptName", fillingName);
@@ -58,7 +65,8 @@ public class ProductReciptTable  extends Db_table{
     }
     
     public SqlResultInfo update(Integer reciptId, Integer pid, String pName, Integer number, String mainName,
-            String topName, String fillingName, Integer workinghours)
+            String topName, String fillingName, Integer workinghours, Boolean mainReciptByCK,
+            Boolean toppingByCK, Boolean fillingByCk)
     {
         SqlResultInfo result = new SqlResultInfo(false);
         if(reciptId != null)
@@ -69,6 +77,9 @@ public class ProductReciptTable  extends Db_table{
             valueHolder.put("mainReciptName", mainName);
             valueHolder.put("toppingReciptName", topName);
             valueHolder.put("fillingReciptName", fillingName);
+            valueHolder.put("mainReciptName", mainReciptByCK==true?"1":"0");
+            valueHolder.put("toppingReciptName", toppingByCK==true?"1":"0");
+            valueHolder.put("fillingReciptName", fillingByCk==true?"1":"0");
             valueHolder.put("workingHours", workinghours.toString());
 
             //where 
@@ -100,6 +111,9 @@ public class ProductReciptTable  extends Db_table{
         valueHolder.put("toppingReciptId", "selected");
         valueHolder.put("fillingReciptId", "selected");
         valueHolder.put("workingHours", "selected");
+        valueHolder.put("mainReciptName", "selected");
+        valueHolder.put("toppingReciptName", "selected");
+        valueHolder.put("fillingReciptName", "selected");
         valueHolder.put("reciptIndentifier", "selected");
         
         //where 

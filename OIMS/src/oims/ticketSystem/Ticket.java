@@ -29,7 +29,8 @@ public class Ticket {
     private String  currentOwnerName_; 
     private String  submitorName_;        
     private Integer currentOwnerId_;       
-    private Integer for_;                   
+    private Integer for_;     
+    private String  forName_;
     private Integer rawMaterialId_;         
     private Integer submitorId_;            
     private String  status_;                
@@ -148,7 +149,8 @@ public class Ticket {
     public String  getCurrentOwnerName(){return currentOwnerName_;} 
     public String  getSubmitorName(){return submitorName_;}        
     public Integer getCurrentOwnerId(){return currentOwnerId_;}       
-    public Integer getFor(){return for_;}                   
+    public Integer getFor(){return for_;}                      
+    public String  getForName(){ return forName_;}               
     public Integer getRawMaterialId(){return rawMaterialId_;}         
     public Integer getSubmitorId(){return submitorId_;}            
     public String  getStatus(){return status_;}                
@@ -165,7 +167,8 @@ public class Ticket {
     public void setCurrentOwnerName(String currentOwnerName){  currentOwnerName_ = currentOwnerName;} 
     public void setSubmitorName(String submitorName){  submitorName_ = submitorName;}        
     public void setCurrentOwnerId(Integer currentOwnerId){  currentOwnerId_ = currentOwnerId;}       
-    public void setFor(Integer forId){  for_ = forId;}                   
+    public void setFor(Integer forId){  for_ = forId;}                       
+    public void setForName(String name){  forName_ = name;}                   
     public void setRawMaterialId(Integer rawMaterialId){  rawMaterialId_ = rawMaterialId;}         
     public void setSubmitorId(Integer submitorId){  submitorId_ = submitorId;}            
     public void setStatus(String status){  status_ = status;}                

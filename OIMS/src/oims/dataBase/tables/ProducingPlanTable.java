@@ -35,7 +35,7 @@ public class ProducingPlanTable extends Db_table{
         super.registerColumn("lockTime", Db_publicColumnAttribute.ATTRIBUTE_NAME.TIME, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
         super.registerColumn("locked", Db_publicColumnAttribute.ATTRIBUTE_NAME.BIT, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
         // serialized plan detail format:
-        // storeId1:productId1:quantity|storeId1:productId2:quantity|...|storeIdN:productIdN:quantity
+        // storeName1:productName1:quantity|storeName1:productName2:quantity|...|storeNameN:productNameN:quantity
         super.registerColumn("serializedPlanDetail", Db_publicColumnAttribute.ATTRIBUTE_NAME.TEXT,  Boolean.FALSE,   Boolean.FALSE,  Boolean.FALSE, null);
         super.registerColumn("PlanDate", Db_publicColumnAttribute.ATTRIBUTE_NAME.DATE, Boolean.FALSE, Boolean.TRUE, Boolean.FALSE, null);
         super.registerColumn("tindex", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER, Boolean.TRUE, Boolean.TRUE,  Boolean.TRUE, null);

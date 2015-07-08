@@ -30,9 +30,11 @@ public class ReciptManager  implements oims.systemManagement.Client{
     }
         
     public SqlResultInfo newProductRecipt(Integer pid, String pName, Integer number, String mainName,
-            String topName, String fillingName, Integer workinghours)
+            String topName, String fillingName, Integer workinghours, Boolean mainReciptByCK,
+            Boolean toppingByCK, Boolean fillingByCk)
     {
-        return this.itsProductReciptTable_.newEntry(pid, pName, number, mainName, topName, fillingName, workinghours);
+        return this.itsProductReciptTable_.newEntry(pid, pName, number, mainName, 
+                topName, fillingName, workinghours, mainReciptByCK, toppingByCK, fillingByCk);
     }
     
     @Override

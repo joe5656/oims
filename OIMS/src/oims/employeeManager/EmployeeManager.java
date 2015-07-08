@@ -119,4 +119,6 @@ public class EmployeeManager implements oims.systemManagement.Client,EmployeePag
     }
     
     static public Integer getInvalidEmployeeId(){return 99999999;}
+    static public Integer getRobetId(){return 88888888;}
+    static public String  getRobetName(){return "systemAuto";}
 }

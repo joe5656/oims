@@ -44,11 +44,11 @@ public class TicketManager implements oims.systemManagement.Client{
     }
     
     public SqlResultInfo createTicket(Ticket.TicketType ticketType, Integer submitorId, String submitorName,
-            Integer reciever, Integer rawMId, UnitQuantity quantity, double unitPrice,
+            Integer reciever, String recieverName, Integer rawMId, UnitQuantity quantity, double unitPrice,
             double totalPrice, double deliveryFee, Date requestDate)
     {
         return this.itsTicketTable_.NewEntry(ticketType, submitorId, submitorName, 
-                reciever, rawMId, quantity, unitPrice, totalPrice, deliveryFee, requestDate);
+                reciever, recieverName,rawMId, quantity, unitPrice, totalPrice, deliveryFee, requestDate);
     }
 
     public SqlDataTable ticketQuery(Ticket.TicketType ticketType, Integer owner, 

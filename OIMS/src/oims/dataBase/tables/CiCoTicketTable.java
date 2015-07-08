@@ -49,6 +49,7 @@ public class CiCoTicketTable extends Db_table {
         super.registerColumn("submitorName", Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR60,  Boolean.FALSE,   Boolean.FALSE,  Boolean.FALSE, null);
         super.registerColumn("currentOwnerId", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
         // if it's CI ticket, for contains value of warehouseId; if it's CO ticket, for is deptId
+        super.registerColumn("forName", Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR60,  Boolean.FALSE,   Boolean.FALSE,  Boolean.FALSE, null);
         super.registerColumn("for", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER,  Boolean.FALSE,   Boolean.FALSE,  Boolean.FALSE, null);
         super.registerColumn("rawMaterialId", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
         super.registerColumn("submitorId", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER,  Boolean.FALSE,   Boolean.FALSE,  Boolean.FALSE, null);
@@ -59,7 +60,7 @@ public class CiCoTicketTable extends Db_table {
     
 
     public SqlResultInfo NewEntry(Ticket.TicketType ticketType, Integer submitorId, String submitorName,
-            Integer reciever, Integer rawMId, UnitQuantity quantity, Double unitPrice,
+            Integer reciever, String recieverName, Integer rawMId, UnitQuantity quantity, Double unitPrice,
             Double totalPrice, Double deliveryFee, Date requestDate)
     {
         SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
@@ -73,6 +74,7 @@ public class CiCoTicketTable extends Db_table {
         valueHolder.put("rawMaterialId", rawMId.toString());
         valueHolder.put("Quantity", quantity.getQuantity().toString());
         valueHolder.put("Unit", quantity.getUnit().getUnitName());
+        valueHolder.put("forName", recieverName);
         valueHolder.put("for", reciever.toString());
         valueHolder.put("requestDate", timeFormat.format(requestDate));
         valueHolder.put("delvieryFee", deliveryFee.toString());
@@ -120,7 +122,8 @@ public class CiCoTicketTable extends Db_table {
             valueHolder.put("currentOwnerName", "selected"); 
             valueHolder.put("submitorName", "selected");        
             valueHolder.put("currentOwnerId" , "selected");       
-            valueHolder.put("for", "selected");                   
+            valueHolder.put("for", "selected");               
+            valueHolder.put("forName", "selected");    
             valueHolder.put("rawMaterialId", "selected");         
             valueHolder.put("submitorId", "selected");            
             valueHolder.put("status", "selected");                
@@ -210,7 +213,8 @@ public class CiCoTicketTable extends Db_table {
         valueHolder.put("currentOwnerName", "selected"); 
         valueHolder.put("submitorName", "selected");        
         valueHolder.put("currentOwnerId" , "selected");       
-        valueHolder.put("for", "selected");                   
+        valueHolder.put("for", "selected");            
+        valueHolder.put("forName", "selected");                  
         valueHolder.put("rawMaterialId", "selected");         
         valueHolder.put("submitorId", "selected");            
         valueHolder.put("status", "selected");                
@@ -241,6 +245,7 @@ public class CiCoTicketTable extends Db_table {
             t.setSubmitorName(rs.getString("submitorName"));
             t.setCurrentOwnerId(rs.getInt("currentOwnerId"));
             t.setFor(rs.getInt("for"));
+            t.setForName(rs.getString("forName"));
             t.setRawMaterialId(rs.getInt("rawMaterialId"));     
             t.setSubmitorId(rs.getInt("submitorId"));
             t.setStatus(rs.getString("status"));
@@ -268,7 +273,8 @@ public class CiCoTicketTable extends Db_table {
             case "currentOwnerName":{return "责任人";} 
             case "submitorName":{return "提交人";}        
             case "currentOwnerId" :{return "责任人编号";}       
-            case "for":{return "接收单位";}                   
+            case "for":{return "接收单位编码";}                 
+            case "forName":{return "接收单位名称";}                  
             case "rawMaterialId":{return "原料编号";}         
             case "submitorId":{return "提交人编号";}            
             case "status":{return "状态";}                

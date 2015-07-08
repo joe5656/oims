@@ -14,12 +14,13 @@ import java.util.Map.Entry;
  * @author ezouyyi
  */
 public class ProductPlanDataTable {
-    // Map<StoreId, Map<ProductId, Quantity>>
-    private Map<Integer, Map<Integer,Integer>> productList_;
+    // Map<StoreName, Map<ProductName, Quantity>>
+    private Map<String, Map<String,Integer>> productList_;
     private String serilizedInfo_;
+    private Map<String, Integer>  productNameToId_;
     
     // format:
-    // storeId1:productId1:quantity|storeId1:productId2:quantity|...|storeIdN:productIdN:quantity
+    // storeName1:productName1:quantity|storeName1:productName2:quantity|...|storeNameN:productNameN:quantity
     public ProductPlanDataTable(String serilizedInfo)
     {
         
@@ -35,24 +36,25 @@ public class ProductPlanDataTable {
         
     }
     
-    public Boolean addData(Integer storeId, Integer productId, Integer quantity)
+    public Map<String, Map<String,Integer>> getProductList(){return productList_;}
+    public Boolean addData(String storeName, String productName, Integer quantity)
     {
         Boolean result = false;
         if(this.productList_ != null)
         {
-            if(this.productList_.containsKey(storeId))
+            if(this.productList_.containsKey(storeName))
             {
-                Map<Integer, Integer> quantityMap = this.productList_.get(storeId);
-                if(!quantityMap.containsKey(productId))
+                Map<String, Integer> quantityMap = this.productList_.get(storeName);
+                if(!quantityMap.containsKey(productName))
                 {
-                    quantityMap.put(productId, quantity);
+                    quantityMap.put(productName, quantity);
                 }
             }
             else
             {
-                Map<Integer, Integer> quantityMap = Maps.newHashMap();
-                quantityMap.put(productId, quantity);
-                this.productList_.put(storeId, quantityMap);
+                Map<String, Integer> quantityMap = Maps.newHashMap();
+                quantityMap.put(productName, quantity);
+                this.productList_.put(storeName, quantityMap);
             }
         }
         return result;
@@ -70,19 +72,19 @@ public class ProductPlanDataTable {
         if(this.productList_ != null)
         {
             Boolean firstloop = true;
-            for(Entry<Integer,Map<Integer,Integer>> entry:this.productList_.entrySet())
+            for(Entry<String,Map<String,Integer>> entry:this.productList_.entrySet())
             {
-                Integer storeId = entry.getKey();
-                for(Entry<Integer,Integer> quantityEntry:entry.getValue().entrySet())
+                String storeName = entry.getKey();
+                for(Entry<String,Integer> quantityEntry:entry.getValue().entrySet())
                 {
-                    Integer productId = quantityEntry.getKey();
+                    String productName = quantityEntry.getKey();
                     Integer quantity = quantityEntry.getValue();
-                    this.serilizedInfo_ += (firstloop?"":"|")+storeId+":"+productId+":"+quantity;
+                    this.serilizedInfo_ += (firstloop?"":"|")+storeName+":"+productName+":"+quantity;
                     firstloop = false;
                 }
             }
         }
-    };
+    }
     
     private void unserializeInfo(String serilizedInfo)
     {
@@ -95,25 +97,25 @@ public class ProductPlanDataTable {
                 String[] splitL2 = str.split(":");
                 if(splitL2.length == 3)
                 {
-                    Integer storeId = Integer.parseInt(splitL2[0]);
-                    Integer productId = Integer.parseInt(splitL2[1]);
+                    String storeName = splitL2[0];
+                    String productName = splitL2[1];
                     Integer quantity = Integer.parseInt(splitL2[2]);
-                    if(this.productList_.containsKey(storeId))
+                    if(this.productList_.containsKey(storeName))
                     {
-                        Map<Integer, Integer> quantityMap = this.productList_.get(storeId);
-                        if(!quantityMap.containsKey(productId))
+                        Map<String, Integer> quantityMap = this.productList_.get(storeName);
+                        if(!quantityMap.containsKey(productName))
                         {
-                            quantityMap.put(productId, quantity);
+                            quantityMap.put(productName, quantity);
                         }
                     }
                     else
                     {
-                        Map<Integer, Integer> quantityMap = Maps.newHashMap();
-                        this.productList_.put(storeId, quantityMap);
-                        quantityMap.put(productId, quantity);
+                        Map<String, Integer> quantityMap = Maps.newHashMap();
+                        this.productList_.put(storeName, quantityMap);
+                        quantityMap.put(productName, quantity);
                     }
                 }
             }
         }
-    };
+    }
 }
