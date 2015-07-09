@@ -399,8 +399,7 @@ public class Db_dataBase_MYSQL implements Db_dataBase{
             query += this.generateQuery_where(entry_eq, entry_gr, entry_sml);
             try{
                 Statement sm = curConnection_.createStatement();
-                sm.executeUpdate(query);
-                result.setSucceed();
+                if(0 < sm.executeUpdate(query))result.setSucceed();
             }catch(SQLException  e)
             {
                 result.setErrInfo(e);
@@ -580,7 +579,7 @@ public class Db_dataBase_MYSQL implements Db_dataBase{
             int[] re = sm.executeBatch();
             for(int i:re)
             {
-                if(re[i] < 0)
+                if(i < 0)
                 {
                     result = Boolean.FALSE;
                     break;
@@ -614,9 +613,9 @@ public class Db_dataBase_MYSQL implements Db_dataBase{
                     ResultSetMetaData data = resultSet.getMetaData();
                     int colCnt = data.getColumnCount();
                     String coln = " (";
-                    for(int i = 0;i< colCnt;i++)
+                    for(int i = 1;i<= colCnt;i++)
                     {
-                        coln += " " + data.getColumnName(i)+", ";
+                        coln += " " + data.getColumnName(i)+(i==colCnt?"":", ");
                     }
                     coln += ") ";
                     resultSet.first();
@@ -624,14 +623,14 @@ public class Db_dataBase_MYSQL implements Db_dataBase{
                     do
                     {
                         String buildSql = " (";
-                        for(int i = 0;i< colCnt;i++)
+                        for(int i = 1;i<= colCnt;i++)
                         {
-                            buildSql += " " + resultSet.getString(i)+", ";
+                            buildSql += " '" + resultSet.getString(i)+(i==colCnt?"'":"', ");
                         }
                         buildSql += " )";
                         query = "insert into " + copyTable.getName() + coln
                         + " values " + buildSql + " ;";
-                        querySet.add(buildSql);
+                        querySet.add(query);
                     }while(resultSet.next());
                     if(mysqlDataBase.batchExecute(querySet))
                     {

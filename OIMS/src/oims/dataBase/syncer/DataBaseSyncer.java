@@ -8,6 +8,7 @@ package oims.dataBase.syncer;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import java.sql.ResultSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -50,7 +51,23 @@ public class DataBaseSyncer implements Runnable{
     {
         if(table.getTableType() == Db_table.Table_Type.TABLE_TYPE_MIRROR)
         {
-            this.itsChangedTables_.add(table);
+            synchronized(this.itsChangedTables_)
+            {
+                this.itsChangedTables_.add(table);
+            }
+        }
+    }
+    
+    private  void processChangedTable()
+    {
+        synchronized(this.itsChangedTables_)
+        {
+            Iterator<Db_table> itr = this.itsChangedTables_.iterator();
+            while(itr.hasNext())
+            {
+                this.itsSyncerTable_.tableUpdated(itr.next());
+            }
+            this.itsChangedTables_.clear();
         }
     }
     
@@ -88,20 +105,18 @@ public class DataBaseSyncer implements Runnable{
     }
     
     @Override
-    public void run() 
+    public void  run() 
     {
         while(isSyncerWorking_)
         {
             try {
-                Thread.sleep(60000);
+                Thread.sleep(15000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(DataBaseSyncer.class.getName()).log(Level.SEVERE, null, ex);
             }
             
             /*update table*/
-            this.itsChangedTables_.stream().forEach((table) -> {
-                this.itsSyncerTable_.tableUpdated(table);
-            });
+            this.processChangedTable();
             
             /*prcess updated tables*/
             /*check syncerTable and process mirror tables*/

@@ -68,7 +68,8 @@ public class DbmReqHandler{
                         {
                             result = itsDbm_.getRemoteDataBase().insertRecord(entry_, itsTable_);
                             if(result.isSucceed() && 
-                                    itsTable_.getTableType() == Db_table.Table_Type.TABLE_TYPE_MIRROR)
+                                    itsTable_.getTableType() == Db_table.Table_Type.TABLE_TYPE_MIRROR
+                                    && itsTable_.getName()!="SyncerTable")
                             {
                                 this.itsDbm_.inforSycnerTableUpdated(itsTable_);
                             }
@@ -162,7 +163,7 @@ public class DbmReqHandler{
                 {
                     result = itsDbm_.getRemoteDataBase().update(entry_, 
                             equalEntry_, greatThanEntry_, smallerThanEntry_, itsTable_);
-                    if(result.isSucceed()&& 
+                    if(result.isSucceed()&&  itsTable_.getName()!="SyncerTable"&&
                             itsTable_.getTableType() == Db_table.Table_Type.TABLE_TYPE_MIRROR)
                     {
                         this.itsDbm_.inforSycnerTableUpdated(itsTable_);
@@ -174,7 +175,7 @@ public class DbmReqHandler{
             {
                 result = itsDbm_.getRemoteDataBase().delete(equalEntry_, greatThanEntry_, 
                         smallerThanEntry_, itsTable_);
-                if(result.isSucceed() && 
+                if(result.isSucceed() && itsTable_.getName()!="SyncerTable" && 
                         itsTable_.getTableType() == Db_table.Table_Type.TABLE_TYPE_MIRROR)
                 {
                     this.itsDbm_.inforSycnerTableUpdated(itsTable_);

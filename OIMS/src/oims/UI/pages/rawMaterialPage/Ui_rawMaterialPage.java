@@ -82,6 +82,11 @@ public class Ui_rawMaterialPage extends BasePageClass {
         });
 
         jButton2.setText("查看原材料列表");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -279,6 +284,11 @@ public class Ui_rawMaterialPage extends BasePageClass {
             }
         }
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        RawMaterialPicker picker = new RawMaterialPicker(this.itsrmM_.query(null, null), null);
+        picker.setVisible(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
     
     private void toggleCreateArea(Boolean isOn)
     {
