@@ -322,7 +322,7 @@ public class NewCiCoTicket extends javax.swing.JFrame implements RawMaterialPick
     }
 
     @Override
-    public void employeeDataSelected(SqlDataTable rx) {
+    public void employeeDataSelected(SqlDataTable rx, Integer identity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -62,6 +62,13 @@ public class Ui_rawMaterialPage extends BasePageClass {
         jComboBox2 = new javax.swing.JComboBox();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        jTextField3 = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setResizable(false);
@@ -228,17 +235,79 @@ public class Ui_rawMaterialPage extends BasePageClass {
                 .addContainerGap())
         );
 
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("原材料激活/去激活"));
+
+        jLabel9.setText("原材料编号：");
+
+        jLabel10.setText("状态：");
+
+        jLabel11.setText("未开始");
+
+        jButton5.setText("激活");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jButton6.setText("去激活");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel9)
+                    .addComponent(jLabel10)
+                    .addComponent(jButton5))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton6)
+                    .addComponent(jLabel11)
+                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(116, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel11))
+                .addGap(36, 36, 36)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton5)
+                    .addComponent(jButton6))
+                .addContainerGap(96, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 29, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -289,6 +358,64 @@ public class Ui_rawMaterialPage extends BasePageClass {
         RawMaterialPicker picker = new RawMaterialPicker(this.itsrmM_.query(null, null), null);
         picker.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        if("".equals(this.jTextField3.getText().trim()))
+        {
+            this.jLabel11.setText("未输入有效原材料编码");
+        }
+        else
+        {
+            String id = this.jTextField3.getText().trim();
+            try
+            {
+                Integer idn = Integer.parseInt(id);
+                SqlResultInfo result = this.itsrmM_.udpate(idn, null, null, null, true);
+                if(result.isSucceed())
+                {
+                    this.jLabel11.setText("去激活成功(编码："+idn+")，可进行下一次修改");
+                }
+                else
+                {
+                    this.jLabel11.setText("修改失败"+result.getErrInfo());
+                    this.jTextField3.setText("");
+                }
+            }catch(java.lang.NumberFormatException e)
+            {
+                this.jLabel11.setText("未输入有效原材料编码");
+                this.jTextField3.setText("");
+            }
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        if("".equals(this.jTextField3.getText().trim()))
+        {
+            this.jLabel11.setText("未输入有效原材料编码");
+        }
+        else
+        {
+            String id = this.jTextField3.getText().trim();
+            try
+            {
+                Integer idn = Integer.parseInt(id);
+                SqlResultInfo result = this.itsrmM_.udpate(idn, null, null, null, false);
+                if(result.isSucceed())
+                {
+                    this.jLabel11.setText("去激活成功(编码："+idn+")，可进行下一次修改");
+                }
+                else
+                {
+                    this.jLabel11.setText("修改失败"+result.getErrInfo());
+                    this.jTextField3.setText("");
+                }
+            }catch(java.lang.NumberFormatException e)
+            {
+                this.jLabel11.setText("未输入有效原材料编码");
+                this.jTextField3.setText("");
+            }
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
     
     private void toggleCreateArea(Boolean isOn)
     {
@@ -315,9 +442,13 @@ public class Ui_rawMaterialPage extends BasePageClass {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JComboBox jComboBox2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -325,10 +456,13 @@ public class Ui_rawMaterialPage extends BasePageClass {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
     // End of variables declaration//GEN-END:variables
 }

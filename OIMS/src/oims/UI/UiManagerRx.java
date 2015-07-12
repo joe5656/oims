@@ -24,11 +24,12 @@ public interface UiManagerRx {
         EMPLOYEE_PAGE,
         STACK_PAGE,
         RAWMATERIAL_PAGE,
-        STORE_PAGE
+        STORE_PAGE,
+        PRODUCT_PAGE
     };
     public Page getPage(PageType pt);
     public void showPage(Integer pageId);
-    public void showEmployeePicker(SqlDataTable table, EmployeePickerTx tx);
+    public void showEmployeePicker(SqlDataTable table, EmployeePickerTx tx, Integer identify);
     public void showWarehousePicker(SqlDataTable table, WarehousePickerTx tx);
     public void showRawMaterialPicker(SqlDataTable table, RawMaterialPickerTx tx);
 }

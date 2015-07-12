@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package oims.UI.pages.employeePage;
+package oims.UI.pages.ProductPage;
 
 import oims.support.util.SqlDataTable;
 
@@ -11,6 +11,6 @@ import oims.support.util.SqlDataTable;
  *
  * @author freda
  */
-public interface EmployeePickerTx {
-    public void employeeDataSelected(SqlDataTable rx, Integer identity);
+public interface ProductPickerTx {
+    public void ProductDataSelected(SqlDataTable rx, Integer identity);    
 }

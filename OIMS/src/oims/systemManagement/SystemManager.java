@@ -30,7 +30,9 @@ public class SystemManager {
         DATABASE_MANAGER,
         TICKET_MANAGER,
         EMPLOYEE_MANAGER,
-        RAWMATERIAL_MANAGER
+        RAWMATERIAL_MANAGER,
+        STORE_MANAGER,
+        PRODUCT_MANAGER
     }
     public enum systemStatus
     {

@@ -55,7 +55,7 @@ public class StorePicker extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         selectB = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

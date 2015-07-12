@@ -26,25 +26,36 @@
             <file>file:/D:/git/OIMS/src/oims/dataBase/tables/RawMaterialTable.java</file>
             <file>file:/D:/git/OIMS/src/oims/rawMaterialManagement/RawMaterial.java</file>
             <file>file:/D:/git/OIMS/src/oims/rawMaterialManagement/RawMaterialManager.java</file>
+            <file>file:/D:/git/OIMS/src/oims/stockManagement/StockManager.java</file>
             <file>file:/D:/git/OIMS/src/oims/dataBase/tables/DoughTypeTable.java</file>
+            <file>file:/D:/git/OIMS/src/oims/UI/pages/ProductPage/ProductPickerTx.java</file>
             <file>file:/D:/git/OIMS/src/oims/dataBase/MYSQL/Db_columnTypeMapper_MYSQL.java</file>
             <file>file:/D:/git/OIMS/src/oims/AppBuilder.java</file>
+            <file>file:/D:/git/OIMS/src/oims/UI/pages/employeePage/EmployeePicker.java</file>
+            <file>file:/D:/git/OIMS/src/oims/UI/pages/ProductPage/ProductPicker.java</file>
             <file>file:/D:/git/OIMS/src/oims/dataBase/tables/ProducingPlanTable.java</file>
+            <file>file:/D:/git/OIMS/src/oims/UI/pages/employeePage/Ui_employeeManagerment.java</file>
             <file>file:/D:/git/OIMS/src/oims/dataBase/tables/StoreTable.java</file>
             <file>file:/D:/git/OIMS/src/oims/OIMS.java</file>
             <file>file:/D:/git/OIMS/src/oims/dataBase/MYSQL/Db_dataBase_MYSQL.java</file>
+            <file>file:/D:/git/OIMS/src/oims/productManagement/ProductManager.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/warehouseManagerment/WarehousePageRx.java</file>
+            <file>file:/D:/git/OIMS/src/oims/storeManagement/StoreManager.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/storeManagementPage/Ui_storeManagePage.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/rawMaterialPage/RawMaterialPickerTx.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/UiManagerRx.java</file>
+            <file>file:/D:/git/OIMS/src/oims/UI/pages/employeePage/EmployeePageRx.java</file>
             <file>file:/D:/git/OIMS/src/oims/dataBase/DbmReqHandler.java</file>
             <file>file:/D:/git/OIMS/src/oims/dataBase/tables/EmployeeTable.java</file>
             <file>file:/D:/git/OIMS/src/oims/support/util/CommonUnit.java</file>
             <file>file:/D:/git/OIMS/src/oims/systemManagement/SystemManager.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/warehouseManagerment/Ui_WarehousePage.java</file>
+            <file>file:/D:/git/OIMS/src/oims/UI/pages/employeePage/EmployeePageTx.java</file>
             <file>file:/D:/git/OIMS/src/oims/employeeManager/EmployeeManager.java</file>
             <file>file:/D:/git/OIMS/src/oims/dataBase/tables/SyncerTable.java</file>
+            <file>file:/D:/git/OIMS/src/oims/UI/pages/employeePage/EmployeePickerTx.java</file>
             <file>file:/D:/git/OIMS/src/oims/warehouseManagemnet/WareHouseManager.java</file>
+            <file>file:/D:/git/OIMS/src/oims/UI/pages/ProductPage/Ui_ProductPage.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/UiManager.java</file>
             <file>file:/D:/git/OIMS/src/oims/dataBase/tables/ProductReciptTable.java</file>
             <file>file:/D:/git/OIMS/src/oims/support/util/SqlResultInfo.java</file>

@@ -48,6 +48,7 @@ public class Ui_mainMenuPage extends BasePageClass{
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -92,6 +93,13 @@ public class Ui_mainMenuPage extends BasePageClass{
             }
         });
 
+        jButton6.setText("产品配置");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -101,7 +109,10 @@ public class Ui_mainMenuPage extends BasePageClass{
                 .addComponent(jButton1)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton5)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton5)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton6))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton2)
                         .addGap(18, 18, 18)
@@ -120,7 +131,9 @@ public class Ui_mainMenuPage extends BasePageClass{
                     .addComponent(jButton3)
                     .addComponent(jButton4))
                 .addGap(18, 18, 18)
-                .addComponent(jButton5)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton5)
+                    .addComponent(jButton6))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
@@ -177,6 +190,10 @@ public class Ui_mainMenuPage extends BasePageClass{
         itsUiManager_.createAndShowPage(UiManagerRx.PageType.STORE_PAGE, this);
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        itsUiManager_.createAndShowPage(UiManagerRx.PageType.PRODUCT_PAGE, this);
+    }//GEN-LAST:event_jButton6ActionPerformed
+
     public void toggleDbStatus(Boolean local, Boolean isOn)
     {
         javax.swing.JLabel aimLab;
@@ -218,6 +235,7 @@ public class Ui_mainMenuPage extends BasePageClass{
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

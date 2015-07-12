@@ -6,6 +6,7 @@
 package oims.dataBase.tables;
 
 import com.google.common.collect.Maps;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -103,6 +104,41 @@ public class EmployeeTable extends Db_table{
         return result;        
     }
     
+    public SqlResultInfo update(String id, String name, String NationalId, String picurl, String contact,
+                            Integer posi,Integer deptId, Boolean valid, String pw)
+    {
+         SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
+        
+       
+        TableEntry entryToBeInsert = generateTableEntry();
+        Map<String, String> valueHolder = Maps.newHashMap();
+        if(deptId!=null)valueHolder.put("deptId", deptId.toString());
+        if(posi!=null)valueHolder.put("positionId", posi.toString());
+        if(valid!=null)valueHolder.put("valid", valid==true?"1":"0");
+        if(contact!=null)valueHolder.put("contact", contact);
+        if(pw!=null)valueHolder.put("password", pw);
+        if(picurl!=null)valueHolder.put("picurl", picurl);
+        if(NationalId!=null)valueHolder.put("NationalId", NationalId);
+        if(name!=null)valueHolder.put("name", name);
+        
+        
+        // where
+        TableEntry wh = generateTableEntry();
+        Map<String, String> valueHoldereq = Maps.newHashMap();
+        valueHoldereq.put("EmployeeId", id);
+        
+        if(entryToBeInsert.fillInEntryValues(valueHolder) && wh.fillInEntryValues(valueHoldereq))
+        {
+            result = super.update(entryToBeInsert, wh, null, null);
+        }
+        else
+        {
+            result.setErrInfo("数据库连接请求失败，位置: EmployeeTable.newEntry");
+        }
+        
+        return result;  
+    }
+    
     static private String EnToCh(String en)
     {
         switch(en)
@@ -174,7 +210,7 @@ public class EmployeeTable extends Db_table{
         }
     }
     
-    public SqlResultInfo queryAllEmployeeGeneralInfo()
+    public SqlResultInfo queryEmployeeGeneralInfo(String employeeId, String employeeName)
     {
         SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
         TableEntry select = generateTableEntry();
@@ -187,7 +223,8 @@ public class EmployeeTable extends Db_table{
         
         TableEntry eq = generateTableEntry();
         Map<String, String> valueHoldereq = Maps.newHashMap();
-        valueHoldereq.put("valid", "1");
+        if(employeeId != null)valueHoldereq.put("EmployeeId", employeeId);
+        if(employeeName != null)valueHoldereq.put("name", employeeName);
         
         if(select.fillInEntryValues(valueHolder)
                 && eq.fillInEntryValues(valueHoldereq))
@@ -202,6 +239,37 @@ public class EmployeeTable extends Db_table{
         return result;        
     }
     
+    public Boolean checkPassword(String id, String pw)
+    {
+        Boolean value = false;
+        TableEntry select = generateTableEntry();
+        Map<String, String> valueHolder = Maps.newHashMap();
+        valueHolder.put("EmployeeId", "select");
+        valueHolder.put("gender", "select");
+        valueHolder.put("valid", "1");
+        valueHolder.put("contact", "select");
+        valueHolder.put("name", "select");
+        
+        TableEntry eq = generateTableEntry();
+        Map<String, String> valueHoldereq = Maps.newHashMap();
+        valueHoldereq.put("EmployeeId", id);
+        valueHoldereq.put("password", pw);
+        
+        if(select.fillInEntryValues(valueHolder)
+                && eq.fillInEntryValues(valueHoldereq))
+        {
+            SqlResultInfo result = super.select(select, eq, null, null);
+            try {
+                if(result.isSucceed() && result.getResultSet().first())
+                {
+                    value = true;
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(EmployeeTable.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return value;
+    }
     static public String getPrimaryKeyColNameInCh(){return EnToCh("EmployeeId");} 
     static public String getPrimaryKeyColNameInEng(){return "EmployeeId";}
     static public String getEmployeeNameColNameInCh(){return EnToCh("name");} 

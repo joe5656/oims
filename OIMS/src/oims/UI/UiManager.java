@@ -8,6 +8,7 @@ package oims.UI;
 import com.google.common.collect.Maps;
 import java.util.Map;
 import oims.UI.pages.Page;
+import oims.UI.pages.ProductPage.Ui_ProductPage;
 import oims.UI.pages.employeePage.EmployeePageTx;
 import oims.UI.pages.employeePage.Ui_employeeManagerment;
 import oims.dataBase.DataBaseManager;
@@ -30,7 +31,9 @@ import oims.UI.pages.warehouseManagerment.WarehousePickerTx;
 import oims.dataBase.Interfaces.dbStatus.DataBaseRx_dbStatus;
 import oims.dataBase.Interfaces.dbStatus.DataBaseTx_dbStatus;
 import oims.employeeManager.EmployeeManager;
+import oims.productManagement.ProductManager;
 import oims.rawMaterialManagement.RawMaterialManager;
+import oims.storeManagement.StoreManager;
 import oims.support.util.SqlDataTable;
 /**
  *
@@ -182,8 +185,9 @@ public class UiManager   implements oims.systemManagement.Client,UiManagerRx, Da
                 else
                 {
                     WarehousePageTx tempWM = (WarehousePageTx)itsSysManager_.getClient(SystemManager.clientType.WAREHOUSE_MANAGER);
+                    EmployeeManager em = (EmployeeManager)itsSysManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
                     if(tempWM == null){break;}
-                    pageWanted = new Ui_WarehousePage(this,tempWM);
+                    pageWanted = new Ui_WarehousePage(this,tempWM,em);
                     itsPages_.put(PageType.WAREHOUSE_PAGE, pageWanted);
                 }
                 break;
@@ -226,10 +230,26 @@ public class UiManager   implements oims.systemManagement.Client,UiManagerRx, Da
                 }
                 else
                 {
-                    //RawMaterialManager tempRM = (RawMaterialManager)itsSysManager_.getClient(SystemManager.clientType.RAWMATERIAL_MANAGER);
-                    //if(tempRM == null){break;}
-                    pageWanted = new Ui_storeManagePage(this);
+                    StoreManager tempRM = (StoreManager)itsSysManager_.getClient(SystemManager.clientType.STORE_MANAGER);
+                    EmployeeManager tempEM = (EmployeeManager)itsSysManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
+                    if(tempRM == null || tempEM == null){break;}
+                    pageWanted = new Ui_storeManagePage(this,tempRM,tempEM);
                     itsPages_.put(PageType.STORE_PAGE, pageWanted);
+                }
+                break;
+            }
+            case PRODUCT_PAGE:
+            {
+                if(itsPages_.containsKey(PageType.PRODUCT_PAGE))
+                {
+                    pageWanted = itsPages_.get(PageType.PRODUCT_PAGE);
+                }
+                else
+                {
+                    ProductManager tempPM = (ProductManager)itsSysManager_.getClient(SystemManager.clientType.PRODUCT_MANAGER);
+                    if(tempPM == null){break;}
+                    pageWanted = new Ui_ProductPage(this,tempPM);
+                    itsPages_.put(PageType.PRODUCT_PAGE, pageWanted);
                 }
                 break;
             }
@@ -297,9 +317,9 @@ public class UiManager   implements oims.systemManagement.Client,UiManagerRx, Da
     }
 
     @Override
-    public void showEmployeePicker(SqlDataTable table, EmployeePickerTx tx) 
+    public void showEmployeePicker(SqlDataTable table, EmployeePickerTx tx, Integer identity) 
     {
-        EmployeePicker page = new EmployeePicker(table, tx);
+        EmployeePicker page = new EmployeePicker(table, tx, identity);
         page.setVisible(true);
     }
 

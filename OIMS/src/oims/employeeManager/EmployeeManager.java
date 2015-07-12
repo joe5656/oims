@@ -85,8 +85,15 @@ public class EmployeeManager implements oims.systemManagement.Client,EmployeePag
     }
 
     @Override
-    public Employee queryEmployeeInfo(String employeeId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public SqlDataTable queryEmployeeInfo(String employeeId) 
+    {
+        SqlResultInfo rs = this.itsEmployeeTable_.queryEmployeeGeneralInfo(employeeId,null);
+        SqlDataTable dTable = null;
+        if(rs.isSucceed())
+        {
+            dTable = new SqlDataTable(rs.getResultSet(),EmployeeTable.getDerivedTableName());
+        }
+        return dTable;
     }
 
     @Override
@@ -98,7 +105,7 @@ public class EmployeeManager implements oims.systemManagement.Client,EmployeePag
 
     @Override
     public SqlDataTable queryGenerallEmployeeInfo() {
-        SqlResultInfo rs = this.itsEmployeeTable_.queryAllEmployeeGeneralInfo();
+        SqlResultInfo rs = this.itsEmployeeTable_.queryEmployeeGeneralInfo(null,null);
         SqlDataTable dTable = null;
         if(rs.isSucceed())
         {
@@ -107,10 +114,10 @@ public class EmployeeManager implements oims.systemManagement.Client,EmployeePag
         return dTable;
     }
     
-    public void needEmployeePicker(EmployeePickerTx tx)
+    public void needEmployeePicker(EmployeePickerTx tx, Integer id)
     {
         UiManager tempUiM = (UiManager)itsSysManager_.getClient(SystemManager.clientType.UI_MANAGER);
-        tempUiM.showEmployeePicker(this.queryGenerallEmployeeInfo(), tx);
+        tempUiM.showEmployeePicker(this.queryGenerallEmployeeInfo(), tx, id);
     }
     
     public String getEmployeeName(Integer id)
@@ -121,4 +128,20 @@ public class EmployeeManager implements oims.systemManagement.Client,EmployeePag
     static public Integer getInvalidEmployeeId(){return 99999999;}
     static public Integer getRobetId(){return 88888888;}
     static public String  getRobetName(){return "systemAuto";}
+
+    @Override
+    public Boolean checkPassword(String id, String pw) {
+       return this.itsEmployeeTable_.checkPassword(id, pw);
+    }
+
+    @Override
+    public SqlResultInfo updatePassword(String id, String pw) {
+        return this.itsEmployeeTable_.update(id, null, null, null, null, null, null, null, pw);
+    }
+
+    @Override
+    public Boolean toggleEmployee(String id, Boolean active) {
+        SqlResultInfo result = this.itsEmployeeTable_.update(id, null, null, null, null, null, null, active, null);
+        return result.isSucceed();
+    }
 }

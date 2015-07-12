@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package oims.UI.pages.employeePage;
+package oims.UI.pages.ProductPage;
 
 import javax.swing.ListSelectionModel;
+import oims.UI.pages.employeePage.EmployeePickerTx;
 import oims.support.util.SqlDataTable;
 import oims.support.util.UneditableTableModule;
 
@@ -13,14 +14,14 @@ import oims.support.util.UneditableTableModule;
  *
  * @author freda
  */
-public class EmployeePicker extends javax.swing.JFrame {
+public class ProductPicker extends javax.swing.JFrame {
     private SqlDataTable      itsSqlDTable_;
-    private EmployeePickerTx  pickerTx_;
+    private ProductPickerTx pickerTx_;
     private final Integer     callerIdentifier_;
     /**
-     * Creates new form EmployeePicker
+     * Creates new form ProductPicker
      */
-    public EmployeePicker(SqlDataTable table, EmployeePickerTx pickerTx, Integer identifier) {
+    public ProductPicker(SqlDataTable table, ProductPickerTx pickerTx, Integer identifier) {
         initComponents();
         callerIdentifier_ = identifier;
         if(table!=null)
@@ -43,8 +44,7 @@ public class EmployeePicker extends javax.swing.JFrame {
             jTable1.setVisible(Boolean.FALSE);
             this.selectB.setEnabled(Boolean.FALSE);
         }
-        
-    }                                      
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -59,9 +59,7 @@ public class EmployeePicker extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         selectB = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-
-        jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("员工信息"));
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -91,15 +89,15 @@ public class EmployeePicker extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(selectB)
-                .addContainerGap())
+                .addGap(18, 18, 18))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(selectB)
-                .addGap(0, 15, Short.MAX_VALUE))
+                .addGap(0, 12, Short.MAX_VALUE))
         );
 
         pack();
@@ -112,10 +110,9 @@ public class EmployeePicker extends javax.swing.JFrame {
         {
             this.itsSqlDTable_.setRowSelected(row);
         }
-        this.pickerTx_.employeeDataSelected(itsSqlDTable_,this.callerIdentifier_);
+        this.pickerTx_.ProductDataSelected(itsSqlDTable_,this.callerIdentifier_);
         this.dispose();
     }//GEN-LAST:event_selectBActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;

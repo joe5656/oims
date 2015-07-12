@@ -19,7 +19,10 @@ public interface EmployeePageTx {
     public void           setRx(EmployeePageRx rx);
     public SqlResultInfo  createNewEmploye(Employee employee);
     public SqlResultInfo  changeEmployeeInformation(Employee employee);
-    public Employee       queryEmployeeInfo(String employeeId);
+    public SqlDataTable   queryEmployeeInfo(String employeeId);
     public Vector         requestColumns();
     public SqlDataTable   queryGenerallEmployeeInfo();
+    public Boolean        checkPassword(String id, String pw);
+    public SqlResultInfo  updatePassword(String id, String pw);
+    public Boolean        toggleEmployee(String id, Boolean active);
 }

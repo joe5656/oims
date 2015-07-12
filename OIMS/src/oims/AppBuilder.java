@@ -11,7 +11,8 @@ import oims.dataBase.DataBaseManager;
 import oims.employeeManager.EmployeeManager;
 import oims.loggingManagement.LoggingManager;
 import oims.rawMaterialManagement.RawMaterialManager;
-import oims.stockManagement.SockManager;
+import oims.stockManagement.StockManager;
+import oims.storeManagement.StoreManager;
 import oims.systemManagement.SystemManager;
 import oims.ticketSystem.TicketManager;
 import oims.warehouseManagemnet.WareHouseManager;
@@ -28,9 +29,9 @@ public class AppBuilder {
     UiManager        itsUiManager_;
     LoggingManager   itsLogManager_;
     EmployeeManager  itsEmployeeManger_;
-    SockManager     itsStackManager_;
+    StockManager     itsStackManager_;
     RawMaterialManager itsRawMManager_;
-    
+    StoreManager     itsStoreManager_;
     public AppBuilder()
     {
         itsSystemManager_ = new SystemManager();
@@ -38,9 +39,10 @@ public class AppBuilder {
         itsUiManager_ = new UiManager(itsDataBaseManager_);
         itsUiManager_.showStartingPage();
         itsEmployeeManger_ = new EmployeeManager(itsDataBaseManager_);
-        itsStackManager_   = new SockManager();
+        itsStackManager_   = new StockManager();
         itsWareHouseManager_ = new WareHouseManager(itsDataBaseManager_,itsStackManager_);
         itsRawMManager_      = new RawMaterialManager(itsDataBaseManager_);
+        itsStoreManager_     = new StoreManager(itsDataBaseManager_);
         //itsTicketManager_ = new TicketManager(itsSystemManager_, itsDataBaseManager_);
         //itsWareHouseManager_ = new WareHouseManager(itsSystemManager_, itsDataBaseManager_);
         //itsLogManager_ = new LoggingManager(itsDataBaseManager_);
@@ -50,6 +52,7 @@ public class AppBuilder {
         //itsSystemManager_.registerClient(SystemManager.clientType.TICKET_MANAGER, itsTicketManager_);
         itsSystemManager_.registerClient(SystemManager.clientType.WAREHOUSE_MANAGER,itsWareHouseManager_);
         itsSystemManager_.registerClient(SystemManager.clientType.RAWMATERIAL_MANAGER,itsRawMManager_);
+        itsSystemManager_.registerClient(SystemManager.clientType.STORE_MANAGER,itsStoreManager_);
     }
     public void run()
     {System.out.print("sys started");

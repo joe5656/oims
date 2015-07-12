@@ -13,7 +13,7 @@ import oims.support.util.UnitQuantity;
  *
  * @author ezouyyi
  */
-public class SockManager {
+public class StockManager {
     StockTable     itsStackTable_;
     
     public Boolean isStackEmptryForWarehouse(Integer warehouseId){return Boolean.TRUE;}

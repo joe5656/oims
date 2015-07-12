@@ -13,6 +13,7 @@ import oims.UI.pages.employeePage.EmployeePageRx;
 import oims.UI.pages.employeePage.EmployeePickerTx;
 import oims.dataBase.tables.EmployeeTable;
 import oims.dataBase.tables.WareHouseTable;
+import oims.employeeManager.EmployeeManager;
 import oims.support.util.SqlDataTable;
 import oims.support.util.SqlResultInfo;
 
@@ -26,14 +27,15 @@ public class Ui_WarehousePage extends BasePageClass implements WarehousePageRx,W
     private String            tempKey_;
     private SqlDataTable      itsEmloyeeTmpDTable_;
     private String            tempEmployeeKey_;
-    private EmployeePageRx    itsEmployeePgRx_;
+    private EmployeeManager   itsEmployeeM_;
     /**
      * Creates new form Ui_WarehouseManagerment
      */
-    public Ui_WarehousePage(UiManager uiM,WarehousePageTx itsWarehousePageTx) {
+    public Ui_WarehousePage(UiManager uiM,WarehousePageTx itsWarehousePageTx,EmployeeManager em) {
         super(uiM,Page.PAGE_TYPE.SUB_PAGE);
         itsWarehousePageTx_ = itsWarehousePageTx;
         itsWarehousePageTx_.setRx(this);
+        itsEmployeeM_ = em;
         initComponents();
     }
 
@@ -169,6 +171,7 @@ public class Ui_WarehousePage extends BasePageClass implements WarehousePageRx,W
         keeperLable.setText("未制定管理员");
 
         selEmployeeB.setText("选择管理员");
+        selEmployeeB.setEnabled(false);
         selEmployeeB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 selEmployeeBActionPerformed(evt);
@@ -482,7 +485,7 @@ public class Ui_WarehousePage extends BasePageClass implements WarehousePageRx,W
     }//GEN-LAST:event_DelSelBActionPerformed
 
     private void selEmployeeBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selEmployeeBActionPerformed
-        //itsEmployeePgRx_.showEmployeePicker(this);
+       itsEmployeeM_.needEmployeePicker(this,0);
     }//GEN-LAST:event_selEmployeeBActionPerformed
     
     private void toggleDelArea(Boolean on)
@@ -507,11 +510,12 @@ public class Ui_WarehousePage extends BasePageClass implements WarehousePageRx,W
         this.createCancelB.setEnabled(on);
         this.warehouseContact.setEnabled(on);
         this.createB.setEnabled(on);
+        this.tempEmployeeKey_=null;
     }
     
     private void clearCreateArea()
     {
-        this.keeperLable.setText("未制定管理员");
+        this.keeperLable.setText("未指定管理员");
         this.warehouseAddr.setText(null);
         this.warehouseContact.setText(null);
         this.warehouseName.setText(null);
@@ -573,11 +577,11 @@ public class Ui_WarehousePage extends BasePageClass implements WarehousePageRx,W
     }
 
     @Override
-    public void employeeDataSelected(SqlDataTable dTable) {
+    public void employeeDataSelected(SqlDataTable dTable, Integer id) {
         this.itsEmloyeeTmpDTable_ = dTable;
         Vector head = dTable.getColumnNames();
-        Integer nameDataIndex = head.indexOf(EmployeeTable.getEmployeeNameColNameInCh());;
-        Integer primaryKeyIndex = head.indexOf(EmployeeTable.getPrimaryKeyColNameInCh());
+        Integer nameDataIndex = head.indexOf(EmployeeTable.getEmployeeNameColNameInEng());;
+        Integer primaryKeyIndex = head.indexOf(EmployeeTable.getPrimaryKeyColNameInEng());
         if(nameDataIndex != -1 && primaryKeyIndex != -1)
         {
             Vector data = (Vector)dTable.getSelectedRows().get(0);
