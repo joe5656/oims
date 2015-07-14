@@ -95,6 +95,36 @@ public class ProductTable extends Db_table{
         return result; 
     }
     
+    public SqlResultInfo query(Integer productId, Boolean valid,  String nameAbbr)
+    {
+        SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
+        if(productId!=null)
+        {
+            TableEntry entryToSelect = generateTableEntry();
+            Map<String, String> valueHolder = Maps.newHashMap();
+            valueHolder.put("cost", "selected");
+            valueHolder.put("nameAbbr", "selected");
+            valueHolder.put("valid", "selected");
+            valueHolder.put("picUrl", "selected");
+            valueHolder.put("cat", "selected");
+            valueHolder.put("vipPrice", "selected");
+            valueHolder.put("price", "selected");
+            valueHolder.put("produtName", "selected");
+            
+            //where
+            TableEntry wheq = generateTableEntry();
+            Map<String, String> whereeq = Maps.newHashMap();
+            whereeq.put("productId", productId.toString());
+            whereeq.put("valid", valid?"1":"0");
+            
+            if(entryToSelect.fillInEntryValues(valueHolder) && wheq.fillInEntryValues(whereeq))
+            {
+                result = super.select(entryToSelect, wheq, null, null);
+            }
+        }
+        return result; 
+    }
+    
     static private String EnToCh(String en)
     {
         switch(en)

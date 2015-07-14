@@ -6,7 +6,6 @@
 package oims.UI.pages.ProductPage;
 
 import javax.swing.ListSelectionModel;
-import oims.UI.pages.employeePage.EmployeePickerTx;
 import oims.support.util.SqlDataTable;
 import oims.support.util.UneditableTableModule;
 
@@ -15,9 +14,9 @@ import oims.support.util.UneditableTableModule;
  * @author freda
  */
 public class ProductPicker extends javax.swing.JFrame {
-    private SqlDataTable      itsSqlDTable_;
+    private SqlDataTable    itsSqlDTable_;
     private ProductPickerTx pickerTx_;
-    private final Integer     callerIdentifier_;
+    private final Integer   callerIdentifier_;
     /**
      * Creates new form ProductPicker
      */

@@ -10,6 +10,7 @@ import oims.UI.UiManager;
 import oims.dataBase.DataBaseManager;
 import oims.employeeManager.EmployeeManager;
 import oims.loggingManagement.LoggingManager;
+import oims.productManagement.ProductManager;
 import oims.rawMaterialManagement.RawMaterialManager;
 import oims.stockManagement.StockManager;
 import oims.storeManagement.StoreManager;
@@ -32,6 +33,7 @@ public class AppBuilder {
     StockManager     itsStackManager_;
     RawMaterialManager itsRawMManager_;
     StoreManager     itsStoreManager_;
+    ProductManager   itsProductManager_;
     public AppBuilder()
     {
         itsSystemManager_ = new SystemManager();
@@ -43,6 +45,7 @@ public class AppBuilder {
         itsWareHouseManager_ = new WareHouseManager(itsDataBaseManager_,itsStackManager_);
         itsRawMManager_      = new RawMaterialManager(itsDataBaseManager_);
         itsStoreManager_     = new StoreManager(itsDataBaseManager_);
+        itsProductManager_   = new ProductManager(itsDataBaseManager_);
         //itsTicketManager_ = new TicketManager(itsSystemManager_, itsDataBaseManager_);
         //itsWareHouseManager_ = new WareHouseManager(itsSystemManager_, itsDataBaseManager_);
         //itsLogManager_ = new LoggingManager(itsDataBaseManager_);
@@ -53,11 +56,11 @@ public class AppBuilder {
         itsSystemManager_.registerClient(SystemManager.clientType.WAREHOUSE_MANAGER,itsWareHouseManager_);
         itsSystemManager_.registerClient(SystemManager.clientType.RAWMATERIAL_MANAGER,itsRawMManager_);
         itsSystemManager_.registerClient(SystemManager.clientType.STORE_MANAGER,itsStoreManager_);
+        itsSystemManager_.registerClient(SystemManager.clientType.PRODUCT_MANAGER,itsProductManager_);
     }
+    
     public void run()
-    {System.out.print("sys started");
+    {
         itsSystemManager_.run();
-        System.out.print("system reached the last line");
-        //System.exit(0);
     };
 }

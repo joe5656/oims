@@ -9,6 +9,7 @@ import oims.UI.UiManager;
 import oims.UI.pages.BasePageClass;
 import oims.UI.pages.Page;
 import oims.productManagement.ProductManager;
+import oims.support.util.SqlResultInfo;
 
 /**
  *
@@ -59,6 +60,11 @@ public class Ui_ProductPage   extends BasePageClass{
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("操作"));
 
         jButton1.setText("开始新建");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("查询所有产品");
 
@@ -105,9 +111,19 @@ public class Ui_ProductPage   extends BasePageClass{
 
         jButton3.setText("新建");
         jButton3.setEnabled(false);
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("取消");
         jButton4.setEnabled(false);
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -155,8 +171,18 @@ public class Ui_ProductPage   extends BasePageClass{
         jLabel7.setText("未开始");
 
         jButton5.setText("激活");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jButton6.setText("去激活");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -219,6 +245,108 @@ public class Ui_ProductPage   extends BasePageClass{
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        toggleCreateArea(false);
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        String name = this.jTextField2.getText().trim();
+        String abbr = this.jTextField3.getText().trim();
+        if(name.equals("") || abbr.equals(""))
+        {
+            this.jLabel5.setText("数据不完整");
+        }
+        else
+        {
+            SqlResultInfo result = this.itsProductManager_.createNewProduct(name,
+                    0.0, 0.0, "none", "none", abbr);
+            if(result.isSucceed())
+            {
+                this.jLabel5.setText("创建成功，可以继续创建");
+                this.toggleCreateArea(false);
+            }
+            else
+            {
+                this.jLabel5.setText("创建失败"+result.getErrInfo());
+                this.toggleCreateArea(false);
+            }
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        toggleCreateArea(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        String productId = this.jTextField1.getText().trim();
+        if(productId.equals(""))
+        {
+            this.jLabel7.setText("未填入产品编码");
+        }
+        else
+        {
+            try
+            {
+                Integer productIdInt = Integer.parseInt(productId);
+                SqlResultInfo result = this.itsProductManager_.toggleProduct(productIdInt, true);
+                if(result.isSucceed())
+                {
+                    this.jLabel7.setText("产品（编码："+productId+"）已激活");
+                    this.jTextField1.setText("");
+                }
+                else
+                {
+                    this.jLabel7.setText("产品（编码："+productId+"）激活失败"+result.getErrInfo());
+                }
+            }catch(Exception e)
+            {
+                this.jLabel7.setText("产品编码无效");
+                this.jTextField1.setText("");
+            }
+            
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        String productId = this.jTextField1.getText().trim();
+        if(productId.equals(""))
+        {
+            this.jLabel7.setText("未填入产品编码");
+        }
+        else
+        {
+            try
+            {
+                Integer productIdInt = Integer.parseInt(productId);
+                SqlResultInfo result = this.itsProductManager_.toggleProduct(productIdInt, false);
+                if(result.isSucceed())
+                {
+                    this.jLabel7.setText("产品（编码："+productId+"）已去激活");
+                    this.jTextField1.setText("");
+                }
+                else
+                {
+                    this.jLabel7.setText("产品（编码："+productId+"）去激活失败"+result.getErrInfo());
+                }
+            }catch(Exception e)
+            {
+                this.jLabel7.setText("产品编码无效");
+                this.jTextField1.setText("");
+            }
+            
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
+    
+    private void toggleCreateArea(Boolean ison)
+    {
+        this.jButton3.setEnabled(ison);
+        this.jButton4.setEnabled(ison);
+        this.jTextField2.setEnabled(ison);
+        this.jTextField3.setEnabled(ison);
+        this.jTextField2.setText("");
+        this.jTextField3.setText("");
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;

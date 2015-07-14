@@ -5,10 +5,13 @@
  */
 package oims.reciptManagement;
 
+import java.util.List;
 import oims.dataBase.DataBaseManager;
 import oims.dataBase.tables.DetailReciptTable;
 import oims.dataBase.tables.ProductReciptTable;
 import oims.dataBase.tables.RawMaterialTable;
+import oims.support.util.CommonUnit;
+import oims.support.util.QuantitiedRawMaterial;
 import oims.support.util.SqlResultInfo;
 import oims.systemManagement.SystemManager;
 
@@ -35,6 +38,26 @@ public class ReciptManager  implements oims.systemManagement.Client{
     {
         return this.itsProductReciptTable_.newEntry(pid, pName, number, mainName, 
                 topName, fillingName, workinghours, mainReciptByCK, toppingByCK, fillingByCk);
+    }
+    
+    public SqlResultInfo newDetailRecipt(String reciptName, List<QuantitiedRawMaterial> rms)
+    {
+        String recipt = DetailRecipt.serialize(rms);
+        return this.itsDetailReciptTable_.newEntry(reciptName, recipt);
+    }
+    
+    public SqlResultInfo updateProductRecipt(Integer productId, Double price, Double vipPrice,
+            Boolean valid, String name, Double cost, String nameAbbr, String picUrl,
+            String cat)
+    {
+        return this.itsProductReciptTable_.update(productId, productId, name, 
+                productId, name, name, name, productId, valid, valid, valid);
+    }
+    
+    public SqlResultInfo updateDetailRecipt(String reciptName, List<QuantitiedRawMaterial> rms)
+    {
+        String recipt = DetailRecipt.serialize(rms);
+        return this.itsDetailReciptTable_.update(reciptName, recipt);
     }
     
     @Override
