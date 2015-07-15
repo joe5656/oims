@@ -223,7 +223,6 @@
                     <Component class="javax.swing.JTextField" name="jTextField1">
                       <Properties>
                         <Property name="editable" type="boolean" value="false"/>
-                        <Property name="text" type="java.lang.String" value="&#x672a;&#x9009;&#x62e9;"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JButton" name="jButton3">

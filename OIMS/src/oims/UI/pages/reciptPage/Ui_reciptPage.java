@@ -24,7 +24,27 @@ public class Ui_reciptPage extends BasePageClass {
         itsReciptManager_ = repM;
         initComponents();
     }
-
+    private void toggleCreateArea(Boolean ison)
+    {
+        this.jTextField1.setEnabled(ison);
+        this.jTextField2.setEnabled(ison);
+        this.jTextField3.setEnabled(ison);
+        this.jTextField4.setEnabled(ison);
+        
+        this.jTextField1.setText("");
+        this.jTextField2.setText("");
+        this.jTextField3.setText("");
+        this.jTextField4.setText("");
+        
+        this.jButton3.setEnabled(ison);
+        this.jButton4.setEnabled(ison);
+        this.jButton5.setEnabled(ison);
+        this.jButton6.setEnabled(ison);
+        
+        this.jComboBox2.setEnabled(ison);
+        this.jComboBox3.setEnabled(ison);
+        this.jComboBox4.setEnabled(ison);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -180,7 +200,6 @@ public class Ui_reciptPage extends BasePageClass {
         jLabel1.setText("产品：");
 
         jTextField1.setEditable(false);
-        jTextField1.setText("未选择");
 
         jButton3.setText("选择");
 
