@@ -32,7 +32,8 @@ public class SystemManager {
         EMPLOYEE_MANAGER,
         RAWMATERIAL_MANAGER,
         STORE_MANAGER,
-        PRODUCT_MANAGER
+        PRODUCT_MANAGER,
+        RECIPT_MANAGER
     }
     public enum systemStatus
     {

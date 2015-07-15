@@ -5,23 +5,34 @@
  */
 package oims.UI.pages.reciptPage;
 
+import java.util.Vector;
 import oims.UI.UiManager;
 import oims.UI.pages.BasePageClass;
 import oims.UI.pages.Page;
+import oims.UI.pages.ProductPage.ProductPickerTx;
+import oims.UI.pages.employeePage.EmployeePickerTx;
+import oims.dataBase.tables.DetailReciptTable;
+import oims.dataBase.tables.EmployeeTable;
+import oims.dataBase.tables.ProductTable;
+import oims.productManagement.ProductManager;
 import oims.reciptManagement.ReciptManager;
+import oims.support.util.SqlDataTable;
 
 /**
  *
  * @author ezouyyi
  */
-public class Ui_reciptPage extends BasePageClass {
+public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,DetailReciptPickerTx{
     private ReciptManager itsReciptManager_;
+    private ProductManager itsProductManager_;
+    
     /**
      * Creates new form Ui_reciptPage
      */
-    public Ui_reciptPage(UiManager uiM, ReciptManager repM) {
+    public Ui_reciptPage(UiManager uiM, ReciptManager repM,ProductManager pm) {
         super(uiM,Page.PAGE_TYPE.SUB_PAGE);
         itsReciptManager_ = repM;
+        itsProductManager_ = pm;
         initComponents();
     }
     private void toggleCreateArea(Boolean ison)
@@ -40,7 +51,11 @@ public class Ui_reciptPage extends BasePageClass {
         this.jButton4.setEnabled(ison);
         this.jButton5.setEnabled(ison);
         this.jButton6.setEnabled(ison);
-        
+        this.jButton8.setEnabled(ison);
+        if(!ison)
+        {
+            this.jButton7.setEnabled(ison);
+        }
         this.jComboBox2.setEnabled(ison);
         this.jComboBox3.setEnabled(ison);
         this.jComboBox4.setEnabled(ison);
@@ -154,6 +169,11 @@ public class Ui_reciptPage extends BasePageClass {
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("操作"));
 
         jButton1.setText("创建新的产品配方");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("查看所有产品配方");
 
@@ -200,8 +220,15 @@ public class Ui_reciptPage extends BasePageClass {
         jLabel1.setText("产品：");
 
         jTextField1.setEditable(false);
+        jTextField1.setEnabled(false);
 
         jButton3.setText("选择");
+        jButton3.setEnabled(false);
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -235,8 +262,10 @@ public class Ui_reciptPage extends BasePageClass {
         jLabel2.setText("主配方");
 
         jTextField2.setEditable(false);
+        jTextField2.setEnabled(false);
 
         jButton4.setText("选择");
+        jButton4.setEnabled(false);
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -246,18 +275,34 @@ public class Ui_reciptPage extends BasePageClass {
         jLabel3.setText("填料配方");
 
         jTextField3.setEditable(false);
+        jTextField3.setEnabled(false);
 
         jButton5.setText("选择");
+        jButton5.setEnabled(false);
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("顶料配方");
 
         jTextField4.setEditable(false);
+        jTextField4.setEnabled(false);
 
         jButton6.setText("选择");
+        jButton6.setEnabled(false);
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         jButton7.setText("创建");
+        jButton7.setEnabled(false);
 
         jButton8.setText("取消");
+        jButton8.setEnabled(false);
 
         jLabel17.setText("加工单位：");
 
@@ -266,10 +311,13 @@ public class Ui_reciptPage extends BasePageClass {
         jLabel19.setText("加工单位：");
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "中央厨房", "门店" }));
+        jComboBox2.setEnabled(false);
 
         jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "中央厨房", "门店" }));
+        jComboBox3.setEnabled(false);
 
         jComboBox4.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "中央厨房", "门店" }));
+        jComboBox4.setEnabled(false);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -901,12 +949,28 @@ public class Ui_reciptPage extends BasePageClass {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
+        this.itsReciptManager_.needDetailReciptPicker(this, 0);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton21ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton21ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        this.itsProductManager_.needProductPicker(this, 0, null, null);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.toggleCreateArea(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        this.itsReciptManager_.needDetailReciptPicker(this, 1);
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        this.itsReciptManager_.needDetailReciptPicker(this, 2);
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -1004,4 +1068,33 @@ public class Ui_reciptPage extends BasePageClass {
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField9;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void ProductDataSelected(SqlDataTable dTable, Integer identity) {
+        if(identity == 0)
+        {
+            Vector head = dTable.getColumnNames();
+            Integer ProductNameIndex = head.indexOf(ProductTable.getProductNameInCh());
+            Vector data = (Vector)dTable.getSelectedRows().get(0);
+            String productName = (String)data.get(ProductNameIndex);
+            this.jTextField1.setText(productName);
+        }
+    }
+
+    @Override
+    public void DetailReciptDataSelected(SqlDataTable dTable, Integer identity) {
+        Vector head = dTable.getColumnNames();
+        Integer reciptNameIndex = head.indexOf(DetailReciptTable.getReciptNameColNameInCh());
+        Vector data = (Vector)dTable.getSelectedRows().get(0);
+        String reciptName = (String)data.get(reciptNameIndex);
+        
+        if(identity == 0)
+        {
+            this.jTextField2.setText(reciptName);
+            this.jButton17.setEnabled(true);
+            this.jButton8.setEnabled(true);
+        }
+        else if(identity == 1){this.jTextField3.setText(reciptName);}
+        else if(identity == 2){this.jTextField4.setText(reciptName);}
+    }
 }

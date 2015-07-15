@@ -12,5 +12,5 @@ import oims.support.util.SqlDataTable;
  * @author ezouyyi
  */
 public interface DetailReciptPickerTx {
-    public void DetailReciptDataSelected(SqlDataTable dTable);
+    public void DetailReciptDataSelected(SqlDataTable dTable, Integer identity);
 }

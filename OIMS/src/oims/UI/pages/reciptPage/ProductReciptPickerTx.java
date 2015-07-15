@@ -12,5 +12,5 @@ import oims.support.util.SqlDataTable;
  * @author ezouyyi
  */
 public interface ProductReciptPickerTx {
-    public void ProductReciptDataSelected(SqlDataTable dTable);
+    public void ProductReciptDataSelected(SqlDataTable dTable, Integer identity);
 }

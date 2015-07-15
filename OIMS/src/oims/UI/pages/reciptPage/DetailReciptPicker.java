@@ -17,12 +17,13 @@ import oims.support.util.UneditableTableModule;
 public class DetailReciptPicker extends javax.swing.JFrame {
     private DetailReciptPickerTx pickerTx_;
     private SqlDataTable         itsSqlDTable_;
+    private Integer              identity_;
     /**
      * Creates new form DetailReciptPicker
      */
-    public DetailReciptPicker(SqlDataTable table, DetailReciptPickerTx pickerTx) {
+    public DetailReciptPicker(SqlDataTable table, DetailReciptPickerTx pickerTx, Integer identity) {
         initComponents();
-        
+        identity_ = identity;
         this.jTable1.setModel(new UneditableTableModule(table.getData(),table.getColumnNames()));
         itsSqlDTable_ = table;
         if(pickerTx != null)
@@ -50,7 +51,7 @@ public class DetailReciptPicker extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         selectB = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -101,7 +102,7 @@ public class DetailReciptPicker extends javax.swing.JFrame {
         {
             this.itsSqlDTable_.setRowSelected(row);
         }
-        this.pickerTx_.DetailReciptDataSelected(itsSqlDTable_);
+        this.pickerTx_.DetailReciptDataSelected(itsSqlDTable_, identity_);
         this.dispose();
     }//GEN-LAST:event_selectBActionPerformed
 

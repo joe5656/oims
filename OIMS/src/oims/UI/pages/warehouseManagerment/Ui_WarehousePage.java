@@ -580,7 +580,7 @@ public class Ui_WarehousePage extends BasePageClass implements WarehousePageRx,W
     public void employeeDataSelected(SqlDataTable dTable, Integer id) {
         this.itsEmloyeeTmpDTable_ = dTable;
         Vector head = dTable.getColumnNames();
-        Integer nameDataIndex = head.indexOf(EmployeeTable.getEmployeeNameColNameInEng());;
+        Integer nameDataIndex = head.indexOf(EmployeeTable.getEmployeeNameColNameInEng());
         Integer primaryKeyIndex = head.indexOf(EmployeeTable.getPrimaryKeyColNameInEng());
         if(nameDataIndex != -1 && primaryKeyIndex != -1)
         {

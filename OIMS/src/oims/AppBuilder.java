@@ -12,6 +12,7 @@ import oims.employeeManager.EmployeeManager;
 import oims.loggingManagement.LoggingManager;
 import oims.productManagement.ProductManager;
 import oims.rawMaterialManagement.RawMaterialManager;
+import oims.reciptManagement.ReciptManager;
 import oims.stockManagement.StockManager;
 import oims.storeManagement.StoreManager;
 import oims.systemManagement.SystemManager;
@@ -34,6 +35,7 @@ public class AppBuilder {
     RawMaterialManager itsRawMManager_;
     StoreManager     itsStoreManager_;
     ProductManager   itsProductManager_;
+    ReciptManager    itsReciptManager_;
     public AppBuilder()
     {
         itsSystemManager_ = new SystemManager();
@@ -46,6 +48,7 @@ public class AppBuilder {
         itsRawMManager_      = new RawMaterialManager(itsDataBaseManager_);
         itsStoreManager_     = new StoreManager(itsDataBaseManager_);
         itsProductManager_   = new ProductManager(itsDataBaseManager_);
+        itsReciptManager_    = new ReciptManager(itsDataBaseManager_);
         //itsTicketManager_ = new TicketManager(itsSystemManager_, itsDataBaseManager_);
         //itsWareHouseManager_ = new WareHouseManager(itsSystemManager_, itsDataBaseManager_);
         //itsLogManager_ = new LoggingManager(itsDataBaseManager_);
@@ -57,6 +60,7 @@ public class AppBuilder {
         itsSystemManager_.registerClient(SystemManager.clientType.RAWMATERIAL_MANAGER,itsRawMManager_);
         itsSystemManager_.registerClient(SystemManager.clientType.STORE_MANAGER,itsStoreManager_);
         itsSystemManager_.registerClient(SystemManager.clientType.PRODUCT_MANAGER,itsProductManager_);
+        itsSystemManager_.registerClient(SystemManager.clientType.RECIPT_MANAGER,itsReciptManager_);
     }
     
     public void run()

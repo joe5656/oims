@@ -117,6 +117,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="&#x521b;&#x5efa;&#x65b0;&#x7684;&#x4ea7;&#x54c1;&#x914d;&#x65b9;"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="jButton2">
                   <Properties>
@@ -223,12 +226,17 @@
                     <Component class="javax.swing.JTextField" name="jTextField1">
                       <Properties>
                         <Property name="editable" type="boolean" value="false"/>
+                        <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JButton" name="jButton3">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="&#x9009;&#x62e9;"/>
+                        <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton3ActionPerformed"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>
@@ -337,11 +345,13 @@
                     <Component class="javax.swing.JTextField" name="jTextField2">
                       <Properties>
                         <Property name="editable" type="boolean" value="false"/>
+                        <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JButton" name="jButton4">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="&#x9009;&#x62e9;"/>
+                        <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
@@ -355,12 +365,17 @@
                     <Component class="javax.swing.JTextField" name="jTextField3">
                       <Properties>
                         <Property name="editable" type="boolean" value="false"/>
+                        <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JButton" name="jButton5">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="&#x9009;&#x62e9;"/>
+                        <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton5ActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel4">
                       <Properties>
@@ -370,21 +385,28 @@
                     <Component class="javax.swing.JTextField" name="jTextField4">
                       <Properties>
                         <Property name="editable" type="boolean" value="false"/>
+                        <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JButton" name="jButton6">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="&#x9009;&#x62e9;"/>
+                        <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton6ActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="jButton7">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="&#x521b;&#x5efa;"/>
+                        <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JButton" name="jButton8">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="&#x53d6;&#x6d88;"/>
+                        <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel17">
@@ -410,6 +432,7 @@
                             <StringItem index="1" value="&#x95e8;&#x5e97;"/>
                           </StringArray>
                         </Property>
+                        <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JComboBox" name="jComboBox3">
@@ -420,6 +443,7 @@
                             <StringItem index="1" value="&#x95e8;&#x5e97;"/>
                           </StringArray>
                         </Property>
+                        <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JComboBox" name="jComboBox4">
@@ -430,6 +454,7 @@
                             <StringItem index="1" value="&#x95e8;&#x5e97;"/>
                           </StringArray>
                         </Property>
+                        <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
                     </Component>
                   </SubComponents>

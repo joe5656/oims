@@ -6,12 +6,17 @@
 package oims.reciptManagement;
 
 import java.util.List;
+import oims.UI.UiManager;
+import oims.UI.pages.ProductPage.ProductPickerTx;
+import oims.UI.pages.reciptPage.DetailReciptPickerTx;
+import oims.UI.pages.reciptPage.ProductReciptPickerTx;
 import oims.dataBase.DataBaseManager;
 import oims.dataBase.tables.DetailReciptTable;
 import oims.dataBase.tables.ProductReciptTable;
 import oims.dataBase.tables.RawMaterialTable;
 import oims.support.util.CommonUnit;
 import oims.support.util.QuantitiedRawMaterial;
+import oims.support.util.SqlDataTable;
 import oims.support.util.SqlResultInfo;
 import oims.systemManagement.SystemManager;
 
@@ -60,6 +65,18 @@ public class ReciptManager  implements oims.systemManagement.Client{
         return this.itsDetailReciptTable_.update(reciptName, recipt);
     }
     
+    public SqlDataTable queryDetailReciptAll()
+    {
+        return new SqlDataTable(this.itsDetailReciptTable_.query(null, null).getResultSet(),
+                this.itsDetailReciptTable_.getName());
+    }
+    
+    public SqlDataTable queryProductReciptAll()
+    {
+        return new SqlDataTable(this.itsProductReciptTable_.query(null, null, null).getResultSet(),
+                this.itsDetailReciptTable_.getName());
+    }
+    
     @Override
     public Boolean systemStatusChangeNotify(SystemManager.systemStatus status)
     {
@@ -99,4 +116,19 @@ public class ReciptManager  implements oims.systemManagement.Client{
     @Override
     public void setSystemManager(SystemManager sysManager){itsSysManager_= sysManager;}
     
+    public void needDetailReciptPicker(DetailReciptPickerTx tx, Integer id)
+    {
+        UiManager tempUiM = (UiManager)itsSysManager_.getClient(SystemManager.clientType.UI_MANAGER);
+        SqlDataTable table = this.queryDetailReciptAll();
+        this.itsDetailReciptTable_.translateColumnName(table.getColumnNames());
+        tempUiM.showDetailReciptPicker(table, tx, id);
+    }
+    
+    public void needProductReciptPicker(ProductReciptPickerTx tx, Integer id)
+    {
+        UiManager tempUiM = (UiManager)itsSysManager_.getClient(SystemManager.clientType.UI_MANAGER);
+        SqlDataTable table = this.queryProductReciptAll();
+        this.itsDetailReciptTable_.translateColumnName(table.getColumnNames());
+        tempUiM.showrProductReciptPicker(table, tx, id);
+    }
 }

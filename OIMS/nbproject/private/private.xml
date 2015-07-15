@@ -7,10 +7,12 @@
             <file>file:/D:/git/OIMS/src/oims/UI/pages/rawMaterialPage/RawMaterialPicker.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/storeManagementPage/StorePicker.java</file>
             <file>file:/D:/git/OIMS/src/oims/employeeManager/Employee.java</file>
+            <file>file:/D:/git/OIMS/src/oims/reciptManagement/ReciptManager.java</file>
             <file>file:/D:/git/OIMS/src/oims/Tasks/DataBaseKeepAlive.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/warehouseManagerment/WarehouseListPage.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/mainMenu/Ui_mainMenuPage.java</file>
             <file>file:/D:/git/OIMS/src/oims/dataBase/Db_table.java</file>
+            <file>file:/D:/git/OIMS/src/oims/dataBase/tables/DetailReciptTable.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/storeManagementPage/StorePickerTx.java</file>
             <file>file:/D:/git/OIMS/src/oims/dataBase/tables/LogTable.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/reciptPage/Ui_reciptPage.java</file>
@@ -21,22 +23,27 @@
             <file>file:/D:/git/OIMS/src/oims/dataBase/tables/ReciptTable.java</file>
             <file>file:/D:/git/OIMS/src/oims/support/util/UneditableTableModule.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/StackPage/NewCiCoTicket.java</file>
+            <file>file:/D:/git/OIMS/src/oims/UI/pages/reciptPage/DetailReciptPickerTx.java</file>
             <file>file:/D:/git/OIMS/src/oims/support/util/SqlDataTable.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/BasePageClass.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/StackPage/Ui_StackMangement.java</file>
             <file>file:/D:/git/OIMS/src/oims/dataBase/tables/RawMaterialTable.java</file>
             <file>file:/D:/git/OIMS/src/oims/rawMaterialManagement/RawMaterial.java</file>
+            <file>file:/D:/git/OIMS/src/oims/UI/pages/reciptPage/ProductReciptPickerTx.java</file>
             <file>file:/D:/git/OIMS/src/oims/rawMaterialManagement/RawMaterialManager.java</file>
             <file>file:/D:/git/OIMS/src/oims/stockManagement/StockManager.java</file>
             <file>file:/D:/git/OIMS/src/oims/dataBase/tables/DoughTypeTable.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/ProductPage/ProductPickerTx.java</file>
             <file>file:/D:/git/OIMS/src/oims/dataBase/MYSQL/Db_columnTypeMapper_MYSQL.java</file>
+            <file>file:/D:/git/OIMS/src/oims/UI/pages/reciptPage/DetailReciptPicker.java</file>
             <file>file:/D:/git/OIMS/src/oims/AppBuilder.java</file>
+            <file>file:/D:/git/OIMS/src/oims/UI/pages/reciptPage/ProductReciptPicker.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/employeePage/EmployeePicker.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/ProductPage/ProductPicker.java</file>
             <file>file:/D:/git/OIMS/src/oims/dataBase/tables/ProducingPlanTable.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/employeePage/Ui_employeeManagerment.java</file>
             <file>file:/D:/git/OIMS/src/oims/dataBase/tables/StoreTable.java</file>
+            <file>file:/D:/git/OIMS/src/oims/reciptManagement/DetailRecipt.java</file>
             <file>file:/D:/git/OIMS/src/oims/OIMS.java</file>
             <file>file:/D:/git/OIMS/src/oims/dataBase/MYSQL/Db_dataBase_MYSQL.java</file>
             <file>file:/D:/git/OIMS/src/oims/productManagement/ProductManager.java</file>

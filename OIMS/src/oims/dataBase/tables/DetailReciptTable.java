@@ -27,7 +27,7 @@ public class DetailReciptTable   extends Db_table{
     {
         super("DetailReciptTable", dbm, Table_Type.TABLE_TYPE_MIRROR);
         // recipt format: MaterialId1:MaterialName1:quantity1:unit1|.....|MaterialIdN:MaterialNameN:quantityN:unitN
-        super.registerColumn("recipt", Db_publicColumnAttribute.ATTRIBUTE_NAME.TEXT, Boolean.FALSE, Boolean.TRUE, Boolean.FALSE, null);
+        super.registerColumn("recipt", Db_publicColumnAttribute.ATTRIBUTE_NAME.TEXT, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
         super.registerColumn("reciptName", Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR60, Boolean.FALSE, Boolean.TRUE, Boolean.FALSE, null);
         super.registerColumn("reciptId", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER, Boolean.TRUE, Boolean.TRUE,  Boolean.TRUE, null);
     }
@@ -125,4 +125,8 @@ public class DetailReciptTable   extends Db_table{
             col.setElementAt(EnToCh((String)col.elementAt(i)), i);
         }
     }
+    static public String getPrimaryKeyColNameInCh(){return EnToCh("reciptId");} 
+    static public String getPrimaryKeyColNameInEng(){return "reciptId";}
+    static public String getReciptNameColNameInCh(){return EnToCh("reciptName");} 
+    static public String getReciptNameColNameInEng(){return "reciptName";}
 }

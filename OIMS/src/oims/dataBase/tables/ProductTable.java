@@ -98,30 +98,28 @@ public class ProductTable extends Db_table{
     public SqlResultInfo query(Integer productId, Boolean valid,  String nameAbbr)
     {
         SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
-        if(productId!=null)
+        TableEntry entryToSelect = generateTableEntry();
+        Map<String, String> valueHolder = Maps.newHashMap();
+        valueHolder.put("cost", "selected");
+        valueHolder.put("nameAbbr", "selected");
+        valueHolder.put("valid", "selected");
+        valueHolder.put("picUrl", "selected");
+        valueHolder.put("cat", "selected");
+        valueHolder.put("vipPrice", "selected");
+        valueHolder.put("price", "selected");
+        valueHolder.put("produtName", "selected");
+
+        //where
+        TableEntry wheq = generateTableEntry();
+        Map<String, String> whereeq = Maps.newHashMap();
+        if(productId!=null)whereeq.put("productId", productId.toString());
+        if(valid!=null)whereeq.put("valid", valid?"1":"0");
+
+        if(entryToSelect.fillInEntryValues(valueHolder) && wheq.fillInEntryValues(whereeq))
         {
-            TableEntry entryToSelect = generateTableEntry();
-            Map<String, String> valueHolder = Maps.newHashMap();
-            valueHolder.put("cost", "selected");
-            valueHolder.put("nameAbbr", "selected");
-            valueHolder.put("valid", "selected");
-            valueHolder.put("picUrl", "selected");
-            valueHolder.put("cat", "selected");
-            valueHolder.put("vipPrice", "selected");
-            valueHolder.put("price", "selected");
-            valueHolder.put("produtName", "selected");
-            
-            //where
-            TableEntry wheq = generateTableEntry();
-            Map<String, String> whereeq = Maps.newHashMap();
-            whereeq.put("productId", productId.toString());
-            whereeq.put("valid", valid?"1":"0");
-            
-            if(entryToSelect.fillInEntryValues(valueHolder) && wheq.fillInEntryValues(whereeq))
-            {
-                result = super.select(entryToSelect, wheq, null, null);
-            }
+            result = super.select(entryToSelect, wheq, null, null);
         }
+
         return result; 
     }
     
@@ -152,4 +150,6 @@ public class ProductTable extends Db_table{
     
     static public String getPrimaryKeyColName(){return "productId";}
     static public String getPrimaryKeyColNameInCh(){return EnToCh("productId");}   
+    static public String getProductName(){return "produtName";}
+    static public String getProductNameInCh(){return EnToCh("produtName");}   
 }

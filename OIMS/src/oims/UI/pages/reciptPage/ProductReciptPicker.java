@@ -17,12 +17,13 @@ import oims.support.util.UneditableTableModule;
 public class ProductReciptPicker extends javax.swing.JFrame {
     private ProductReciptPickerTx pickerTx_;
     private SqlDataTable          itsSqlDTable_;
+    private Integer               itsIdentity_;
     /**
      * Creates new form ProductReciptPicker
      */
-    public ProductReciptPicker(SqlDataTable table, ProductReciptPickerTx pickerTx) {
+    public ProductReciptPicker(SqlDataTable table, ProductReciptPickerTx pickerTx, Integer identity) {
         initComponents();
-        
+        itsIdentity_ = identity;
         this.jTable1.setModel(new UneditableTableModule(table.getData(),table.getColumnNames()));
         itsSqlDTable_ = table;
         if(pickerTx != null)
@@ -101,7 +102,7 @@ public class ProductReciptPicker extends javax.swing.JFrame {
         {
             this.itsSqlDTable_.setRowSelected(row);
         }
-        this.pickerTx_.ProductReciptDataSelected(itsSqlDTable_);
+        this.pickerTx_.ProductReciptDataSelected(itsSqlDTable_, this.itsIdentity_);
         this.dispose();
     }//GEN-LAST:event_selectBActionPerformed
 

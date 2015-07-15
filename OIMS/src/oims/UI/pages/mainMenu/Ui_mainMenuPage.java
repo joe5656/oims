@@ -49,6 +49,7 @@ public class Ui_mainMenuPage extends BasePageClass{
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -100,6 +101,13 @@ public class Ui_mainMenuPage extends BasePageClass{
             }
         });
 
+        jButton7.setText("配方管理");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -112,7 +120,9 @@ public class Ui_mainMenuPage extends BasePageClass{
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton5)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton6))
+                        .addComponent(jButton6)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton7))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton2)
                         .addGap(18, 18, 18)
@@ -133,7 +143,8 @@ public class Ui_mainMenuPage extends BasePageClass{
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton5)
-                    .addComponent(jButton6))
+                    .addComponent(jButton6)
+                    .addComponent(jButton7))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
@@ -194,6 +205,10 @@ public class Ui_mainMenuPage extends BasePageClass{
         itsUiManager_.createAndShowPage(UiManagerRx.PageType.PRODUCT_PAGE, this);
     }//GEN-LAST:event_jButton6ActionPerformed
 
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        itsUiManager_.createAndShowPage(UiManagerRx.PageType.RECIPT_PAGE, this);
+    }//GEN-LAST:event_jButton7ActionPerformed
+
     public void toggleDbStatus(Boolean local, Boolean isOn)
     {
         javax.swing.JLabel aimLab;
@@ -236,6 +251,7 @@ public class Ui_mainMenuPage extends BasePageClass{
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

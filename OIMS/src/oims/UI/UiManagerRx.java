@@ -6,8 +6,11 @@
 package oims.UI;
 
 import oims.UI.pages.Page;
+import oims.UI.pages.ProductPage.ProductPickerTx;
 import oims.UI.pages.employeePage.EmployeePickerTx;
 import oims.UI.pages.rawMaterialPage.RawMaterialPickerTx;
+import oims.UI.pages.reciptPage.DetailReciptPickerTx;
+import oims.UI.pages.reciptPage.ProductReciptPickerTx;
 import oims.UI.pages.warehouseManagerment.WarehousePickerTx;
 import oims.support.util.SqlDataTable;
 
@@ -25,11 +28,15 @@ public interface UiManagerRx {
         STACK_PAGE,
         RAWMATERIAL_PAGE,
         STORE_PAGE,
-        PRODUCT_PAGE
+        PRODUCT_PAGE,
+        RECIPT_PAGE
     };
     public Page getPage(PageType pt);
     public void showPage(Integer pageId);
     public void showEmployeePicker(SqlDataTable table, EmployeePickerTx tx, Integer identify);
+    public void showProductPicker(SqlDataTable table, ProductPickerTx tx, Integer identify);
+    public void showDetailReciptPicker(SqlDataTable table, DetailReciptPickerTx tx, Integer identify);
+    public void showrProductReciptPicker(SqlDataTable table, ProductReciptPickerTx tx, Integer identify);
     public void showWarehousePicker(SqlDataTable table, WarehousePickerTx tx);
     public void showRawMaterialPicker(SqlDataTable table, RawMaterialPickerTx tx);
 }

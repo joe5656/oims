@@ -8,6 +8,8 @@ package oims.UI;
 import com.google.common.collect.Maps;
 import java.util.Map;
 import oims.UI.pages.Page;
+import oims.UI.pages.ProductPage.ProductPicker;
+import oims.UI.pages.ProductPage.ProductPickerTx;
 import oims.UI.pages.ProductPage.Ui_ProductPage;
 import oims.UI.pages.employeePage.EmployeePageTx;
 import oims.UI.pages.employeePage.Ui_employeeManagerment;
@@ -23,6 +25,11 @@ import oims.UI.pages.employeePage.EmployeePickerTx;
 import oims.UI.pages.rawMaterialPage.RawMaterialPicker;
 import oims.UI.pages.rawMaterialPage.RawMaterialPickerTx;
 import oims.UI.pages.rawMaterialPage.Ui_rawMaterialPage;
+import oims.UI.pages.reciptPage.DetailReciptPicker;
+import oims.UI.pages.reciptPage.DetailReciptPickerTx;
+import oims.UI.pages.reciptPage.ProductReciptPicker;
+import oims.UI.pages.reciptPage.ProductReciptPickerTx;
+import oims.UI.pages.reciptPage.Ui_reciptPage;
 import oims.UI.pages.storeManagementPage.Ui_storeManagePage;
 import oims.UI.pages.warehouseManagerment.Ui_WarehousePage;
 import oims.UI.pages.warehouseManagerment.WarehouseListPage;
@@ -30,9 +37,11 @@ import oims.UI.pages.warehouseManagerment.WarehousePageTx;
 import oims.UI.pages.warehouseManagerment.WarehousePickerTx;
 import oims.dataBase.Interfaces.dbStatus.DataBaseRx_dbStatus;
 import oims.dataBase.Interfaces.dbStatus.DataBaseTx_dbStatus;
+import oims.dataBase.tables.DetailReciptTable;
 import oims.employeeManager.EmployeeManager;
 import oims.productManagement.ProductManager;
 import oims.rawMaterialManagement.RawMaterialManager;
+import oims.reciptManagement.ReciptManager;
 import oims.storeManagement.StoreManager;
 import oims.support.util.SqlDataTable;
 /**
@@ -253,6 +262,22 @@ public class UiManager   implements oims.systemManagement.Client,UiManagerRx, Da
                 }
                 break;
             }
+            case RECIPT_PAGE:
+            {
+                if(itsPages_.containsKey(PageType.RECIPT_PAGE))
+                {
+                    pageWanted = itsPages_.get(PageType.RECIPT_PAGE);
+                }
+                else
+                {
+                    ReciptManager tempRM = (ReciptManager)itsSysManager_.getClient(SystemManager.clientType.RECIPT_MANAGER);
+                    ProductManager tempPM = (ProductManager)itsSysManager_.getClient(SystemManager.clientType.PRODUCT_MANAGER);
+                    if(tempPM == null || tempRM == null){break;}
+                    pageWanted = new Ui_reciptPage(this,tempRM,tempPM);
+                    itsPages_.put(PageType.RECIPT_PAGE, pageWanted);
+                }
+                break;
+            }
             default:
             {
                 break;
@@ -327,11 +352,32 @@ public class UiManager   implements oims.systemManagement.Client,UiManagerRx, Da
     public void showWarehousePicker(SqlDataTable table, WarehousePickerTx tx) 
     {
         WarehouseListPage page = new WarehouseListPage(table, tx);
+        page.setVisible(true);
     }
 
     @Override
     public void showRawMaterialPicker(SqlDataTable table, RawMaterialPickerTx tx) 
     {
         RawMaterialPicker page = new RawMaterialPicker(table, tx);
+        page.setVisible(true);
+    }
+    
+    @Override
+    public void showProductPicker(SqlDataTable table, ProductPickerTx tx, Integer identity) 
+    {
+        ProductPicker page = new ProductPicker(table, tx,identity);
+        page.setVisible(true);
+    }
+
+    @Override
+    public void showDetailReciptPicker(SqlDataTable table, DetailReciptPickerTx tx, Integer identity) {
+        DetailReciptPicker page = new DetailReciptPicker(table, tx, identity);
+        page.setVisible(true);
+    }
+
+    @Override
+    public void showrProductReciptPicker(SqlDataTable table, ProductReciptPickerTx tx, Integer identity) {
+        ProductReciptPicker page = new ProductReciptPicker(table, tx, identity);
+        page.setVisible(true);
     }
 }

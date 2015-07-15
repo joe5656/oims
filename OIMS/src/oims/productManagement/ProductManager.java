@@ -7,6 +7,9 @@ package oims.productManagement;
 
 import oims.dataBase.tables.ProductTable;
 import java.util.Map;
+import oims.UI.UiManager;
+import oims.UI.pages.ProductPage.ProductPickerTx;
+import oims.UI.pages.employeePage.EmployeePickerTx;
 import oims.dataBase.DataBaseManager;
 import oims.dataBase.tables.EmployeeTable;
 import oims.support.util.SqlDataTable;
@@ -99,4 +102,12 @@ public class ProductManager implements oims.systemManagement.Client{
 
     @Override
     public void setSystemManager(SystemManager sysManager) {itsSysManager_ = sysManager;}
+    
+    public void needProductPicker(ProductPickerTx tx, Integer id, Integer productId, Boolean isActive)
+    {
+        UiManager tempUiM = (UiManager)itsSysManager_.getClient(SystemManager.clientType.UI_MANAGER);
+        SqlDataTable table = this.queryProduct(productId, isActive);
+        this.itsProductTable_.translateColumnName(table.getColumnNames());
+        tempUiM.showProductPicker(table, tx, id);
+    }
 }
