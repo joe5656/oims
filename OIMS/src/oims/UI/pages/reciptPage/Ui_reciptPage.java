@@ -11,10 +11,13 @@ import oims.UI.pages.BasePageClass;
 import oims.UI.pages.Page;
 import oims.UI.pages.ProductPage.ProductPickerTx;
 import oims.UI.pages.employeePage.EmployeePickerTx;
+import oims.UI.pages.rawMaterialPage.RawMaterialPickerTx;
 import oims.dataBase.tables.DetailReciptTable;
 import oims.dataBase.tables.EmployeeTable;
 import oims.dataBase.tables.ProductTable;
+import oims.dataBase.tables.RawMaterialTable;
 import oims.productManagement.ProductManager;
+import oims.rawMaterialManagement.RawMaterialManager;
 import oims.reciptManagement.ReciptManager;
 import oims.support.util.SqlDataTable;
 
@@ -22,17 +25,21 @@ import oims.support.util.SqlDataTable;
  *
  * @author ezouyyi
  */
-public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,DetailReciptPickerTx{
+public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,DetailReciptPickerTx,RawMaterialPickerTx{
     private ReciptManager itsReciptManager_;
     private ProductManager itsProductManager_;
+    private RawMaterialManager itsRmManager_;
     
     /**
      * Creates new form Ui_reciptPage
      */
-    public Ui_reciptPage(UiManager uiM, ReciptManager repM,ProductManager pm) {
+    public Ui_reciptPage(UiManager uiM, ReciptManager repM,ProductManager pm, 
+            RawMaterialManager rm) 
+    {
         super(uiM,Page.PAGE_TYPE.SUB_PAGE);
         itsReciptManager_ = repM;
         itsProductManager_ = pm;
+        itsRmManager_ = rm;
         initComponents();
     }
     private void toggleCreateArea(Boolean ison)
@@ -627,6 +634,11 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
         jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder("操作"));
 
         jButton15.setText("创建新的详细配方");
+        jButton15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton15ActionPerformed(evt);
+            }
+        });
 
         jButton16.setText("查看所有详细配方");
 
@@ -681,9 +693,15 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
         jLabel13.setText("原材料：");
 
         jTextField9.setEditable(false);
+        jTextField9.setEnabled(false);
 
         jButton17.setText("选择");
         jButton17.setEnabled(false);
+        jButton17.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton17ActionPerformed(evt);
+            }
+        });
 
         jLabel14.setText("重量：");
 
@@ -702,6 +720,11 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
 
         jButton20.setText("取消");
         jButton20.setEnabled(false);
+        jButton20.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton20ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
@@ -972,6 +995,32 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
         this.itsReciptManager_.needDetailReciptPicker(this, 2);
     }//GEN-LAST:event_jButton6ActionPerformed
 
+    private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
+        toggleDetailReciptCreateArea(true);
+    }//GEN-LAST:event_jButton15ActionPerformed
+
+    private void jButton20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton20ActionPerformed
+        toggleDetailReciptCreateArea(false);
+    }//GEN-LAST:event_jButton20ActionPerformed
+
+    private void jButton17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton17ActionPerformed
+        this.itsRmManager_.needRawMaterialPickerValidAll(this, 0);
+    }//GEN-LAST:event_jButton17ActionPerformed
+
+    private void toggleDetailReciptCreateArea(Boolean ison)
+    {
+        this.jTextField11.setEnabled(ison);
+        this.jTextField9.setEnabled(ison);
+        this.jTextField10.setEnabled(ison);
+        this.jTextField11.setText("");
+        this.jTextField10.setText("");
+        this.jTextField9.setText("");
+        this.jButton17.setEnabled(ison);
+        this.jComboBox1.setEnabled(ison);
+        this.jButton18.setEnabled(ison);
+        this.jButton19.setEnabled(ison);
+        this.jButton20.setEnabled(ison);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
@@ -1096,5 +1145,17 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
         }
         else if(identity == 1){this.jTextField3.setText(reciptName);}
         else if(identity == 2){this.jTextField4.setText(reciptName);}
+    }
+
+    @Override
+    public void RawMaterialDataSelected(SqlDataTable dTable, Integer identity) {
+        Vector head = dTable.getColumnNames();
+        Integer rmNameIndex = head.indexOf(RawMaterialTable.getRmNameColNameInCh());
+        Vector data = (Vector)dTable.getSelectedRows().get(0);
+        String rmName = (String)data.get(rmNameIndex);  
+        if(identity == 0)
+        {
+            this.jTextField9.setText(rmName);
+        }
     }
 }

@@ -355,7 +355,7 @@ public class Ui_rawMaterialPage extends BasePageClass {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        RawMaterialPicker picker = new RawMaterialPicker(this.itsrmM_.query(null, null), null);
+        RawMaterialPicker picker = new RawMaterialPicker(this.itsrmM_.query(null, null), null, 0);
         picker.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 

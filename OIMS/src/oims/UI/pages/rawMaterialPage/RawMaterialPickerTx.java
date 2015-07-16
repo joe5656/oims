@@ -12,5 +12,5 @@ import oims.support.util.SqlDataTable;
  * @author ezouyyi
  */
 public interface RawMaterialPickerTx {
-    public void RawMaterialDataSelected(SqlDataTable table);
+    public void RawMaterialDataSelected(SqlDataTable table, Integer id);
 }

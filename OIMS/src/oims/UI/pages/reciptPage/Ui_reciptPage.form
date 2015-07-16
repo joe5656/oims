@@ -876,6 +876,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="&#x521b;&#x5efa;&#x65b0;&#x7684;&#x8be6;&#x7ec6;&#x914d;&#x65b9;"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton15ActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="jButton16">
                   <Properties>
@@ -1039,6 +1042,7 @@
                     <Component class="javax.swing.JTextField" name="jTextField9">
                       <Properties>
                         <Property name="editable" type="boolean" value="false"/>
+                        <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JButton" name="jButton17">
@@ -1046,6 +1050,9 @@
                         <Property name="text" type="java.lang.String" value="&#x9009;&#x62e9;"/>
                         <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton17ActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel14">
                       <Properties>
@@ -1092,6 +1099,9 @@
                         <Property name="text" type="java.lang.String" value="&#x53d6;&#x6d88;"/>
                         <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton20ActionPerformed"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>

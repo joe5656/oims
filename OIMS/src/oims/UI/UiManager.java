@@ -272,8 +272,9 @@ public class UiManager   implements oims.systemManagement.Client,UiManagerRx, Da
                 {
                     ReciptManager tempRM = (ReciptManager)itsSysManager_.getClient(SystemManager.clientType.RECIPT_MANAGER);
                     ProductManager tempPM = (ProductManager)itsSysManager_.getClient(SystemManager.clientType.PRODUCT_MANAGER);
-                    if(tempPM == null || tempRM == null){break;}
-                    pageWanted = new Ui_reciptPage(this,tempRM,tempPM);
+                    RawMaterialManager tempRmM = (RawMaterialManager)itsSysManager_.getClient(SystemManager.clientType.RAWMATERIAL_MANAGER);
+                    if(tempPM == null || tempRM == null || tempRmM == null){break;}
+                    pageWanted = new Ui_reciptPage(this,tempRM,tempPM, tempRmM);
                     itsPages_.put(PageType.RECIPT_PAGE, pageWanted);
                 }
                 break;
@@ -356,9 +357,9 @@ public class UiManager   implements oims.systemManagement.Client,UiManagerRx, Da
     }
 
     @Override
-    public void showRawMaterialPicker(SqlDataTable table, RawMaterialPickerTx tx) 
+    public void showRawMaterialPicker(SqlDataTable table, RawMaterialPickerTx tx, Integer identity) 
     {
-        RawMaterialPicker page = new RawMaterialPicker(table, tx);
+        RawMaterialPicker page = new RawMaterialPicker(table, tx, identity);
         page.setVisible(true);
     }
     

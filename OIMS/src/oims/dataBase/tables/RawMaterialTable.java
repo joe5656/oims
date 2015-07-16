@@ -174,4 +174,7 @@ public class RawMaterialTable extends Db_table{
             col.setElementAt(EnToCh((String)col.elementAt(i)), i);
         }
     }
+
+    static public String getRmNameColName(){return "materialName";}
+    static public String getRmNameColNameInCh(){return EnToCh("materialName");}   
 }

@@ -38,5 +38,5 @@ public interface UiManagerRx {
     public void showDetailReciptPicker(SqlDataTable table, DetailReciptPickerTx tx, Integer identify);
     public void showrProductReciptPicker(SqlDataTable table, ProductReciptPickerTx tx, Integer identify);
     public void showWarehousePicker(SqlDataTable table, WarehousePickerTx tx);
-    public void showRawMaterialPicker(SqlDataTable table, RawMaterialPickerTx tx);
+    public void showRawMaterialPicker(SqlDataTable table, RawMaterialPickerTx tx, Integer identify);
 }

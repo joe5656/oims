@@ -16,11 +16,15 @@ import oims.support.util.UneditableTableModule;
 public class RawMaterialPicker extends javax.swing.JFrame{
     private RawMaterialPickerTx itsTx_;
     private SqlDataTable        itsSqlDTable_;
+    private Integer             identity_;
     /**
      * Creates new form RawMaterialPicker
      */
-    public RawMaterialPicker(SqlDataTable table, RawMaterialPickerTx pickerTx) {
+    public RawMaterialPicker(SqlDataTable table, RawMaterialPickerTx pickerTx,
+            Integer identity) 
+    {
         itsTx_ = pickerTx;
+        identity_ = identity;
         initComponents();
         if(table!=null)
         {
@@ -107,7 +111,7 @@ public class RawMaterialPicker extends javax.swing.JFrame{
         {
             this.itsSqlDTable_.setRowSelected(row);
         }
-        this.itsTx_.RawMaterialDataSelected(itsSqlDTable_);
+        this.itsTx_.RawMaterialDataSelected(itsSqlDTable_, this.identity_);
         this.dispose();
     }//GEN-LAST:event_selectBActionPerformed
 

@@ -90,15 +90,15 @@ public class RawMaterialManager implements oims.systemManagement.Client{
         return dTable;
     }
     
-    public void needRawMaterialPickerAll(RawMaterialPickerTx tx)
+    public void needRawMaterialPickerAll(RawMaterialPickerTx tx, Integer identity)
     {
         UiManager tempUiM = (UiManager)itsSysManager_.getClient(SystemManager.clientType.UI_MANAGER);
-        tempUiM.showRawMaterialPicker(this.query(null, null), tx);
+        tempUiM.showRawMaterialPicker(this.query(null, null), tx, identity);
     }
     
-    public void needRawMaterialPickerValidAll(RawMaterialPickerTx tx)
+    public void needRawMaterialPickerValidAll(RawMaterialPickerTx tx, Integer idnentiy)
     {
         UiManager tempUiM = (UiManager)itsSysManager_.getClient(SystemManager.clientType.UI_MANAGER);
-        tempUiM.showRawMaterialPicker(this.query(null, Boolean.TRUE), tx);
+        tempUiM.showRawMaterialPicker(this.query(null, Boolean.TRUE), tx, idnentiy);
     }
 }

@@ -317,7 +317,7 @@ public class NewCiCoTicket extends javax.swing.JFrame implements RawMaterialPick
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void RawMaterialDataSelected(SqlDataTable table) {
+    public void RawMaterialDataSelected(SqlDataTable table, Integer id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
