@@ -74,7 +74,7 @@ public class DetailReciptTable   extends Db_table{
     {
         SqlResultInfo result = new SqlResultInfo(false);
         
-        TableEntry entryToBeUpdate = generateTableEntry();
+        TableEntry entryToBeSelect = generateTableEntry();
         Map<String, String> valueHolder = Maps.newHashMap();
         valueHolder.put("recipt", "selected");
         valueHolder.put("reciptName", "selected");
@@ -86,9 +86,9 @@ public class DetailReciptTable   extends Db_table{
         if(reciptId!=null)valueHoldereq.put("reciptId", reciptId.toString());
         if(reciptName!=null)valueHoldereq.put("reciptName", reciptName);
 
-        if(entryToBeUpdate.fillInEntryValues(valueHolder) && where.fillInEntryValues(valueHoldereq))
+        if(entryToBeSelect.fillInEntryValues(valueHolder) && where.fillInEntryValues(valueHoldereq))
         {
-            result = super.update(entryToBeUpdate, where, null, null);
+            result = super.select(entryToBeSelect, where, null,null);
         }
         
         return result;

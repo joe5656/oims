@@ -11,19 +11,16 @@ package oims.support.util;
  */
 public class QuantitiedRawMaterial {
     private final String rmName_;
-    private final String rmId_;
     private final UnitQuantity quantity_;
     
-    public QuantitiedRawMaterial( String id, String unit, String q,String name)
+    public QuantitiedRawMaterial(String unit, String q,String name)
     {
         rmName_ = name;
-        rmId_ = id;
         quantity_ = new UnitQuantity(new CommonUnit(unit),Double.parseDouble(q));
     }
     
     
     public String getRmName(){return rmName_;}
-    public String getRmId(){return rmId_;}
     public String getRmQuantity(){return quantity_.getQuantity().toString();}
     public String getRmUnitName(){return quantity_.getUnit().getUnitName();}
 }

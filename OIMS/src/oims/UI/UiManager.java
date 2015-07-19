@@ -42,8 +42,10 @@ import oims.employeeManager.EmployeeManager;
 import oims.productManagement.ProductManager;
 import oims.rawMaterialManagement.RawMaterialManager;
 import oims.reciptManagement.ReciptManager;
+import oims.stockManagement.StockManager;
 import oims.storeManagement.StoreManager;
 import oims.support.util.SqlDataTable;
+import oims.ticketSystem.TicketManager;
 /**
  *
  * @author ezouyyi
@@ -180,7 +182,10 @@ public class UiManager   implements oims.systemManagement.Client,UiManagerRx, Da
                 }
                 else
                 {
-                    pageWanted = new Ui_StackMangement(this);
+                    TicketManager tempTM = (TicketManager)itsSysManager_.getClient(SystemManager.clientType.TICKET_MANAGER);
+                    StockManager sm = (StockManager)itsSysManager_.getClient(SystemManager.clientType.STOCK_MANAGER);
+                    if(tempTM == null || sm == null){break;}
+                    pageWanted = new Ui_StackMangement(this,tempTM,sm);
                     itsPages_.put(PageType.STACK_PAGE, pageWanted);
                 }
                 break;
@@ -195,7 +200,7 @@ public class UiManager   implements oims.systemManagement.Client,UiManagerRx, Da
                 {
                     WarehousePageTx tempWM = (WarehousePageTx)itsSysManager_.getClient(SystemManager.clientType.WAREHOUSE_MANAGER);
                     EmployeeManager em = (EmployeeManager)itsSysManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
-                    if(tempWM == null){break;}
+                    if(tempWM == null || em == null){break;}
                     pageWanted = new Ui_WarehousePage(this,tempWM,em);
                     itsPages_.put(PageType.WAREHOUSE_PAGE, pageWanted);
                 }

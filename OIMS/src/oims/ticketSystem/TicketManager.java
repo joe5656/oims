@@ -30,7 +30,8 @@ import oims.warehouseManagemnet.WareHouseManager;
  */
 public class TicketManager implements oims.systemManagement.Client{
     CiCoTicketTable itsTicketTable_;
-    SystemManager itsSystemManager_;
+    SystemManager itsSysManager_;
+    private DataBaseManager  itsdbm_;
     
     public enum TicketAction
     {
@@ -40,6 +41,7 @@ public class TicketManager implements oims.systemManagement.Client{
     
     public TicketManager(DataBaseManager dbm)
     {
+        itsdbm_ = dbm;
         itsTicketTable_ = new CiCoTicketTable(dbm);
     }
     
@@ -79,17 +81,17 @@ public class TicketManager implements oims.systemManagement.Client{
                                 // CI ticket: for is warehouse ID, need to find keeper
                                 Integer warehouseId = ticket.getFor();
                                 WareHouseManager whm = 
-                                        (WareHouseManager)this.itsSystemManager_.getClient(SystemManager.clientType.WAREHOUSE_MANAGER);
+                                        (WareHouseManager)this.itsSysManager_.getClient(SystemManager.clientType.WAREHOUSE_MANAGER);
                                 Integer nextOwnerId = whm.getKeeperId(warehouseId);
                                 EmployeeManager eyM = 
-                                        (EmployeeManager)this.itsSystemManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
+                                        (EmployeeManager)this.itsSysManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
                                 String nextOwnerName = eyM.getEmployeeName(nextOwnerId);
                                 this.itsTicketTable_.update(ticket, nextOwnerId, nextOwnerName, nextStep.toString());
                             }
                             else if(nextStep == Ticket.CiTicketStatus.CI_CANCLED)
                             {
                                 EmployeeManager eyM = 
-                                        (EmployeeManager)this.itsSystemManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
+                                        (EmployeeManager)this.itsSysManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
                                 Integer employeeId = eyM.getInvalidEmployeeId();
                                 this.itsTicketTable_.update(ticket, employeeId, "noName", nextStep.toString());
                             }
@@ -101,14 +103,14 @@ public class TicketManager implements oims.systemManagement.Client{
                             {
                                 //TODO: should go to financial responser set to nobody for now
                                 EmployeeManager eyM = 
-                                        (EmployeeManager)this.itsSystemManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
+                                        (EmployeeManager)this.itsSysManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
                                 Integer employeeId = eyM.getInvalidEmployeeId();
                                 this.itsTicketTable_.update(ticket, employeeId, "noName", nextStep.toString());
                             }
                             else if(nextStep == Ticket.CiTicketStatus.CI_CANCLED)
                             {
                                 EmployeeManager eyM = 
-                                        (EmployeeManager)this.itsSystemManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
+                                        (EmployeeManager)this.itsSysManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
                                 Integer employeeId = eyM.getInvalidEmployeeId();
                                 this.itsTicketTable_.update(ticket, employeeId, "noName", nextStep.toString());
                             }
@@ -119,7 +121,7 @@ public class TicketManager implements oims.systemManagement.Client{
                             if(nextStep == Ticket.CiTicketStatus.CI_CLOSE)
                             {
                                 EmployeeManager eyM = 
-                                        (EmployeeManager)this.itsSystemManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
+                                        (EmployeeManager)this.itsSysManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
                                 Integer employeeId = eyM.getInvalidEmployeeId();
                                 this.itsTicketTable_.update(ticket, employeeId, "noName", nextStep.toString());
                             }
@@ -167,17 +169,17 @@ public class TicketManager implements oims.systemManagement.Client{
                                 // CO ticket: for is warehouse ID, need to find keeper
                                 Integer warehouseId = ticket.getFor();
                                 WareHouseManager whm = 
-                                        (WareHouseManager)this.itsSystemManager_.getClient(SystemManager.clientType.WAREHOUSE_MANAGER);
+                                        (WareHouseManager)this.itsSysManager_.getClient(SystemManager.clientType.WAREHOUSE_MANAGER);
                                 Integer nextOwnerId = whm.getKeeperId(warehouseId);
                                 EmployeeManager eyM = 
-                                        (EmployeeManager)this.itsSystemManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
+                                        (EmployeeManager)this.itsSysManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
                                 String nextOwnerName = eyM.getEmployeeName(nextOwnerId);
                                 this.itsTicketTable_.update(ticket, nextOwnerId, nextOwnerName, nextStep.toString());
                             }
                             else if(nextStep == Ticket.CoTicketStatus.CO_CANCLED)
                             {
                                 EmployeeManager eyM = 
-                                        (EmployeeManager)this.itsSystemManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
+                                        (EmployeeManager)this.itsSysManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
                                 Integer employeeId = eyM.getInvalidEmployeeId();
                                 this.itsTicketTable_.update(ticket, employeeId, "noName", nextStep.toString());
                             }
@@ -192,7 +194,7 @@ public class TicketManager implements oims.systemManagement.Client{
                             else if(nextStep == Ticket.CoTicketStatus.CO_CANCLED)
                             {
                                 EmployeeManager eyM = 
-                                        (EmployeeManager)this.itsSystemManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
+                                        (EmployeeManager)this.itsSysManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
                                 Integer employeeId = eyM.getInvalidEmployeeId();
                                 this.itsTicketTable_.update(ticket, employeeId, "noName", nextStep.toString());
                             }
@@ -204,7 +206,7 @@ public class TicketManager implements oims.systemManagement.Client{
                                     nextStep == Ticket.CoTicketStatus.CO_CANCLED)
                             {
                                 EmployeeManager eyM = 
-                                        (EmployeeManager)this.itsSystemManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
+                                        (EmployeeManager)this.itsSysManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
                                 Integer employeeId = eyM.getInvalidEmployeeId();
                                 this.itsTicketTable_.update(ticket, employeeId, "noName", nextStep.toString());
                             }
@@ -234,12 +236,34 @@ public class TicketManager implements oims.systemManagement.Client{
         {
             case SYS_INIT:
             {
-                itsSystemManager_.statusChangeCompleted(Boolean.TRUE, "ticketM");
+                itsSysManager_.statusChangeCompleted(Boolean.TRUE, "sm");
+                break;
+            }
+            case SYS_CONFIG:
+            {
+                
+                itsSysManager_.statusChangeCompleted(Boolean.TRUE, "sm");
+                break;
+            }
+            case SYS_REGISTER:
+            {
+                this.itsdbm_.registerTable(itsTicketTable_);
+                break;
+            }
+            case SYS_START:
+            {
+                
+                break;
+            }
+            default:
+            {
+                itsSysManager_.statusChangeCompleted(Boolean.TRUE, "sm");
+                break;
             }
         }
-        return Boolean.FALSE;
+        return Boolean.TRUE;
     }
 
     @Override
-    public void setSystemManager(SystemManager sysManager) {itsSystemManager_ = sysManager;}
+    public void setSystemManager(SystemManager sysManager) {itsSysManager_ = sysManager;}
 }

@@ -13,6 +13,12 @@ public class UnitQuantity {
     CommonUnit unit_;
     Double     quantity_;
     
+    public UnitQuantity()
+    {
+        quantity_ = null;
+        unit_  = null;
+    }
+    
     public UnitQuantity(CommonUnit unit, Double quantity)
     {
         unit_ = unit;

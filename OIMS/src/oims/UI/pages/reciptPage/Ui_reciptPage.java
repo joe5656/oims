@@ -5,7 +5,11 @@
  */
 package oims.UI.pages.reciptPage;
 
+import com.google.common.collect.Lists;
+import java.util.List;
+import java.util.Map;
 import java.util.Vector;
+import javax.swing.table.TableColumn;
 import oims.UI.UiManager;
 import oims.UI.pages.BasePageClass;
 import oims.UI.pages.Page;
@@ -19,7 +23,11 @@ import oims.dataBase.tables.RawMaterialTable;
 import oims.productManagement.ProductManager;
 import oims.rawMaterialManagement.RawMaterialManager;
 import oims.reciptManagement.ReciptManager;
+import oims.support.util.CommonUnit;
+import oims.support.util.QuantitiedRawMaterial;
 import oims.support.util.SqlDataTable;
+import oims.support.util.SqlResultInfo;
+import oims.support.util.UnitQuantity;
 
 /**
  *
@@ -29,7 +37,9 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
     private ReciptManager itsReciptManager_;
     private ProductManager itsProductManager_;
     private RawMaterialManager itsRmManager_;
-    
+    private List<QuantitiedRawMaterial> itsTempRmList_;
+    private String             tempName_;
+    private String             tempId_;
     /**
      * Creates new form Ui_reciptPage
      */
@@ -37,10 +47,44 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
             RawMaterialManager rm) 
     {
         super(uiM,Page.PAGE_TYPE.SUB_PAGE);
+        itsTempRmList_ = Lists.newArrayList();
         itsReciptManager_ = repM;
         itsProductManager_ = pm;
         itsRmManager_ = rm;
         initComponents();
+        customizeCompoents();
+    }
+    
+    private void clearTempList()
+    {
+        this.itsTempRmList_.clear();
+    }
+    
+    private void clearCreateDetailReciptTable()
+    {
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+            },
+            new String [] {
+                "原材料名称", "重量", "单位"
+            }
+        ));        
+    }
+    
+    private void customizeCompoents()
+    {
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+            },
+            new String [] {
+                "原材料名称", "重量", "单位"
+            }
+        ));
+        this.jTable1.setEnabled(false);
+        
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(CommonUnit.getUnitListStringChn()));
     }
     private void toggleCreateArea(Boolean ison)
     {
@@ -48,7 +92,7 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
         this.jTextField2.setEnabled(ison);
         this.jTextField3.setEnabled(ison);
         this.jTextField4.setEnabled(ison);
-        
+        this.jComboBox9.setEnabled(ison);
         this.jTextField1.setText("");
         this.jTextField2.setText("");
         this.jTextField3.setText("");
@@ -107,6 +151,8 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
         jComboBox2 = new javax.swing.JComboBox();
         jComboBox3 = new javax.swing.JComboBox();
         jComboBox4 = new javax.swing.JComboBox();
+        jLabel8 = new javax.swing.JLabel();
+        jComboBox9 = new javax.swing.JComboBox();
         jPanel7 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
@@ -134,10 +180,7 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
         jTable2 = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
-        jButton15 = new javax.swing.JButton();
         jButton16 = new javax.swing.JButton();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
         jPanel11 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -154,6 +197,9 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
         jButton20 = new javax.swing.JButton();
         jLabel16 = new javax.swing.JLabel();
         jTextField11 = new javax.swing.JTextField();
+        jButton15 = new javax.swing.JButton();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
         jPanel14 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable3 = new javax.swing.JTable();
@@ -170,6 +216,11 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
         jButton29 = new javax.swing.JButton();
         jLabel29 = new javax.swing.JLabel();
         jTextField17 = new javax.swing.JTextField();
+        jButton11 = new javax.swing.JButton();
+        jLabel30 = new javax.swing.JLabel();
+        jLabel31 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTable4 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -183,6 +234,11 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
         });
 
         jButton2.setText("查看所有产品配方");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("状态：");
 
@@ -307,9 +363,19 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
 
         jButton7.setText("创建");
         jButton7.setEnabled(false);
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         jButton8.setText("取消");
         jButton8.setEnabled(false);
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
 
         jLabel17.setText("加工单位：");
 
@@ -325,6 +391,11 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
 
         jComboBox4.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "中央厨房", "门店" }));
         jComboBox4.setEnabled(false);
+
+        jLabel8.setText("标准配方制作产品个数：");
+
+        jComboBox9.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
+        jComboBox9.setEnabled(false);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -356,17 +427,21 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel6Layout.createSequentialGroup()
-                                .addComponent(jButton4)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel17)
-                                .addGap(18, 18, 18)
-                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel6Layout.createSequentialGroup()
                                 .addComponent(jButton5)
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel18)
                                 .addGap(18, 18, 18)
-                                .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addComponent(jButton4)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel17)
+                                .addGap(18, 18, 18)
+                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel8)
+                                .addGap(18, 18, 18)
+                                .addComponent(jComboBox9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -379,7 +454,9 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton4)
                     .addComponent(jLabel17)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8)
+                    .addComponent(jComboBox9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -519,7 +596,7 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
                         .addComponent(jLabel25)
                         .addGap(18, 18, 18)
                         .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 511, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 517, Short.MAX_VALUE)
                         .addComponent(jButton24)
                         .addGap(45, 45, 45)
                         .addComponent(jButton25))
@@ -633,47 +710,33 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
 
         jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder("操作"));
 
-        jButton15.setText("创建新的详细配方");
-        jButton15.addActionListener(new java.awt.event.ActionListener() {
+        jButton16.setText("查看所有详细配方");
+        jButton16.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton15ActionPerformed(evt);
+                jButton16ActionPerformed(evt);
             }
         });
-
-        jButton16.setText("查看所有详细配方");
-
-        jLabel11.setText("状态：");
-
-        jLabel12.setText("未开始创建");
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jButton15)
-                .addGap(31, 31, 31)
+                .addContainerGap()
                 .addComponent(jButton16)
-                .addGap(73, 73, 73)
-                .addComponent(jLabel11)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel12)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton15)
-                    .addComponent(jButton16)
-                    .addComponent(jLabel11)
-                    .addComponent(jLabel12))
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton16)
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
-        jPanel11.setBorder(javax.swing.BorderFactory.createTitledBorder("详细信息"));
+        jPanel11.setBorder(javax.swing.BorderFactory.createTitledBorder("创建配方详细信息"));
+
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -714,9 +777,19 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
 
         jButton18.setText("添加");
         jButton18.setEnabled(false);
+        jButton18.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton18ActionPerformed(evt);
+            }
+        });
 
         jButton19.setText("开始创建");
         jButton19.setEnabled(false);
+        jButton19.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton19ActionPerformed(evt);
+            }
+        });
 
         jButton20.setText("取消");
         jButton20.setEnabled(false);
@@ -782,6 +855,17 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
 
         jTextField11.setEnabled(false);
 
+        jButton15.setText("创建新的详细配方");
+        jButton15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton15ActionPerformed(evt);
+            }
+        });
+
+        jLabel11.setText("状态：");
+
+        jLabel12.setText("未开始创建");
+
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
@@ -790,26 +874,40 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
             .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel16)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel16)
+                    .addComponent(jLabel11))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel11Layout.createSequentialGroup()
+                        .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton15))
+                    .addComponent(jLabel12))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16)
-                    .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(41, 41, 41)
+                    .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton15))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(jLabel12))
+                .addGap(15, 15, 15)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel14.setBorder(javax.swing.BorderFactory.createTitledBorder("详细信息"));
+        jPanel14.setBorder(javax.swing.BorderFactory.createTitledBorder("修改配方详细信息"));
+
+        jScrollPane3.setBorder(javax.swing.BorderFactory.createTitledBorder("历史信息"));
 
         jTable3.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -879,7 +977,7 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
                         .addComponent(jButton28)
                         .addGap(18, 18, 18)
                         .addComponent(jButton29)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(177, Short.MAX_VALUE))
         );
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -907,31 +1005,66 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
 
         jTextField17.setEnabled(false);
 
+        jButton11.setText("修改现有配方");
+
+        jLabel30.setText("状态：");
+
+        jLabel31.setText("未开始");
+
+        jScrollPane4.setBorder(javax.swing.BorderFactory.createTitledBorder("新信息"));
+
+        jTable4.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane4.setViewportView(jTable4);
+
         javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
         jPanel14.setLayout(jPanel14Layout);
         jPanel14Layout.setHorizontalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 513, Short.MAX_VALUE)
             .addComponent(jPanel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel14Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel29)
+                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel29)
+                    .addComponent(jLabel30))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel14Layout.createSequentialGroup()
+                        .addComponent(jTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)
+                        .addComponent(jButton11))
+                    .addComponent(jLabel31))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jScrollPane4)
         );
         jPanel14Layout.setVerticalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel14Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel29)
-                    .addComponent(jTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(41, 41, 41)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton11))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel30)
+                    .addComponent(jLabel31))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -950,9 +1083,11 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
                 .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(143, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 133, Short.MAX_VALUE))
+                    .addComponent(jPanel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("详细配方", jPanel2);
@@ -1001,11 +1136,106 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
 
     private void jButton20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton20ActionPerformed
         toggleDetailReciptCreateArea(false);
+        this.clearTempList();
+        clearCreateDetailReciptTable();
+        this.jLabel11.setText("未开始");
     }//GEN-LAST:event_jButton20ActionPerformed
 
     private void jButton17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton17ActionPerformed
         this.itsRmManager_.needRawMaterialPickerValidAll(this, 0);
     }//GEN-LAST:event_jButton17ActionPerformed
+
+    private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
+        if(this.jTextField9.getText().trim().equals("") ||
+                this.jTextField10.getText().trim().equals(""))
+        {
+            return;
+        }
+        else
+        {
+            Double q;
+            try
+            {
+                q = Double.parseDouble(this.jTextField10.getText().trim());
+            }catch(Exception e)
+            {
+                return;
+            }
+            
+            QuantitiedRawMaterial tempRm = new QuantitiedRawMaterial(this.jComboBox1.getSelectedItem().toString(),
+            this.jTextField10.getText().trim(), this.tempName_);
+            this.itsTempRmList_.add(tempRm);
+            javax.swing.table.DefaultTableModel module = (javax.swing.table.DefaultTableModel)this.jTable1.getModel();
+            module.addRow(new String[] {this.jTextField9.getText().trim(),q.toString(),this.jComboBox1.getSelectedItem().toString()});
+            this.jTextField10.setText("");
+            this.jTextField9.setText("");
+        }
+    }//GEN-LAST:event_jButton18ActionPerformed
+
+    private void jButton19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton19ActionPerformed
+        if(this.itsTempRmList_.isEmpty())
+        {
+            this.jLabel12.setText("没有任何原材料信息");
+        }
+        else if(this.jTextField11.getText().trim().equals(""))
+        {
+            this.jLabel12.setText("必须指定配方名称");
+        }
+        else
+        {
+            SqlResultInfo rs = this.itsReciptManager_.newDetailRecipt(
+                    this.jTextField11.getText().trim(), this.itsTempRmList_);
+            if(rs.isSucceed())
+            {
+                this.jLabel12.setText("创建成功");
+            }
+            else
+            {
+                this.jLabel12.setText("创建失败"+rs.getErrInfo());
+            }
+        }
+    }//GEN-LAST:event_jButton19ActionPerformed
+
+    private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton16ActionPerformed
+        this.itsReciptManager_.needDetailReciptPicker(null, null);
+    }//GEN-LAST:event_jButton16ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        toggleCreateArea(false);
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        String productName = this.jTextField1.getText().trim();
+        String mainR = this.jTextField2.getText().trim();
+        String toppingR = this.jTextField4.getText().trim();
+        String fillingR = this.jTextField3.getText().trim();
+        Boolean mainRByCK = this.jComboBox2.getSelectedItem().toString()=="中央厨房"?true:false;
+        Boolean fillingRByCK = this.jComboBox3.getSelectedItem().toString()=="中央厨房"?true:false;
+        Boolean toppingRByCK = this.jComboBox4.getSelectedItem().toString()=="中央厨房"?true:false;
+        String  numberOfP = this.jComboBox9.getSelectedItem().toString();
+        if(productName.equals("") || mainR.equals(""))
+        {
+            this.jLabel6.setText("信息不完整");
+        }
+        else
+        {
+            SqlResultInfo rs = this.itsReciptManager_.newProductRecipt(productName,
+                    Integer.parseInt(numberOfP), mainR, toppingR, fillingR, 0, mainRByCK, toppingRByCK, fillingRByCK);
+            if(rs.isSucceed())
+            {
+                this.jLabel6.setText("创建成功");
+                this.toggleCreateArea(false);
+            }
+            else
+            {
+                this.jLabel6.setText("创建失败"+rs.getErrInfo());
+            }
+        }
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        this.itsReciptManager_.needProductReciptPicker(null, null);
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     private void toggleDetailReciptCreateArea(Boolean ison)
     {
@@ -1024,6 +1254,7 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton15;
     private javax.swing.JButton jButton16;
     private javax.swing.JButton jButton17;
@@ -1055,6 +1286,7 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
     private javax.swing.JComboBox jComboBox6;
     private javax.swing.JComboBox jComboBox7;
     private javax.swing.JComboBox jComboBox8;
+    private javax.swing.JComboBox jComboBox9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -1077,10 +1309,13 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -1098,10 +1333,12 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
+    private javax.swing.JTable jTable4;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField10;
     private javax.swing.JTextField jTextField11;
@@ -1140,7 +1377,7 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
         if(identity == 0)
         {
             this.jTextField2.setText(reciptName);
-            this.jButton17.setEnabled(true);
+            this.jButton7.setEnabled(true);
             this.jButton8.setEnabled(true);
         }
         else if(identity == 1){this.jTextField3.setText(reciptName);}
@@ -1151,10 +1388,13 @@ public class Ui_reciptPage extends BasePageClass implements ProductPickerTx,Deta
     public void RawMaterialDataSelected(SqlDataTable dTable, Integer identity) {
         Vector head = dTable.getColumnNames();
         Integer rmNameIndex = head.indexOf(RawMaterialTable.getRmNameColNameInCh());
+        Integer rmIdIndex = head.indexOf(RawMaterialTable.getPrimaryKeyColNameInCh());
         Vector data = (Vector)dTable.getSelectedRows().get(0);
         String rmName = (String)data.get(rmNameIndex);  
         if(identity == 0)
         {
+            this.tempId_ = (String)data.get(rmIdIndex); 
+            this.tempName_ = rmName;
             this.jTextField9.setText(rmName);
         }
     }

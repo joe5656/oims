@@ -59,7 +59,7 @@ public class EmployeePicker extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         selectB = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("员工信息"));
 

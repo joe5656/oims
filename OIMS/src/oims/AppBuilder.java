@@ -43,7 +43,7 @@ public class AppBuilder {
         itsUiManager_ = new UiManager(itsDataBaseManager_);
         itsUiManager_.showStartingPage();
         itsEmployeeManger_ = new EmployeeManager(itsDataBaseManager_);
-        itsStackManager_   = new StockManager();
+        itsStackManager_   = new StockManager(itsDataBaseManager_);
         itsWareHouseManager_ = new WareHouseManager(itsDataBaseManager_,itsStackManager_);
         itsRawMManager_      = new RawMaterialManager(itsDataBaseManager_);
         itsStoreManager_     = new StoreManager(itsDataBaseManager_);

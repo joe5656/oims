@@ -37,11 +37,11 @@ public class ReciptManager  implements oims.systemManagement.Client{
         itsdbm_ = dbm;
     }
         
-    public SqlResultInfo newProductRecipt(Integer pid, String pName, Integer number, String mainName,
+    public SqlResultInfo newProductRecipt(String pName, Integer number, String mainName,
             String topName, String fillingName, Integer workinghours, Boolean mainReciptByCK,
             Boolean toppingByCK, Boolean fillingByCk)
     {
-        return this.itsProductReciptTable_.newEntry(pid, pName, number, mainName, 
+        return this.itsProductReciptTable_.newEntry(pName, number, mainName, 
                 topName, fillingName, workinghours, mainReciptByCK, toppingByCK, fillingByCk);
     }
     
@@ -51,12 +51,12 @@ public class ReciptManager  implements oims.systemManagement.Client{
         return this.itsDetailReciptTable_.newEntry(reciptName, recipt);
     }
     
-    public SqlResultInfo updateProductRecipt(Integer productId, Double price, Double vipPrice,
-            Boolean valid, String name, Double cost, String nameAbbr, String picUrl,
-            String cat)
+    public SqlResultInfo updateProductRecipt(Integer reciptId, String pName, Integer number, String mainName,
+            String topName, String fillingName, Integer workinghours, Boolean mainReciptByCK,
+            Boolean toppingByCK, Boolean fillingByCk)
     {
-        return this.itsProductReciptTable_.update(productId, productId, name, 
-                productId, name, name, name, productId, valid, valid, valid);
+        return this.itsProductReciptTable_.update(reciptId, pName, number, mainName, 
+                topName, fillingName, workinghours, mainReciptByCK, toppingByCK, fillingByCk);
     }
     
     public SqlResultInfo updateDetailRecipt(String reciptName, List<QuantitiedRawMaterial> rms)
@@ -73,7 +73,7 @@ public class ReciptManager  implements oims.systemManagement.Client{
     
     public SqlDataTable queryProductReciptAll()
     {
-        return new SqlDataTable(this.itsProductReciptTable_.query(null, null, null).getResultSet(),
+        return new SqlDataTable(this.itsProductReciptTable_.query(null, null).getResultSet(),
                 this.itsDetailReciptTable_.getName());
     }
     
@@ -128,7 +128,7 @@ public class ReciptManager  implements oims.systemManagement.Client{
     {
         UiManager tempUiM = (UiManager)itsSysManager_.getClient(SystemManager.clientType.UI_MANAGER);
         SqlDataTable table = this.queryProductReciptAll();
-        this.itsDetailReciptTable_.translateColumnName(table.getColumnNames());
+        this.itsProductReciptTable_.translateColumnName(table.getColumnNames());
         tempUiM.showrProductReciptPicker(table, tx, id);
     }
 }

@@ -22,7 +22,7 @@ public class DetailRecipt {
         for(QuantitiedRawMaterial entry:rms)
         {
             loopCnt++;
-            if(firstLoop || loopCnt == rms.size())
+            if(firstLoop)
             {
                 firstLoop = false;
             }
@@ -30,8 +30,8 @@ public class DetailRecipt {
             {
                 result += "|";
             }
-            //MaterialId1:MaterialName1:quantity1:unit1
-            result += entry.getRmId().trim()+":"+entry.getRmName().trim()+":"
+            //MaterialName1:quantity1:unit1
+            result += entry.getRmName().trim()+":"
                     +entry.getRmQuantity().trim()+":"+entry.getRmUnitName().trim();
         }
         return result;
@@ -44,8 +44,8 @@ public class DetailRecipt {
         for(String entry:rms)
         {
             String[] detailInfo = entry.split(":");
-            QuantitiedRawMaterial tmpRm = new QuantitiedRawMaterial(detailInfo[0],
-                detailInfo[1],detailInfo[2],detailInfo[3]);
+            QuantitiedRawMaterial tmpRm = new QuantitiedRawMaterial(
+                detailInfo[0],detailInfo[1],detailInfo[2]);
             returnList.add(tmpRm);
         }
         return returnList;
