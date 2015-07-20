@@ -32,6 +32,7 @@ public class Ui_rawMaterialPage extends BasePageClass {
     {
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(CommonUnit.getUnitListStringChn()));
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(RawMaterialManager.getRawMaterialList()));
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(CommonUnit.getStanderizedUnitChn()));
         toggleCreateArea(false);
     }
     /**
@@ -54,7 +55,6 @@ public class Ui_rawMaterialPage extends BasePageClass {
         jTextField1 = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox();
-        jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
@@ -62,6 +62,9 @@ public class Ui_rawMaterialPage extends BasePageClass {
         jComboBox2 = new javax.swing.JComboBox();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jLabel12 = new javax.swing.JLabel();
+        jTextField4 = new javax.swing.JTextField();
+        jComboBox3 = new javax.swing.JComboBox();
         jPanel4 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
@@ -133,8 +136,11 @@ public class Ui_rawMaterialPage extends BasePageClass {
         jLabel4.setText("计量单位：");
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "千克", "克", "袋", "瓶", "升", "毫升" }));
-
-        jLabel5.setText("(选择袋、瓶等计量单位时需要在原材料名称中注明份量，例如：朗姆酒750毫升瓶）");
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         jLabel6.setText("参考价格：");
 
@@ -158,6 +164,13 @@ public class Ui_rawMaterialPage extends BasePageClass {
             }
         });
 
+        jLabel12.setText("可转换为：");
+
+        jTextField4.setEnabled(false);
+
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox3.setEnabled(false);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -171,11 +184,11 @@ public class Ui_rawMaterialPage extends BasePageClass {
                             .addComponent(jLabel6))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
+                            .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
                             .addComponent(jTextField1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel8)
@@ -185,14 +198,18 @@ public class Ui_rawMaterialPage extends BasePageClass {
                                 .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(41, 41, 41)
+                                .addComponent(jLabel12)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jLabel5))))
+                                .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(152, 152, 152))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jButton3)
                         .addGap(18, 18, 18)
                         .addComponent(jButton4)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -203,7 +220,9 @@ public class Ui_rawMaterialPage extends BasePageClass {
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
+                    .addComponent(jLabel12)
+                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
@@ -322,15 +341,22 @@ public class Ui_rawMaterialPage extends BasePageClass {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        if(this.jTextField1.getText().trim().equals("") || this.jTextField2.getText().trim().equals(""))
+        if(this.jTextField1.getText().trim().equals("") 
+                || this.jTextField2.getText().trim().equals("")
+                || (this.jTextField4.isEnabled()&&this.jTextField4.getText().trim().equals("")))
         {
             this.jLabel2.setText("信息不完整");
         }
         else
         {
+            String unitPrefix = "";
             String name = this.jTextField1.getText();
             String price = this.jTextField2.getText();
             String type = this.jComboBox2.getSelectedItem().toString();
+            if(this.jTextField4.isEnabled())
+            {
+                unitPrefix = this.jTextField4.getText() + this.jComboBox3.getSelectedItem().toString();
+            }
             String unit = this.jComboBox1.getSelectedItem().toString();
             try
             {
@@ -416,6 +442,21 @@ public class Ui_rawMaterialPage extends BasePageClass {
             }
         }
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        String selected = this.jComboBox1.getSelectedItem().toString().trim();
+        if(selected.equals("袋装") ||selected.equals("瓶装") )
+        {
+            this.jComboBox3.setEnabled(true);
+            this.jTextField4.setEnabled(true);
+        }
+        else
+        {
+            this.jComboBox3.setEnabled(false);
+            this.jTextField4.setEnabled(false);
+            this.jTextField4.setText("");
+        }
+    }//GEN-LAST:event_jComboBox1ActionPerformed
     
     private void toggleCreateArea(Boolean isOn)
     {
@@ -425,11 +466,15 @@ public class Ui_rawMaterialPage extends BasePageClass {
         this.jComboBox2.setEnabled(isOn);
         this.jButton3.setEnabled(isOn);
         this.jButton4.setEnabled(isOn);
+        this.jComboBox1.setSelectedIndex(0);
         if(!isOn)
         {
             this.jTextField1.setText(null);
             this.jTextField2.setText(null);
             this.jLabel2.setText("未开始创建");
+            this.jComboBox3.setEnabled(isOn);
+            this.jTextField4.setEnabled(isOn);
+            this.jTextField4.setText("");
         }
         else
         {
@@ -446,13 +491,14 @@ public class Ui_rawMaterialPage extends BasePageClass {
     private javax.swing.JButton jButton6;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JComboBox jComboBox2;
+    private javax.swing.JComboBox jComboBox3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -464,5 +510,6 @@ public class Ui_rawMaterialPage extends BasePageClass {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField jTextField4;
     // End of variables declaration//GEN-END:variables
 }

@@ -46,6 +46,7 @@ import oims.stockManagement.StockManager;
 import oims.storeManagement.StoreManager;
 import oims.support.util.SqlDataTable;
 import oims.ticketSystem.TicketManager;
+import oims.warehouseManagemnet.WareHouseManager;
 /**
  *
  * @author ezouyyi
@@ -183,9 +184,11 @@ public class UiManager   implements oims.systemManagement.Client,UiManagerRx, Da
                 else
                 {
                     TicketManager tempTM = (TicketManager)itsSysManager_.getClient(SystemManager.clientType.TICKET_MANAGER);
+                    WareHouseManager tempWM = (WareHouseManager)itsSysManager_.getClient(SystemManager.clientType.WAREHOUSE_MANAGER);
                     StockManager sm = (StockManager)itsSysManager_.getClient(SystemManager.clientType.STOCK_MANAGER);
-                    if(tempTM == null || sm == null){break;}
-                    pageWanted = new Ui_StackMangement(this,tempTM,sm);
+                    RawMaterialManager rm = (RawMaterialManager)itsSysManager_.getClient(SystemManager.clientType.RAWMATERIAL_MANAGER);
+                    if(tempTM == null || sm == null || tempWM == null || rm ==null){break;}
+                    pageWanted = new Ui_StackMangement(this,tempTM,sm, tempWM,rm);
                     itsPages_.put(PageType.STACK_PAGE, pageWanted);
                 }
                 break;
@@ -355,9 +358,9 @@ public class UiManager   implements oims.systemManagement.Client,UiManagerRx, Da
     }
 
     @Override
-    public void showWarehousePicker(SqlDataTable table, WarehousePickerTx tx) 
+    public void showWarehousePicker(SqlDataTable table, WarehousePickerTx tx, Integer id) 
     {
-        WarehouseListPage page = new WarehouseListPage(table, tx);
+        WarehouseListPage page = new WarehouseListPage(table, tx, id);
         page.setVisible(true);
     }
 

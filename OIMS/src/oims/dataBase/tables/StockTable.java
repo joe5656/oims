@@ -172,7 +172,7 @@ public class StockTable extends Db_table{
         return returnValue;
     }
     
-    public SqlResultInfo query(Integer whId, Integer rmId)
+    public SqlResultInfo query(String whId, String rmName)
     {
         SqlResultInfo result = new SqlResultInfo(false);
         TableEntry select = super.generateTableEntry();
@@ -186,8 +186,8 @@ public class StockTable extends Db_table{
         
         TableEntry where = super.generateTableEntry();
         Map<String, String> whereeq = Maps.newHashMap();
-        if(whId != null){whereeq.put("wareHouseId",whId.toString());}
-        if(rmId != null){whereeq.put("materialId",rmId.toString());}
+        if(whId != null){whereeq.put("wareHouseId",whId);}
+        if(rmName != null){whereeq.put("materialId",rmName);}
         
         
         if(select.fillInEntryValues(prepare) && where.fillInEntryValues(whereeq) )

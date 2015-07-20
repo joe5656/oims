@@ -554,7 +554,7 @@ public class Ui_WarehousePage extends BasePageClass implements WarehousePageRx,W
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void DataSelected(SqlDataTable dTable) {
+    public void DataSelected(SqlDataTable dTable, Integer id) {
         this.delB.setEnabled(Boolean.TRUE);
         this.tempTable_ = dTable;
         Vector head = dTable.getColumnNames();
@@ -572,7 +572,7 @@ public class Ui_WarehousePage extends BasePageClass implements WarehousePageRx,W
 
     
     private void showWarehousePicker(WarehousePickerTx rx) {
-        WarehouseListPage page = new WarehouseListPage(this.itsWarehousePageTx_.queryAllWarehouseInfo(), rx);
+        WarehouseListPage page = new WarehouseListPage(this.itsWarehousePageTx_.queryAllWarehouseInfo(), rx,0);
         page.setVisible(Boolean.TRUE);
     }
 

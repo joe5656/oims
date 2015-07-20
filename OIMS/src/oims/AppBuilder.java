@@ -31,7 +31,7 @@ public class AppBuilder {
     UiManager        itsUiManager_;
     LoggingManager   itsLogManager_;
     EmployeeManager  itsEmployeeManger_;
-    StockManager     itsStackManager_;
+    StockManager     itsStockManager_;
     RawMaterialManager itsRawMManager_;
     StoreManager     itsStoreManager_;
     ProductManager   itsProductManager_;
@@ -43,12 +43,13 @@ public class AppBuilder {
         itsUiManager_ = new UiManager(itsDataBaseManager_);
         itsUiManager_.showStartingPage();
         itsEmployeeManger_ = new EmployeeManager(itsDataBaseManager_);
-        itsStackManager_   = new StockManager(itsDataBaseManager_);
-        itsWareHouseManager_ = new WareHouseManager(itsDataBaseManager_,itsStackManager_);
+        itsStockManager_   = new StockManager(itsDataBaseManager_);
+        itsWareHouseManager_ = new WareHouseManager(itsDataBaseManager_,itsStockManager_);
         itsRawMManager_      = new RawMaterialManager(itsDataBaseManager_);
         itsStoreManager_     = new StoreManager(itsDataBaseManager_);
         itsProductManager_   = new ProductManager(itsDataBaseManager_);
         itsReciptManager_    = new ReciptManager(itsDataBaseManager_);
+        itsTicketManager_    = new TicketManager(itsDataBaseManager_);
         //itsTicketManager_ = new TicketManager(itsSystemManager_, itsDataBaseManager_);
         //itsWareHouseManager_ = new WareHouseManager(itsSystemManager_, itsDataBaseManager_);
         //itsLogManager_ = new LoggingManager(itsDataBaseManager_);
@@ -61,6 +62,8 @@ public class AppBuilder {
         itsSystemManager_.registerClient(SystemManager.clientType.STORE_MANAGER,itsStoreManager_);
         itsSystemManager_.registerClient(SystemManager.clientType.PRODUCT_MANAGER,itsProductManager_);
         itsSystemManager_.registerClient(SystemManager.clientType.RECIPT_MANAGER,itsReciptManager_);
+        itsSystemManager_.registerClient(SystemManager.clientType.TICKET_MANAGER,itsTicketManager_);
+        itsSystemManager_.registerClient(SystemManager.clientType.STOCK_MANAGER,itsStockManager_);
     }
     
     public void run()

@@ -131,10 +131,10 @@ public class WareHouseManager implements oims.systemManagement.Client, Warehouse
         return dTable;
     }
     
-    public void needWarehousePicker(WarehousePickerTx tx)
+    public void needWarehousePicker(WarehousePickerTx tx, Integer id)
     {
         UiManager tempUiM = (UiManager)itsSysManager_.getClient(SystemManager.clientType.UI_MANAGER);
-        tempUiM.showWarehousePicker(this.queryAllWarehouseInfo(), tx);
+        tempUiM.showWarehousePicker(this.queryAllWarehouseInfo(), tx, id);
     }
     
     public Integer getKeeperId(Integer whId)

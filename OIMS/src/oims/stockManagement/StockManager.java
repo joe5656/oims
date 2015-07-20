@@ -5,9 +5,13 @@
  */
 package oims.stockManagement;
 
+import java.util.Vector;
 import oims.dataBase.DataBaseManager;
+import oims.dataBase.tables.RawMaterialTable;
 import oims.dataBase.tables.StockTable;
 import oims.rawMaterialManagement.RawMaterial;
+import oims.support.util.SqlDataTable;
+import oims.support.util.SqlResultInfo;
 import oims.support.util.UnitQuantity;
 import oims.systemManagement.SystemManager;
 
@@ -17,12 +21,12 @@ import oims.systemManagement.SystemManager;
  */
 public class StockManager  implements oims.systemManagement.Client{
     private SystemManager    itsSysManager_;
-    private StockTable       itsStackTable_;
+    private StockTable       itsStockTable_;
     private DataBaseManager  itsdbm_;
     
     public StockManager(DataBaseManager dbm)
     {
-        itsStackTable_ = new StockTable(dbm);
+        itsStockTable_ = new StockTable(dbm);
         itsdbm_  = dbm;
     }    
     
@@ -30,12 +34,12 @@ public class StockManager  implements oims.systemManagement.Client{
     public Boolean checkIn(Integer whId, String whName, Integer rawMaterialId, 
             String rawMaterialName, UnitQuantity uq)
     {
-        return itsStackTable_.rawMaterialCheckIn(whId, whName, rawMaterialId, rawMaterialName, uq);
+        return itsStockTable_.rawMaterialCheckIn(whId, whName, rawMaterialId, rawMaterialName, uq);
     }
  
     public Boolean checkOut(Integer whid, RawMaterial rawMaterial, UnitQuantity uq)
     {
-        return itsStackTable_.rawMaterialCheckOut(whid, rawMaterial, uq);
+        return itsStockTable_.rawMaterialCheckOut(whid, rawMaterial, uq);
     }
 
     @Override
@@ -55,7 +59,7 @@ public class StockManager  implements oims.systemManagement.Client{
             }
             case SYS_REGISTER:
             {
-                this.itsdbm_.registerTable(itsStackTable_);
+                this.itsdbm_.registerTable(itsStockTable_);
                 break;
             }
             case SYS_START:
@@ -74,4 +78,26 @@ public class StockManager  implements oims.systemManagement.Client{
 
     @Override
     public void setSystemManager(SystemManager sysManager){itsSysManager_ = sysManager;}
+    
+    public SqlDataTable queryStock(String whId, String rmName)
+    {
+        SqlResultInfo result = this.itsStockTable_.query(whId, rmName);
+        SqlDataTable returnValue = new SqlDataTable(result.getResultSet(), this.itsStockTable_.getName());
+        this.itsStockTable_.translateColumnName(returnValue.getColumnNames());
+        return returnValue;
+    }
+    
+    public String queryMaterialStockUnit(String whId, String rmName)
+    {
+        SqlDataTable result = this.queryStock(whId, rmName);
+        String returnValue = null;
+        if(result.getColumnNames().size() > 0)
+        {
+            Vector head = result.getColumnNames();
+            Integer unitIndex = head.indexOf(RawMaterialTable.getUnitNameColNameInCh());
+            Vector data = (Vector)result.getSelectedRows().get(0);
+            returnValue = (String)data.get(unitIndex);
+        }
+        return returnValue;
+    }
 }

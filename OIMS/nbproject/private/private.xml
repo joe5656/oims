@@ -7,6 +7,7 @@
             <file>file:/D:/git/OIMS/src/oims/dataBase/tables/ProductTable.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/rawMaterialPage/RawMaterialPicker.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/storeManagementPage/StorePicker.java</file>
+            <file>file:/D:/git/OIMS/src/oims/dataBase/MYSQL/DataBaseFactory_MYSQL.java</file>
             <file>file:/D:/git/OIMS/src/oims/employeeManager/Employee.java</file>
             <file>file:/D:/git/OIMS/src/oims/reciptManagement/ReciptManager.java</file>
             <file>file:/D:/git/OIMS/src/oims/Tasks/DataBaseKeepAlive.java</file>
@@ -18,6 +19,7 @@
             <file>file:/D:/git/OIMS/src/oims/dataBase/tables/LogTable.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/reciptPage/Ui_reciptPage.java</file>
             <file>file:/D:/git/OIMS/src/oims/dataBase/syncer/DataBaseSyncer.java</file>
+            <file>file:/D:/git/OIMS/src/oims/ticketSystem/Ticket.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/rawMaterialPage/Ui_rawMaterialPage.java</file>
             <file>file:/D:/git/OIMS/src/oims/dataBase/DataBaseManager.java</file>
             <file>file:/D:/git/OIMS/src/oims/dataBase/Db_dataBase.java</file>
@@ -29,11 +31,13 @@
             <file>file:/D:/git/OIMS/src/oims/support/util/QuantitiedRawMaterial.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/BasePageClass.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/StackPage/Ui_StackMangement.java</file>
+            <file>file:/D:/git/OIMS/src/oims/dataBase/tables/CiCoTicketTable.java</file>
             <file>file:/D:/git/OIMS/src/oims/dataBase/tables/RawMaterialTable.java</file>
             <file>file:/D:/git/OIMS/src/oims/rawMaterialManagement/RawMaterial.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/reciptPage/ProductReciptPickerTx.java</file>
             <file>file:/D:/git/OIMS/src/oims/rawMaterialManagement/RawMaterialManager.java</file>
             <file>file:/D:/git/OIMS/src/oims/stockManagement/StockManager.java</file>
+            <file>file:/D:/git/OIMS/test/oims/OIMSTest.java</file>
             <file>file:/D:/git/OIMS/src/oims/dataBase/tables/DoughTypeTable.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/ProductPage/ProductPickerTx.java</file>
             <file>file:/D:/git/OIMS/src/oims/ticketSystem/TicketManager.java</file>
@@ -41,6 +45,7 @@
             <file>file:/D:/git/OIMS/src/oims/UI/pages/reciptPage/DetailReciptPicker.java</file>
             <file>file:/D:/git/OIMS/src/oims/AppBuilder.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/reciptPage/ProductReciptPicker.java</file>
+            <file>file:/D:/git/OIMS/test/oims/dataBase/MYSQL/Db_dataBase_MYSQLTest.java</file>
             <file>file:/D:/git/OIMS/src/oims/support/util/Db_publicColumnAttribute.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/employeePage/EmployeePicker.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/ProductPage/ProductPicker.java</file>
@@ -49,6 +54,7 @@
             <file>file:/D:/git/OIMS/src/oims/dataBase/tables/StoreTable.java</file>
             <file>file:/D:/git/OIMS/src/oims/reciptManagement/DetailRecipt.java</file>
             <file>file:/D:/git/OIMS/src/oims/support/util/UnitQuantity.java</file>
+            <file>file:/D:/git/OIMS/test/oims/support/util/CommonUnitTest.java</file>
             <file>file:/D:/git/OIMS/src/oims/OIMS.java</file>
             <file>file:/D:/git/OIMS/src/oims/dataBase/MYSQL/Db_dataBase_MYSQL.java</file>
             <file>file:/D:/git/OIMS/src/oims/productManagement/ProductManager.java</file>
@@ -67,6 +73,7 @@
             <file>file:/D:/git/OIMS/src/oims/UI/pages/employeePage/EmployeePageTx.java</file>
             <file>file:/D:/git/OIMS/src/oims/employeeManager/EmployeeManager.java</file>
             <file>file:/D:/git/OIMS/src/oims/dataBase/tables/SyncerTable.java</file>
+            <file>file:/D:/git/OIMS/src/oims/UI/pages/StackPage/CiTicketOperationPage.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/employeePage/EmployeePickerTx.java</file>
             <file>file:/D:/git/OIMS/src/oims/warehouseManagemnet/WareHouseManager.java</file>
             <file>file:/D:/git/OIMS/src/oims/UI/pages/ProductPage/Ui_ProductPage.java</file>

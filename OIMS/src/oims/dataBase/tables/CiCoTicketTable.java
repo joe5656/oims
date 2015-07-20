@@ -35,7 +35,7 @@ public class CiCoTicketTable extends Db_table {
     public CiCoTicketTable(DataBaseManager dbm)
     {
         super("CiCoTicketTable", dbm, Table_Type.TABLE_TYPE_REMOTE);
-        super.registerColumn("Tickethistory", Db_publicColumnAttribute.ATTRIBUTE_NAME.FLOAT, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
+        super.registerColumn("Tickethistory", Db_publicColumnAttribute.ATTRIBUTE_NAME.LONG_TEXT, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
         // for CI ticket requestDate is the date the cargos are supposed arrival date
         // for CO ticket requestDate is the date that raw materials supposed to be recieved by requester
         super.registerColumn("requestDate", Db_publicColumnAttribute.ATTRIBUTE_NAME.DATE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
@@ -50,8 +50,7 @@ public class CiCoTicketTable extends Db_table {
         super.registerColumn("currentOwnerId", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
         // if it's CI ticket, for contains value of warehouseId; if it's CO ticket, for is deptId
         super.registerColumn("forName", Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR60,  Boolean.FALSE,   Boolean.FALSE,  Boolean.FALSE, null);
-        super.registerColumn("for", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER,  Boolean.FALSE,   Boolean.FALSE,  Boolean.FALSE, null);
-        super.registerColumn("rawMaterialId", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
+        super.registerColumn("forId", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER,  Boolean.FALSE,   Boolean.FALSE,  Boolean.FALSE, null);
         super.registerColumn("submitorId", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER,  Boolean.FALSE,   Boolean.FALSE,  Boolean.FALSE, null);
         super.registerColumn("ticketType", Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR60, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
         super.registerColumn("status", Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR60, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
@@ -60,8 +59,8 @@ public class CiCoTicketTable extends Db_table {
     
 
     public SqlResultInfo NewEntry(Ticket.TicketType ticketType, Integer submitorId, String submitorName,
-            Integer reciever, String recieverName, Integer rawMId, UnitQuantity quantity, Double unitPrice,
-            Double totalPrice, Double deliveryFee, Date requestDate)
+            Integer reciever, String recieverName, String rawMName, UnitQuantity quantity, String unitPrice,
+            String totalPrice, String deliveryFee, Date requestDate)
     {
         SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
         TableEntry entryToBeInsert = generateTableEntry();
@@ -71,20 +70,20 @@ public class CiCoTicketTable extends Db_table {
         valueHolder.put("ticketType", ticketType.toString());
         valueHolder.put("submitorId", submitorId.toString());
         valueHolder.put("submitorName", submitorName);
-        valueHolder.put("rawMaterialId", rawMId.toString());
+        valueHolder.put("rawMaterialName", rawMName);
         valueHolder.put("Quantity", quantity.getQuantity().toString());
         valueHolder.put("Unit", quantity.getUnit().getUnitName());
         valueHolder.put("forName", recieverName);
-        valueHolder.put("for", reciever.toString());
-        valueHolder.put("requestDate", timeFormat.format(requestDate));
-        valueHolder.put("delvieryFee", deliveryFee.toString());
+        valueHolder.put("forId", reciever.toString());
+        valueHolder.put("requestDate", (requestDate==null?"1900-01-01":timeFormat.format(requestDate)));
+        valueHolder.put("delvieryFee", deliveryFee);
         valueHolder.put("currentOwnerId", submitorId.toString());
         valueHolder.put("currentOwnerName", submitorName);
         valueHolder.put("Tickethistory", historyString);
         if(ticketType == TicketType.WAREHOUSETICKET_CI)
         {
-            valueHolder.put("unitPrice", unitPrice.toString());
-            valueHolder.put("totalPrice", totalPrice.toString());
+            valueHolder.put("unitPrice", unitPrice);
+            valueHolder.put("totalPrice", totalPrice);
             valueHolder.put("status", Ticket.CiTicketStatus.CI_SUBMITTED.toString());
         }
         else
@@ -100,6 +99,55 @@ public class CiCoTicketTable extends Db_table {
         return result;
     }    
     
+    public SqlResultInfo querySummary(Ticket.TicketType ticketType, Integer owner, 
+            Integer submitor, Ticket.CiTicketStatus ciStatus, Ticket.CoTicketStatus coStatus)
+    {
+        SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
+        
+        if(ticketType != null)
+        {
+            TableEntry entryToBeUpdate = generateTableEntry();
+            Map<String, String> valueHolder = Maps.newHashMap();
+            
+            valueHolder.put("ticketType",  "selected");
+            valueHolder.put("requestDate", "selected");          
+            valueHolder.put("Unit", "selected");              
+            valueHolder.put("Quantity", "selected");        
+            valueHolder.put("rawMaterialName", "selected");   
+            valueHolder.put("currentOwnerName", "selected");      
+            valueHolder.put("forName", "selected");                
+            valueHolder.put("status", "selected");                
+            valueHolder.put("ticketId", "selected");    
+            
+            //where
+            TableEntry whereeq = generateTableEntry();
+            Map<String, String> valueHoldereq = Maps.newHashMap();
+            if(owner!=null){valueHoldereq.put("currentOwnerId", owner.toString());} 
+            if(submitor!=null){valueHoldereq.put("submitorId", submitor.toString());}
+            switch(ticketType)
+            {
+                case WAREHOUSETICKET_CI:
+                {
+                    if(ciStatus!=null){valueHoldereq.put("status", ciStatus.toString());}
+                    break;
+                }
+                case WAREHOUSETICKET_CO:
+                {
+                    if(coStatus!=null){valueHoldereq.put("status", coStatus.toString());}
+                    break;
+                }
+            }
+            
+            if(entryToBeUpdate.fillInEntryValues(valueHolder) && 
+                    whereeq.fillInEntryValues(valueHoldereq))
+            {
+                result = super.select(entryToBeUpdate, whereeq, null, null);
+            }
+            
+        }
+        return result;
+    }
+    
     public SqlResultInfo query(Ticket.TicketType ticketType, Integer owner, 
             Integer submitor, Ticket.CiTicketStatus ciStatus, Ticket.CoTicketStatus coStatus)
     {
@@ -110,7 +158,7 @@ public class CiCoTicketTable extends Db_table {
             TableEntry entryToBeUpdate = generateTableEntry();
             Map<String, String> valueHolder = Maps.newHashMap();
             
-            valueHolder.put("ticketHistory", "selected");
+            valueHolder.put("Tickethistory", "selected");
             valueHolder.put("ticketType",  "selected");
             valueHolder.put("requestDate", "selected");          
             valueHolder.put("delvieryFee", "selected");          
@@ -122,9 +170,8 @@ public class CiCoTicketTable extends Db_table {
             valueHolder.put("currentOwnerName", "selected"); 
             valueHolder.put("submitorName", "selected");        
             valueHolder.put("currentOwnerId" , "selected");       
-            valueHolder.put("for", "selected");               
-            valueHolder.put("forName", "selected");    
-            valueHolder.put("rawMaterialId", "selected");         
+            valueHolder.put("forId", "selected");               
+            valueHolder.put("forName", "selected");           
             valueHolder.put("submitorId", "selected");            
             valueHolder.put("status", "selected");                
             valueHolder.put("ticketId", "selected");    
@@ -184,7 +231,7 @@ public class CiCoTicketTable extends Db_table {
             newHistory += "\nNewStatus: " + status;
             valueHolder.put("status", status);
         }
-        valueHolder.put("ticketHistory", newHistory);
+        valueHolder.put("Tickethistory", newHistory);
         entryToBeUpdate.fillInEntryValues(valueHolder);
         
         // where 
@@ -201,7 +248,7 @@ public class CiCoTicketTable extends Db_table {
         Boolean result = Boolean.FALSE;
         TableEntry entryToBeSelect = generateTableEntry();
         Map<String, String> valueHolder = Maps.newHashMap();
-        valueHolder.put("ticketHistory", "selected");
+        valueHolder.put("Tickethistory", "selected");
         valueHolder.put("ticketType",  "selected");
         valueHolder.put("requestDate", "selected");          
         valueHolder.put("delvieryFee", "selected");          
@@ -213,9 +260,8 @@ public class CiCoTicketTable extends Db_table {
         valueHolder.put("currentOwnerName", "selected"); 
         valueHolder.put("submitorName", "selected");        
         valueHolder.put("currentOwnerId" , "selected");       
-        valueHolder.put("for", "selected");            
-        valueHolder.put("forName", "selected");                  
-        valueHolder.put("rawMaterialId", "selected");         
+        valueHolder.put("forId", "selected");            
+        valueHolder.put("forName", "selected");             
         valueHolder.put("submitorId", "selected");            
         valueHolder.put("status", "selected");                
         valueHolder.put("ticketId", "selected");    
@@ -244,12 +290,11 @@ public class CiCoTicketTable extends Db_table {
             t.setCurrentOwnerName(rs.getString("currentOwnerName"));
             t.setSubmitorName(rs.getString("submitorName"));
             t.setCurrentOwnerId(rs.getInt("currentOwnerId"));
-            t.setFor(rs.getInt("for"));
-            t.setForName(rs.getString("forName"));
-            t.setRawMaterialId(rs.getInt("rawMaterialId"));     
+            t.setFor(rs.getInt("forId"));
+            t.setForName(rs.getString("forName"));   
             t.setSubmitorId(rs.getInt("submitorId"));
             t.setStatus(rs.getString("status"));
-            t.setHistory(rs.getString("ticketHistory"));
+            t.setHistory(rs.getString("Tickethistory"));
             t.setTicketType(rs.getString("ticketType"));
             t.setQuantity(new UnitQuantity(rs.getString("Unit"),Double.parseDouble(rs.getString("Quantity"))));
             result = Boolean.TRUE;
@@ -261,7 +306,7 @@ public class CiCoTicketTable extends Db_table {
     {
         switch(en)
         {
-            case "ticketHistory":{return "历史信息";}          
+            case "Tickethistory":{return "历史信息";}          
             case "ticketType":{return "单据类型";} 
             case "requestDate":{return "期望日期";}          
             case "delvieryFee":{return "运输费用";}          
@@ -273,9 +318,8 @@ public class CiCoTicketTable extends Db_table {
             case "currentOwnerName":{return "责任人";} 
             case "submitorName":{return "提交人";}        
             case "currentOwnerId" :{return "责任人编号";}       
-            case "for":{return "接收单位编码";}                 
-            case "forName":{return "接收单位名称";}                  
-            case "rawMaterialId":{return "原料编号";}         
+            case "forId":{return "接收单位编码";}                 
+            case "forName":{return "接收单位名称";}           
             case "submitorId":{return "提交人编号";}            
             case "status":{return "状态";}                
             case "ticketId":{return "单据编号";} 

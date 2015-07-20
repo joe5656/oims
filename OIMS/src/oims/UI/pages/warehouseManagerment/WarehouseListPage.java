@@ -17,12 +17,13 @@ import oims.support.util.UneditableTableModule;
 public class WarehouseListPage extends javax.swing.JFrame {
     private WarehousePickerTx pickerTx_;
     private SqlDataTable      itsSqlDTable_;
+    private Integer           identity_;
     /**
      * Creates new form WarehouseList
      */
-    public WarehouseListPage(SqlDataTable table, WarehousePickerTx pickerTx) {
+    public WarehouseListPage(SqlDataTable table, WarehousePickerTx pickerTx, Integer id) {
         initComponents();
-        
+        identity_ = id;
         this.jTable1.setModel(new UneditableTableModule(table.getData(),table.getColumnNames()));
         itsSqlDTable_ = table;
         if(pickerTx != null)
@@ -103,7 +104,7 @@ public class WarehouseListPage extends javax.swing.JFrame {
         {
             this.itsSqlDTable_.setRowSelected(row);
         }
-        this.pickerTx_.DataSelected(itsSqlDTable_);
+        this.pickerTx_.DataSelected(itsSqlDTable_,this.identity_);
         this.dispose();
     }//GEN-LAST:event_selectBActionPerformed
 

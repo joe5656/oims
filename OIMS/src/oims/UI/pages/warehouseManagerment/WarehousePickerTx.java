@@ -12,5 +12,5 @@ import oims.support.util.SqlDataTable;
  * @author freda
  */
 public interface WarehousePickerTx {
-    public void DataSelected(SqlDataTable dTable);
+    public void DataSelected(SqlDataTable dTable, Integer id);
 }

@@ -175,8 +175,12 @@ public class RawMaterialTable extends Db_table{
         }
     }
 
+    static public String getUnitNameColName(){return "pricingUnit";}
+    static public String getUnitNameColNameInCh(){return EnToCh("pricingUnit");}
     static public String getRmNameColName(){return "materialName";}
     static public String getRmNameColNameInCh(){return EnToCh("materialName");}   
+    static public String getRmTypeColName(){return "materialType";}
+    static public String getRmTypeColNameInCh(){return EnToCh("materialType");}   
     static public String getPrimaryKeyColName(){return "materialId";}
     static public String getPrimaryKeyColNameInCh(){return EnToCh("materialId");} 
 }

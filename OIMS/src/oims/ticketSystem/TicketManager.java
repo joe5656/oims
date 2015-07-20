@@ -46,11 +46,11 @@ public class TicketManager implements oims.systemManagement.Client{
     }
     
     public SqlResultInfo createTicket(Ticket.TicketType ticketType, Integer submitorId, String submitorName,
-            Integer reciever, String recieverName, Integer rawMId, UnitQuantity quantity, double unitPrice,
-            double totalPrice, double deliveryFee, Date requestDate)
+            Integer reciever, String recieverName, String rawMName, UnitQuantity quantity, String unitPrice,
+            String totalPrice, String deliveryFee, Date requestDate)
     {
         return this.itsTicketTable_.NewEntry(ticketType, submitorId, submitorName, 
-                reciever, recieverName,rawMId, quantity, unitPrice, totalPrice, deliveryFee, requestDate);
+                reciever, recieverName,rawMName, quantity, unitPrice, totalPrice, deliveryFee, requestDate);
     }
 
     public SqlDataTable ticketQuery(Ticket.TicketType ticketType, Integer owner, 
@@ -59,9 +59,20 @@ public class TicketManager implements oims.systemManagement.Client{
         SqlResultInfo result;
         result = this.itsTicketTable_.query(ticketType, owner, submitor, ciStatus, coStatus);
         SqlDataTable dTable = new SqlDataTable(result.getResultSet(),this.itsTicketTable_.getName());
+        this.itsTicketTable_.translateColumnName(dTable.getColumnNames());
         return dTable;
     }
     
+    public SqlDataTable ticketQuerySummary(Ticket.TicketType ticketType, Integer owner, 
+            Integer submitor, Ticket.CiTicketStatus ciStatus, Ticket.CoTicketStatus coStatus)
+    {
+        SqlResultInfo result;
+        result = this.itsTicketTable_.querySummary(ticketType, owner, submitor, ciStatus, coStatus);
+        SqlDataTable dTable = new SqlDataTable(result.getResultSet(),this.itsTicketTable_.getName());
+        this.itsTicketTable_.translateColumnName(dTable.getColumnNames());
+        return dTable;
+    }
+        
     public Ticket CiTicketGotoNextStep(Integer ticketId, TicketAction action)
     {
         Ticket ticket = new Ticket(ticketId);

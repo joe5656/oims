@@ -39,7 +39,7 @@ public class Db_columnTypeMapper_MYSQL implements Db_columnTypeMapper{
         attributeMap_[Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR10.ordinal()] = "VARCHAR(10) ";
         attributeMap_[Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR60.ordinal()] = "VARCHAR(60) ";
         attributeMap_[Db_publicColumnAttribute.ATTRIBUTE_NAME.TEXT.ordinal()] = "TEXT ";
-        attributeMap_[Db_publicColumnAttribute.ATTRIBUTE_NAME.LONG_TEXT.ordinal()] = "LONG_TEXT ";
+        attributeMap_[Db_publicColumnAttribute.ATTRIBUTE_NAME.LONG_TEXT.ordinal()] = "LONGTEXT ";
         attributeMap_[Db_publicColumnAttribute.ATTRIBUTE_NAME.ENUM.ordinal()] = "ENUM ";
     }
 }
