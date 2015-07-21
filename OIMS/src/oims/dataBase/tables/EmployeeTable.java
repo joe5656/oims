@@ -242,6 +242,7 @@ public class EmployeeTable extends Db_table{
     public Boolean checkPassword(String id, String pw)
     {
         Boolean value = false;
+        
         TableEntry select = generateTableEntry();
         Map<String, String> valueHolder = Maps.newHashMap();
         valueHolder.put("EmployeeId", "select");
@@ -267,6 +268,27 @@ public class EmployeeTable extends Db_table{
             } catch (SQLException ex) {
                 Logger.getLogger(EmployeeTable.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+        
+        if(value == false)
+        {
+            // no employee entry in system at all? login with admin
+            TableEntry sel = generateTableEntry();
+            Map<String, String> selHolder = Maps.newHashMap();
+            selHolder.put("EmployeeId", "select");
+            if(sel.fillInEntryValues(selHolder))
+            {
+                SqlResultInfo result = super.select(select, null, null, null);
+                try {
+                    if(result.isSucceed() && !result.getResultSet().first())
+                    {
+                        value = ("admin".equals(id)) && ("admin".equals(pw));
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(EmployeeTable.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
         }
         return value;
     }

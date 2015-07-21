@@ -45,11 +45,12 @@ public class TicketManager implements oims.systemManagement.Client{
         itsTicketTable_ = new CiCoTicketTable(dbm);
     }
     
-    public SqlResultInfo createTicket(Ticket.TicketType ticketType, Integer submitorId, String submitorName,
-            Integer reciever, String recieverName, String rawMName, UnitQuantity quantity, String unitPrice,
+    public SqlResultInfo createTicket(Ticket.TicketType ticketType, Integer reciever, 
+            String recieverName, String rawMName, UnitQuantity quantity, String unitPrice,
             String totalPrice, String deliveryFee, Date requestDate)
     {
-        return this.itsTicketTable_.NewEntry(ticketType, submitorId, submitorName, 
+        Employee submitor = this.itsSysManager_.getCurEmployee();
+        return this.itsTicketTable_.NewEntry(ticketType, submitor.getId(), submitor.getName(), 
                 reciever, recieverName,rawMName, quantity, unitPrice, totalPrice, deliveryFee, requestDate);
     }
 

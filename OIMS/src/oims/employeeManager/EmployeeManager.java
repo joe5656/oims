@@ -144,4 +144,14 @@ public class EmployeeManager implements oims.systemManagement.Client,EmployeePag
         SqlResultInfo result = this.itsEmployeeTable_.update(id, null, null, null, null, null, null, active, null);
         return result.isSucceed();
     }
+    
+    public Boolean authEmployee(String id, String pw)
+    {
+        return this.itsEmployeeTable_.checkPassword(id, pw);
+    }
+    
+    public Employee getEmployee(String id)
+    {
+        return new Employee();
+    }
 }

@@ -22,6 +22,8 @@ import oims.UI.pages.StackPage.Ui_StackMangement;
 import oims.UI.pages.employeePage.EmployeePageRx;
 import oims.UI.pages.employeePage.EmployeePicker;
 import oims.UI.pages.employeePage.EmployeePickerTx;
+import oims.UI.pages.loginPage.Ui_loginPage;
+import oims.UI.pages.loginPage.loginPageTx;
 import oims.UI.pages.rawMaterialPage.RawMaterialPicker;
 import oims.UI.pages.rawMaterialPage.RawMaterialPickerTx;
 import oims.UI.pages.rawMaterialPage.Ui_rawMaterialPage;
@@ -95,7 +97,7 @@ public class UiManager   implements oims.systemManagement.Client,UiManagerRx, Da
             }
             case SYS_ACTIVE:
             {
-                Ui_mainMenuPage page = new Ui_mainMenuPage(this, itsDbm_.islocalDbConnected(),itsDbm_.isRemoteDbConnected());
+                Ui_mainMenuPage page = new Ui_mainMenuPage(this, itsDbm_.islocalDbConnected(),itsDbm_.isRemoteDbConnected(),itsSysManager_);
                 itsPages_.put(PageType.MAIN_PAGE, page);
                 if(itsPages_.containsKey(PageType.INIT_PAGE))
                 {
@@ -170,7 +172,7 @@ public class UiManager   implements oims.systemManagement.Client,UiManagerRx, Da
                 }
                 else
                 {
-                    pageWanted = new Ui_mainMenuPage(this, itsDbm_.islocalDbConnected(),itsDbm_.isRemoteDbConnected());
+                    pageWanted = new Ui_mainMenuPage(this, itsDbm_.islocalDbConnected(),itsDbm_.isRemoteDbConnected(),itsSysManager_);
                     itsPages_.put(PageType.MAIN_PAGE, pageWanted);
                 }
                 break;
@@ -389,4 +391,14 @@ public class UiManager   implements oims.systemManagement.Client,UiManagerRx, Da
         ProductReciptPicker page = new ProductReciptPicker(table, tx, identity);
         page.setVisible(true);
     }
+
+    @Override
+    public void showLoginPage(loginPageTx tx) 
+    {
+        EmployeeManager em = (EmployeeManager)this.itsSysManager_.getClient(SystemManager.clientType.UI_MANAGER);
+        Ui_loginPage page = new Ui_loginPage(tx, em);
+        page.setVisible(true);
+    }
+    
+    
 }

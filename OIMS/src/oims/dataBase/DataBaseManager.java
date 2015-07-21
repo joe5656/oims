@@ -102,6 +102,10 @@ public class DataBaseManager  implements oims.systemManagement.Client,DataBaseRx
             }
             case SYS_START:
             {
+                // run remote DB maint for one time to create first remote DB and 
+                // connect to the remote DB
+                remoteDbMaintain();
+                
                 if(!localDataBaseConnected_)
                 {
                     startDatabaseService(Boolean.TRUE);
@@ -394,6 +398,13 @@ public class DataBaseManager  implements oims.systemManagement.Client,DataBaseRx
                     if(createDbReq(itsMysqlDb_, Boolean.FALSE))
                     {
                         this.createTable(Boolean.FALSE);
+                    }
+                    
+                    // tye again to connect to remote DB after the installing
+                    remoteDataBaseConnected_ = (remoteDataBase_.selectDb(itsMysqlDb_) != null);
+                    if(remoteDataBaseConnected_)
+                    {
+                        this.notifyDbStatusListeners(remoteDataBase_, remoteDataBaseConnected_);
                     }
                 }
                 else

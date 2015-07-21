@@ -1286,7 +1286,7 @@ public class Ui_StackMangement  extends BasePageClass implements WarehousePicker
         else
         {
             UnitQuantity qu = new UnitQuantity(new CommonUnit(unit),Double.parseDouble(quantity));
-            SqlResultInfo result = this.itsTicketManager_.createTicket(Ticket.TicketType.WAREHOUSETICKET_CI, 0, "testsubmitor", Integer.parseInt(whId), 
+            SqlResultInfo result = this.itsTicketManager_.createTicket(Ticket.TicketType.WAREHOUSETICKET_CI, Integer.parseInt(whId), 
                     whName, rmName, qu, unitPrice, totalPrice, deliveryPrice, null);
             if(result.isSucceed())
             {

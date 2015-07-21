@@ -8,10 +8,12 @@ package oims.UI;
 import oims.UI.pages.Page;
 import oims.UI.pages.ProductPage.ProductPickerTx;
 import oims.UI.pages.employeePage.EmployeePickerTx;
+import oims.UI.pages.loginPage.loginPageTx;
 import oims.UI.pages.rawMaterialPage.RawMaterialPickerTx;
 import oims.UI.pages.reciptPage.DetailReciptPickerTx;
 import oims.UI.pages.reciptPage.ProductReciptPickerTx;
 import oims.UI.pages.warehouseManagerment.WarehousePickerTx;
+import oims.employeeManager.EmployeeManager;
 import oims.support.util.SqlDataTable;
 
 /**
@@ -39,4 +41,5 @@ public interface UiManagerRx {
     public void showrProductReciptPicker(SqlDataTable table, ProductReciptPickerTx tx, Integer identify);
     public void showWarehousePicker(SqlDataTable table, WarehousePickerTx tx, Integer identify);
     public void showRawMaterialPicker(SqlDataTable table, RawMaterialPickerTx tx, Integer identify);
+    public void showLoginPage(loginPageTx tx);
 }

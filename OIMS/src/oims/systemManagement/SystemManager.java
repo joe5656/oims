@@ -156,4 +156,7 @@ public class SystemManager {
         notifyAllClients();
         
     }
+    
+    public void setCurEmployee(Employee e){this.curEmployee_ = e;}
+    public Employee getCurEmployee(){return this.curEmployee_;}
 }

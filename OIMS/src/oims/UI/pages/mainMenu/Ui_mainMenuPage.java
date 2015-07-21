@@ -10,24 +10,30 @@ import oims.UI.UiManager;
 import oims.UI.UiManagerRx;
 import oims.UI.pages.BasePageClass;
 import oims.UI.pages.Page;
+import oims.UI.pages.loginPage.loginPageTx;
+import oims.employeeManager.Employee;
+import oims.systemManagement.SystemManager;
 
 /**
  *
  * @author ezouyyi
  */
-public class Ui_mainMenuPage extends BasePageClass{
+public class Ui_mainMenuPage extends BasePageClass implements loginPageTx{
     private Boolean localDbConnected_;
     private Boolean remoteDbConnected_;
+    private SystemManager itsSystemManager_;
+    
     /**
      * Creates new form Ui_mainMenuPage
      * @param uiM
      */
-    public Ui_mainMenuPage(UiManager uiM, Boolean local, Boolean remote) {
+    public Ui_mainMenuPage(UiManager uiM, Boolean local, Boolean remote, SystemManager sm) {
         super(uiM,Page.PAGE_TYPE.MAIN_PAGE);
         initComponents();
         toggleDbStatus(Boolean.TRUE, local);
         toggleDbStatus(Boolean.FALSE, remote);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        itsSystemManager_ = sm;
     }
 
     /**
@@ -50,6 +56,7 @@ public class Ui_mainMenuPage extends BasePageClass{
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -148,6 +155,13 @@ public class Ui_mainMenuPage extends BasePageClass{
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
+        jButton8.setText("jButton8");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -164,6 +178,10 @@ public class Ui_mainMenuPage extends BasePageClass{
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel3)))
                 .addContainerGap(254, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton8)
+                .addGap(38, 38, 38))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -172,7 +190,9 @@ public class Ui_mainMenuPage extends BasePageClass{
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 143, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
+                .addComponent(jButton8)
+                .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3)))
@@ -208,6 +228,10 @@ public class Ui_mainMenuPage extends BasePageClass{
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         itsUiManager_.createAndShowPage(UiManagerRx.PageType.RECIPT_PAGE, this);
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        this.itsUiManager_.showLoginPage(this);
+    }//GEN-LAST:event_jButton8ActionPerformed
 
     public void toggleDbStatus(Boolean local, Boolean isOn)
     {
@@ -252,11 +276,25 @@ public class Ui_mainMenuPage extends BasePageClass{
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 
+    @Override
+    public void userUnauth() {
+        
+    }
 
+    @Override
+    public void userAuth(Employee authedEmployee) 
+    {
+        this.enablePlane(true);
+        this.itsSystemManager_.setCurEmployee(authedEmployee);
+    }
+
+    private void enablePlane(Boolean ison)
+    {}
 }
