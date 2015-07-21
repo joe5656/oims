@@ -207,6 +207,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="&#x6e05;&#x7a7a;&#x67e5;&#x8be2;&#x7ed3;&#x679c;"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>

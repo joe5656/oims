@@ -485,7 +485,7 @@ public class Ui_WarehousePage extends BasePageClass implements WarehousePageRx,W
     }//GEN-LAST:event_DelSelBActionPerformed
 
     private void selEmployeeBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selEmployeeBActionPerformed
-       itsEmployeeM_.needEmployeePicker(this,0);
+       itsEmployeeM_.needEmployeePicker(this,0,true);
     }//GEN-LAST:event_selEmployeeBActionPerformed
     
     private void toggleDelArea(Boolean on)

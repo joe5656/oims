@@ -87,7 +87,7 @@ public class EmployeeManager implements oims.systemManagement.Client,EmployeePag
     @Override
     public SqlDataTable queryEmployeeInfo(String employeeId) 
     {
-        SqlResultInfo rs = this.itsEmployeeTable_.queryEmployeeGeneralInfo(employeeId,null);
+        SqlResultInfo rs = this.itsEmployeeTable_.queryEmployeeGeneralInfo(employeeId,null,null);
         SqlDataTable dTable = null;
         if(rs.isSucceed())
         {
@@ -104,8 +104,8 @@ public class EmployeeManager implements oims.systemManagement.Client,EmployeePag
     }
 
     @Override
-    public SqlDataTable queryGenerallEmployeeInfo() {
-        SqlResultInfo rs = this.itsEmployeeTable_.queryEmployeeGeneralInfo(null,null);
+    public SqlDataTable queryGenerallEmployeeInfo(Boolean isActive) {
+        SqlResultInfo rs = this.itsEmployeeTable_.queryEmployeeGeneralInfo(null,null,isActive);
         SqlDataTable dTable = null;
         if(rs.isSucceed())
         {
@@ -114,10 +114,10 @@ public class EmployeeManager implements oims.systemManagement.Client,EmployeePag
         return dTable;
     }
     
-    public void needEmployeePicker(EmployeePickerTx tx, Integer id)
+    public void needEmployeePicker(EmployeePickerTx tx, Integer id, Boolean isActive)
     {
         UiManager tempUiM = (UiManager)itsSysManager_.getClient(SystemManager.clientType.UI_MANAGER);
-        tempUiM.showEmployeePicker(this.queryGenerallEmployeeInfo(), tx, id);
+        tempUiM.showEmployeePicker(this.queryGenerallEmployeeInfo(isActive), tx, id);
     }
     
     public String getEmployeeName(Integer id)
@@ -152,6 +152,8 @@ public class EmployeeManager implements oims.systemManagement.Client,EmployeePag
     
     public Employee getEmployee(String id)
     {
-        return new Employee();
+        Employee e = new Employee();
+        this.itsEmployeeTable_.serializeEmployee(e, id);
+        return e;
     }
 }

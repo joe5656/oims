@@ -6,6 +6,7 @@
 package oims.dataBase.tables;
 
 import com.google.common.collect.Maps;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -210,7 +211,7 @@ public class EmployeeTable extends Db_table{
         }
     }
     
-    public SqlResultInfo queryEmployeeGeneralInfo(String employeeId, String employeeName)
+    public SqlResultInfo queryEmployeeGeneralInfo(String employeeId, String employeeName, Boolean acitveFlag)
     {
         SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
         TableEntry select = generateTableEntry();
@@ -225,6 +226,7 @@ public class EmployeeTable extends Db_table{
         Map<String, String> valueHoldereq = Maps.newHashMap();
         if(employeeId != null)valueHoldereq.put("EmployeeId", employeeId);
         if(employeeName != null)valueHoldereq.put("name", employeeName);
+        if(acitveFlag != null)valueHoldereq.put("valid", acitveFlag?"1":"0");
         
         if(select.fillInEntryValues(valueHolder)
                 && eq.fillInEntryValues(valueHoldereq))
@@ -239,6 +241,56 @@ public class EmployeeTable extends Db_table{
         return result;        
     }
     
+    public void serializeEmployee(Employee e, String employeeId)
+    {
+        TableEntry entryToBeQuery = generateTableEntry();
+        Map<String, String> valueHolder = Maps.newHashMap();
+        valueHolder.put("enrollDate", "select");
+        valueHolder.put("gender", "select");
+        valueHolder.put("deptId", "select");
+        valueHolder.put("positionId", "select");
+        valueHolder.put("birthDate", "select");
+        valueHolder.put("valid", "select");
+        valueHolder.put("contact", "select");
+        valueHolder.put("password", "select");
+        valueHolder.put("picurl", "select");
+        valueHolder.put("NationalId", "select");
+        valueHolder.put("name", "select");
+        valueHolder.put("EmployeeId", "select");    
+        
+        // where
+        TableEntry where = generateTableEntry();
+        Map<String, String> valueHoldereq = Maps.newHashMap();
+        valueHoldereq.put("EmployeeId", employeeId);
+        
+        if(entryToBeQuery.fillInEntryValues(valueHolder) && where.fillInEntryValues(valueHoldereq))
+        {
+            SqlResultInfo result = super.select(entryToBeQuery, where, null, null);
+            if(result.isSucceed())
+            {
+                ResultSet rs = result.getResultSet();
+                try {
+                    if(rs.first())
+                    {
+                        e.setId(rs.getInt("EmployeeId"));
+                        e.setName(rs.getString("name"));
+                        e.setNationId(rs.getString("NationalId"));
+                        e.setUrl(rs.getString("picurl"));
+                        e.setPassword(rs.getString("password"));
+                        e.setContact(rs.getString("contact"));
+                        e.setBirthDay(rs.getString("birthDate"));
+                        e.setPositionId(rs.getInt("positionId"));
+                        e.setDepId(rs.getInt("deptId"));
+                        e.setGender(rs.getString("gender"));
+                        e.setEnrollDate(rs.getString("enrollDate"));
+                    }
+                    
+                } catch (SQLException ex) {
+                    Logger.getLogger(EmployeeTable.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }
     public Boolean checkPassword(String id, String pw)
     {
         Boolean value = false;
@@ -247,7 +299,6 @@ public class EmployeeTable extends Db_table{
         Map<String, String> valueHolder = Maps.newHashMap();
         valueHolder.put("EmployeeId", "select");
         valueHolder.put("gender", "select");
-        valueHolder.put("valid", "1");
         valueHolder.put("contact", "select");
         valueHolder.put("name", "select");
         
@@ -255,6 +306,7 @@ public class EmployeeTable extends Db_table{
         Map<String, String> valueHoldereq = Maps.newHashMap();
         valueHoldereq.put("EmployeeId", id);
         valueHoldereq.put("password", pw);
+        valueHoldereq.put("valid", "1");
         
         if(select.fillInEntryValues(valueHolder)
                 && eq.fillInEntryValues(valueHoldereq))
@@ -276,9 +328,14 @@ public class EmployeeTable extends Db_table{
             TableEntry sel = generateTableEntry();
             Map<String, String> selHolder = Maps.newHashMap();
             selHolder.put("EmployeeId", "select");
-            if(sel.fillInEntryValues(selHolder))
+            TableEntry where = generateTableEntry();
+            Map<String, String> selHoldereq = Maps.newHashMap();
+            selHoldereq.put("valid", "1");
+            
+            
+            if(sel.fillInEntryValues(selHolder) && where.fillInEntryValues(valueHoldereq))
             {
-                SqlResultInfo result = super.select(select, null, null, null);
+                SqlResultInfo result = super.select(select, where, null, null);
                 try {
                     if(result.isSucceed() && !result.getResultSet().first())
                     {

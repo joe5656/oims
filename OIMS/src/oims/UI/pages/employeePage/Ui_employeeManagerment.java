@@ -127,6 +127,11 @@ public class Ui_employeeManagerment extends BasePageClass implements EmployeePag
         });
 
         jButton4.setText("清空查询结果");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -344,7 +349,7 @@ public class Ui_employeeManagerment extends BasePageClass implements EmployeePag
         SqlDataTable table;
         if("".equals(this.jTextField1.getText().trim()))
         {
-            table = this.itsEmployeePageTx_.queryGenerallEmployeeInfo();
+            table = this.itsEmployeePageTx_.queryGenerallEmployeeInfo(null);
         }
         else
         {
@@ -394,18 +399,40 @@ public class Ui_employeeManagerment extends BasePageClass implements EmployeePag
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         if("".equals(this.jTextField5.getText().trim()))
         {
-            this.jLabel7.setText("员工号码未输入");
+            this.jLabel11.setText("员工号码未输入");
         }
-        this.itsEmployeePageTx_.toggleEmployee(this.jTextField5.getText().trim(), true);
+        if(this.itsEmployeePageTx_.toggleEmployee(this.jTextField5.getText().trim(), true))
+        {
+            this.jLabel11.setText("激活成功，可进行下一次修改");
+            this.jTextField5.setText("");
+        }
+        else
+        {
+            this.jLabel11.setText("激活操作不成功 请重试");
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         if("".equals(this.jTextField5.getText().trim()))
         {
-            this.jLabel7.setText("员工号码未输入");
+            this.jLabel11.setText("员工号码未输入");
         }
-        this.itsEmployeePageTx_.toggleEmployee(this.jTextField5.getText().trim(), false);
+        if(this.itsEmployeePageTx_.toggleEmployee(this.jTextField5.getText().trim(), false))
+        {
+            this.jLabel11.setText("去激活成功，可进行下一次修改");
+            this.jTextField5.setText("");
+        }
+        else
+        {
+            this.jLabel11.setText("去激活操作不成功 请重试");
+        }
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        SqlDataTable table = new SqlDataTable();
+        this.jTable1.setModel(new javax.swing.table.DefaultTableModel(table.getData(),table.getColumnNames()));
+        this.jTextField1.setText("");
+    }//GEN-LAST:event_jButton4ActionPerformed
     
     public Boolean newEmployee(Employee employees)
     {
@@ -444,7 +471,7 @@ public class Ui_employeeManagerment extends BasePageClass implements EmployeePag
 
     @Override
     public void showEmployeePicker(EmployeePickerTx rx) {
-        EmployeePicker picker = new EmployeePicker(this.itsEmployeePageTx_.queryGenerallEmployeeInfo(), rx, 0);
+        EmployeePicker picker = new EmployeePicker(this.itsEmployeePageTx_.queryGenerallEmployeeInfo(false), rx, 0);
         picker.setVisible(Boolean.TRUE);
     }
 }

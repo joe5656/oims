@@ -21,7 +21,7 @@ public interface EmployeePageTx {
     public SqlResultInfo  changeEmployeeInformation(Employee employee);
     public SqlDataTable   queryEmployeeInfo(String employeeId);
     public Vector         requestColumns();
-    public SqlDataTable   queryGenerallEmployeeInfo();
+    public SqlDataTable   queryGenerallEmployeeInfo(Boolean isActive);
     public Boolean        checkPassword(String id, String pw);
     public SqlResultInfo  updatePassword(String id, String pw);
     public Boolean        toggleEmployee(String id, Boolean active);

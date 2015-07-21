@@ -67,6 +67,11 @@ public class Ui_ProductPage   extends BasePageClass{
         });
 
         jButton2.setText("查询所有产品");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("状态：");
 
@@ -336,6 +341,10 @@ public class Ui_ProductPage   extends BasePageClass{
             
         }
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        this.itsProductManager_.needProductPicker(null, 0, null, null);
+    }//GEN-LAST:event_jButton2ActionPerformed
     
     private void toggleCreateArea(Boolean ison)
     {

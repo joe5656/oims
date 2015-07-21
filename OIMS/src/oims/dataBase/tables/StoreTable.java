@@ -67,6 +67,7 @@ public class StoreTable  extends Db_table{
         SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
         TableEntry entryToBeInsert = generateTableEntry();
         Map<String, String> valueHolder = Maps.newHashMap();
+        valueHolder.put("StoreId", "selected");
         valueHolder.put("StoreName", "selected");
         valueHolder.put("StoreManagerName", "selected");
         valueHolder.put("StoreManagerId","selected");
@@ -96,11 +97,11 @@ public class StoreTable  extends Db_table{
         return result;
     }
     
-    public SqlResultInfo update(String storeName, String StoreManagerName, Integer StoreManagerId,
-            String contact)
+    public SqlResultInfo update(String storeId, String storeName, 
+            String StoreManagerName, Integer StoreManagerId,String contact)
     {
         SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
-        if(storeName != null)
+        if(storeName != null || storeId != null)
         {
             TableEntry entryToBeInsert = generateTableEntry();
             Map<String, String> valueHolder = Maps.newHashMap();
@@ -114,7 +115,8 @@ public class StoreTable  extends Db_table{
             // where
             TableEntry wh = generateTableEntry();
             Map<String, String> valueHoldereq = Maps.newHashMap();
-            valueHoldereq.put("StoreName", storeName);
+            if(storeName!=null)valueHoldereq.put("StoreName", storeName);
+            if(storeId!=null)valueHoldereq.put("StoreId", storeId);
 
             if(entryToBeInsert.fillInEntryValues(valueHolder) && wh.fillInEntryValues(valueHoldereq))
             {

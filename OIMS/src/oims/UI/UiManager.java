@@ -395,7 +395,7 @@ public class UiManager   implements oims.systemManagement.Client,UiManagerRx, Da
     @Override
     public void showLoginPage(loginPageTx tx) 
     {
-        EmployeeManager em = (EmployeeManager)this.itsSysManager_.getClient(SystemManager.clientType.UI_MANAGER);
+        EmployeeManager em = (EmployeeManager)this.itsSysManager_.getClient(SystemManager.clientType.EMPLOYEE_MANAGER);
         Ui_loginPage page = new Ui_loginPage(tx, em);
         page.setVisible(true);
     }

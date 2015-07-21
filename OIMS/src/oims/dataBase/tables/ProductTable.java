@@ -73,14 +73,14 @@ public class ProductTable extends Db_table{
         {
             TableEntry entryToUpdate = generateTableEntry();
             Map<String, String> valueHolder = Maps.newHashMap();
-            valueHolder.put("cost", cost.toString());
-            valueHolder.put("nameAbbr", nameAbbr);
-            valueHolder.put("valid", valid?"1":"0");
-            valueHolder.put("picUrl", picUrl);
-            valueHolder.put("cat", cat);
-            valueHolder.put("vipPrice", vipPrice.toString());
-            valueHolder.put("price", price.toString());
-            valueHolder.put("produtName", name);
+            if(cost!=null)valueHolder.put("cost", cost.toString());
+            if(nameAbbr!=null)valueHolder.put("nameAbbr", nameAbbr);
+            if(valid!=null)valueHolder.put("valid", valid?"1":"0");
+            if(picUrl!=null)valueHolder.put("picUrl", picUrl);
+            if(cat!=null)valueHolder.put("cat", cat);
+            if(vipPrice!=null)valueHolder.put("vipPrice", vipPrice.toString());
+            if(price!=null)valueHolder.put("price", price.toString());
+            if(name!=null)valueHolder.put("produtName", name);
             
             //where
             TableEntry wheq = generateTableEntry();
@@ -108,6 +108,7 @@ public class ProductTable extends Db_table{
         valueHolder.put("vipPrice", "selected");
         valueHolder.put("price", "selected");
         valueHolder.put("produtName", "selected");
+        valueHolder.put("productId",  "selected");
 
         //where
         TableEntry wheq = generateTableEntry();
@@ -135,6 +136,7 @@ public class ProductTable extends Db_table{
             case "vipPrice":{return "会员价";}
             case "produtName":{return "商品名称";}
             case "productId":{return "商品编码";}
+            case "picUrl":{return "商品图片路径";}
             default:{return "错误";}
         }
     }

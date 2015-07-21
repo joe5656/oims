@@ -357,7 +357,7 @@ public class Ui_rawMaterialPage extends BasePageClass {
             {
                 unitPrefix = this.jTextField4.getText() + this.jComboBox3.getSelectedItem().toString();
             }
-            String unit = this.jComboBox1.getSelectedItem().toString();
+            String unit = unitPrefix + this.jComboBox1.getSelectedItem().toString();
             try
             {
                 Double.parseDouble(price);

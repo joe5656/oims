@@ -384,13 +384,13 @@ public class Db_dataBase_MYSQL implements Db_dataBase{
                     if(Objects.equals(firstLoop, Boolean.TRUE))
                     {
                         firstLoop = Boolean.FALSE;
-                        query = query + tmpEntry.getKey() + "=" +
-                            tmpEntry.getValue();
+                        query = query + tmpEntry.getKey() + "='" +
+                            tmpEntry.getValue()+"'";
                     }
                     else
                     {
-                        query = query + ", " + tmpEntry.getKey() + "=" +
-                            tmpEntry.getValue();
+                        query = query + ", " + tmpEntry.getKey() + "='" +
+                            tmpEntry.getValue()+"'";
                     }
                 }
             }

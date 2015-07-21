@@ -77,4 +77,10 @@ public class StoreManager  implements oims.systemManagement.Client{
         this.itsStoreTable_.translateColumnName(table.getColumnNames());
         return table;
     }
+    
+    public SqlResultInfo updateStore(String storeId, String storeName, 
+            String StoreManagerName, Integer StoreManagerId,String contact)
+    {
+        return this.itsStoreTable_.update(storeId, storeName, StoreManagerName, StoreManagerId, contact);
+    }
 }

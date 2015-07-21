@@ -97,6 +97,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="&#x67e5;&#x8be2;&#x6240;&#x6709;&#x4ea7;&#x54c1;"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel4">
           <Properties>
