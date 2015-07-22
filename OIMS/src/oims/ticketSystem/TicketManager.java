@@ -278,4 +278,16 @@ public class TicketManager implements oims.systemManagement.Client{
 
     @Override
     public void setSystemManager(SystemManager sysManager) {itsSysManager_ = sysManager;}
+    
+    public Ticket getTicket(Integer ticketId)
+    {
+        Ticket result = null;
+        try {
+            result = new Ticket(ticketId);
+            this.itsTicketTable_.serializeTicketInstance(result);
+        } catch (SQLException ex) {
+            Logger.getLogger(TicketManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+    }
 }

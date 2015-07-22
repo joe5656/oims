@@ -65,7 +65,8 @@ public class CiCoTicketTable extends Db_table {
         SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
         TableEntry entryToBeInsert = generateTableEntry();
         SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String historyString = "\nTicket submitted at "+timeFormat.format(new Date(System.currentTimeMillis()));
+        String historyString = "============单据提交和改动记录=============\n入库单提交时间： "
+                +timeFormat.format(new Date(System.currentTimeMillis()));
         Map<String, String> valueHolder = Maps.newHashMap();
         valueHolder.put("ticketType", ticketType.toString());
         valueHolder.put("submitorId", submitorId.toString());
@@ -75,7 +76,7 @@ public class CiCoTicketTable extends Db_table {
         valueHolder.put("Unit", quantity.getUnit().getUnitName());
         valueHolder.put("forName", recieverName);
         valueHolder.put("forId", reciever.toString());
-        valueHolder.put("requestDate", (requestDate==null?"1900-01-01":timeFormat.format(requestDate)));
+        valueHolder.put("requestDate", (requestDate==null?"1990-01-01":timeFormat.format(requestDate)));
         valueHolder.put("delvieryFee", deliveryFee);
         valueHolder.put("currentOwnerId", submitorId.toString());
         valueHolder.put("currentOwnerName", submitorName);
@@ -211,14 +212,14 @@ public class CiCoTicketTable extends Db_table {
         Map<String, String> valueHolder = Maps.newHashMap();
         SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
         
-        String newHistory = ticket.getHistory()+ "\n\n--------------------\nTicket updated at "
-                +timeFormat.format(new Date(System.currentTimeMillis()));
+        String newHistory = ticket.getHistory()+ "\n\n--------------------\n单据修改时间："
+                +timeFormat.format(new Date(System.currentTimeMillis()))+" \n--------------------";
         
         if(ownerId != null && ownerName != null)
         {
-            newHistory += "\n============OwnerUpdated============";
-            newHistory += "\nOldOwner: " + ticket.getCurrentOwnerName();
-            newHistory += "\nNewOwner: " + ownerName;
+            newHistory += "\n============责任人变更============";
+            newHistory += "\n原责任人: " + ticket.getCurrentOwnerName();
+            newHistory += "\n新责任人: " + ownerName;
             valueHolder.put("currentOwnerId", ownerId.toString());
             valueHolder.put("currentOwnerName", ownerName);
             
@@ -226,9 +227,9 @@ public class CiCoTicketTable extends Db_table {
         
         if(status != null)
         {
-            newHistory += "\n============StatusUpdated============";
-            newHistory += "\nOldStatus: " + ticket.getStatus();
-            newHistory += "\nNewStatus: " + status;
+            newHistory += "\n============单据状态变更============";
+            newHistory += "\n原状态: " + ticket.getStatus();
+            newHistory += "\n新状态: " + status;
             valueHolder.put("status", status);
         }
         valueHolder.put("Tickethistory", newHistory);

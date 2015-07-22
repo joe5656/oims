@@ -9,6 +9,7 @@ import java.util.Vector;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javax.swing.JFrame;
+import javax.swing.ListSelectionModel;
 import oims.UI.UiManager;
 import oims.UI.pages.BasePageClass;
 import oims.UI.pages.OimsWindowsListener;
@@ -16,6 +17,7 @@ import oims.UI.pages.Page;
 import oims.UI.pages.mainMenu.Ui_mainMenuPage;
 import oims.UI.pages.rawMaterialPage.RawMaterialPickerTx;
 import oims.UI.pages.warehouseManagerment.WarehousePickerTx;
+import oims.dataBase.tables.CiCoTicketTable;
 import oims.dataBase.tables.RawMaterialTable;
 import oims.dataBase.tables.WareHouseTable;
 import oims.rawMaterialManagement.RawMaterialManager;
@@ -42,6 +44,7 @@ public class Ui_StackMangement  extends BasePageClass implements WarehousePicker
     private Boolean       isConditionQuery_;
     private String        itsTempUnit_;
     private String        itsTempWarehouseUnit_;
+    private SqlDataTable  itsTmpCiTicketTable_;
     /**
      * Creates new form Ui_wareHouseMangement
      */
@@ -62,6 +65,7 @@ public class Ui_StackMangement  extends BasePageClass implements WarehousePicker
         isConditionQuery_ = false;
         jComboBox4.setModel(new javax.swing.DefaultComboBoxModel(CommonUnit.getUnitListStringChn()));
         jComboBox5.setModel(new javax.swing.DefaultComboBoxModel(CommonUnit.getStanderizedUnitChn()));
+        this.jTable2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -205,7 +209,7 @@ public class Ui_StackMangement  extends BasePageClass implements WarehousePicker
         jScrollPane5 = new javax.swing.JScrollPane();
         jTable5 = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setMaximumSize(new java.awt.Dimension(1366, 722));
         setMinimumSize(new java.awt.Dimension(100, 100));
@@ -250,7 +254,7 @@ public class Ui_StackMangement  extends BasePageClass implements WarehousePicker
                 .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton12)
-                .addContainerGap(884, Short.MAX_VALUE))
+                .addContainerGap(839, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -351,6 +355,7 @@ public class Ui_StackMangement  extends BasePageClass implements WarehousePicker
         jTabbedPane1.addTab("库存查询", jPanel1);
 
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("查询条件"));
+        jPanel7.setForeground(new java.awt.Color(248, 0, 99));
 
         jRadioButton3.setText("查询我名下的入库单据");
 
@@ -401,7 +406,7 @@ public class Ui_StackMangement  extends BasePageClass implements WarehousePicker
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton10)
                     .addComponent(jButton5))
-                .addContainerGap(251, Short.MAX_VALUE))
+                .addContainerGap(197, Short.MAX_VALUE))
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -440,7 +445,7 @@ public class Ui_StackMangement  extends BasePageClass implements WarehousePicker
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(67, 67, 67)
+                .addGap(121, 121, 121)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addComponent(jRadioButton6)
@@ -481,6 +486,11 @@ public class Ui_StackMangement  extends BasePageClass implements WarehousePicker
         );
 
         jButton4.setText("处理入库单");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("查询结果"));
 
@@ -986,7 +996,7 @@ public class Ui_StackMangement  extends BasePageClass implements WarehousePicker
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 612, Short.MAX_VALUE))
+                .addGap(0, 567, Short.MAX_VALUE))
             .addComponent(jPanel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
@@ -1178,7 +1188,7 @@ public class Ui_StackMangement  extends BasePageClass implements WarehousePicker
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane5))
-                .addContainerGap(69, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1329,8 +1339,26 @@ public class Ui_StackMangement  extends BasePageClass implements WarehousePicker
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         SqlDataTable result = this.itsTicketManager_.ticketQuerySummary(Ticket.TicketType.WAREHOUSETICKET_CI, null, null, null, null);
+        itsTmpCiTicketTable_ = result;
         this.jTable2.setModel(new UneditableTableModule(result.getData(),result.getColumnNames()));
+        
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        if(this.itsTmpCiTicketTable_ != null)
+        {
+            Integer rowNumber = this.jTable2.getSelectedRow();
+            Vector head = this.itsTmpCiTicketTable_.getColumnNames();
+            Integer columnNumber = head.indexOf(CiCoTicketTable.getPrimaryKeyColNameInCh());
+            String ticketId = (String)this.jTable2.getValueAt(rowNumber, columnNumber);
+            Ticket t = this.itsTicketManager_.getTicket(Integer.parseInt(ticketId));
+            if(t.getTicketType() == Ticket.TicketType.WAREHOUSETICKET_CI)
+            {
+                CiTicketOperationPage page = new CiTicketOperationPage(t,this.itsTicketManager_);
+                page.setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     private void toggleQueryConditionArea(Boolean ison)
     {

@@ -5,7 +5,11 @@
  */
 package oims.employeeManager;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import oims.UI.UiManager;
 import oims.UI.pages.employeePage.EmployeePageRx;
 import oims.UI.pages.employeePage.EmployeePageTx;
@@ -122,7 +126,21 @@ public class EmployeeManager implements oims.systemManagement.Client,EmployeePag
     
     public String getEmployeeName(Integer id)
     {
-        return "na";
+        String name = "err";
+        SqlResultInfo result = this.itsEmployeeTable_.queryEmployeeGeneralInfo(null, id.toString(), Boolean.TRUE);
+        if(result.isSucceed())
+        {
+            ResultSet rs = result.getResultSet();
+            try {
+                if(rs.first())
+                {
+                    name = rs.getString(EmployeeTable.getEmployeeNameColNameInEng());
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(EmployeeManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return name;
     }
     
     static public Integer getInvalidEmployeeId(){return 99999999;}

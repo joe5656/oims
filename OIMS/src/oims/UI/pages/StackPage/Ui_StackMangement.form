@@ -2,7 +2,7 @@
 
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
-    <Property name="defaultCloseOperation" type="int" value="0"/>
+    <Property name="defaultCloseOperation" type="int" value="2"/>
     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
       <Color id="&#x9ed8;&#x8ba4;&#x5149;&#x6807;"/>
     </Property>
@@ -155,7 +155,7 @@
                               <Component id="jTextField3" min="-2" pref="95" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="jButton12" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="884" max="32767" attributes="0"/>
+                              <EmptySpace pref="839" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -318,6 +318,9 @@
                     <TitledBorder title="&#x67e5;&#x8be2;&#x6761;&#x4ef6;"/>
                   </Border>
                 </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="63" green="0" red="f8" type="rgb"/>
+                </Property>
               </Properties>
 
               <Layout>
@@ -349,7 +352,7 @@
                                   <Component id="jTextField7" min="-2" pref="112" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace min="-2" pref="67" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="121" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Group type="102" attributes="0">
                                   <Component id="jRadioButton6" min="-2" max="-2" attributes="0"/>
@@ -484,7 +487,7 @@
                                   <Component id="jButton10" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="jButton5" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="251" max="32767" attributes="0"/>
+                              <EmptySpace pref="197" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -522,6 +525,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="&#x5904;&#x7406;&#x5165;&#x5e93;&#x5355;"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
+              </Events>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane2">
               <Properties>
@@ -929,7 +935,7 @@
                       <Component id="jPanel8" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jPanel12" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="612" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="567" max="32767" attributes="0"/>
                   </Group>
                   <Component id="jPanel14" alignment="0" max="32767" attributes="0"/>
               </Group>
@@ -1351,7 +1357,7 @@
                           <Component id="jPanel10" max="32767" attributes="0"/>
                           <Component id="jScrollPane5" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="69" max="32767" attributes="0"/>
+                      <EmptySpace pref="24" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
