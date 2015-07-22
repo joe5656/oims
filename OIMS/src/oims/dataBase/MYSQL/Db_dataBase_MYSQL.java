@@ -400,6 +400,8 @@ public class Db_dataBase_MYSQL implements Db_dataBase{
             try{
                 Statement sm = curConnection_.createStatement();
                 if(0 < sm.executeUpdate(query))result.setSucceed();
+                // NOTICE can NOT modify errInfo, used to judge if 0 line affected
+                else result.setErrInfo("no lines affected by updating SQL");
             }catch(SQLException  e)
             {
                 result.setErrInfo(e);
