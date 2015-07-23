@@ -100,4 +100,10 @@ public class StockManager  implements oims.systemManagement.Client{
         }
         return returnValue;
     }
+    
+    public SqlResultInfo modifyStock(String warehouseName, String rawMaterialName,
+            String modifyNumber, String unit)
+    {
+        
+    }
 }
