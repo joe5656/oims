@@ -5,7 +5,10 @@
  */
 package oims.stockManagement;
 
+import java.sql.SQLException;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import oims.dataBase.DataBaseManager;
 import oims.dataBase.tables.RawMaterialTable;
 import oims.dataBase.tables.StockTable;
@@ -31,15 +34,15 @@ public class StockManager  implements oims.systemManagement.Client{
     }    
     
     public Boolean isStackEmptryForWarehouse(Integer warehouseId){return Boolean.TRUE;}
-    public Boolean checkIn(Integer whId, String whName, Integer rawMaterialId, 
+    public SqlResultInfo checkIn(Integer whId, String whName, Integer rawMaterialId, 
             String rawMaterialName, UnitQuantity uq)
     {
-        return itsStockTable_.rawMaterialCheckIn(whId, whName, rawMaterialId, rawMaterialName, uq);
+        return itsStockTable_.rawMaterialCheckIn(whName, whId, rawMaterialId, rawMaterialName, uq, Boolean.TRUE);
     }
  
-    public Boolean checkOut(Integer whid, RawMaterial rawMaterial, UnitQuantity uq)
+    public SqlResultInfo checkOut(Integer whid, Integer rawMaterialId, UnitQuantity uq)
     {
-        return itsStockTable_.rawMaterialCheckOut(whid, rawMaterial, uq);
+        return itsStockTable_.rawMaterialCheckOut(whid, rawMaterialId, uq);
     }
 
     @Override
@@ -79,31 +82,28 @@ public class StockManager  implements oims.systemManagement.Client{
     @Override
     public void setSystemManager(SystemManager sysManager){itsSysManager_ = sysManager;}
     
-    public SqlDataTable queryStock(String whId, String rmName)
+    public SqlDataTable queryStock(String whId, String rmName, String unit)
     {
-        SqlResultInfo result = this.itsStockTable_.query(whId, rmName);
+        SqlResultInfo result = this.itsStockTable_.query(whId, rmName,unit);
         SqlDataTable returnValue = new SqlDataTable(result.getResultSet(), this.itsStockTable_.getName());
         this.itsStockTable_.translateColumnName(returnValue.getColumnNames());
         return returnValue;
     }
     
-    public String queryMaterialStockUnit(String whId, String rmName)
+    // call modifyStock if you really want to MODIFY a exiting stock not
+    // create a new one when the record is not exits
+    public SqlResultInfo modifyStock(Integer whId, String warehouseName, String rawMaterialName,
+            Integer rawMaterialId, String modifyNumber, Boolean add, String unit)
     {
-        SqlDataTable result = this.queryStock(whId, rmName);
-        String returnValue = null;
-        if(result.getColumnNames().size() > 0)
+        if(add)
         {
-            Vector head = result.getColumnNames();
-            Integer unitIndex = head.indexOf(RawMaterialTable.getUnitNameColNameInCh());
-            Vector data = (Vector)result.getSelectedRows().get(0);
-            returnValue = (String)data.get(unitIndex);
+            return this.itsStockTable_.rawMaterialCheckIn(warehouseName, whId, rawMaterialId, 
+                    rawMaterialName, new UnitQuantity(unit, Double.parseDouble(modifyNumber)), false);
         }
-        return returnValue;
-    }
-    
-    public SqlResultInfo modifyStock(String warehouseName, String rawMaterialName,
-            String modifyNumber, String unit)
-    {
-        
+        else
+        {
+            return this.itsStockTable_.rawMaterialCheckOut(whId, rawMaterialId, 
+                    new UnitQuantity(unit, Double.parseDouble(modifyNumber)));
+        }
     }
 }

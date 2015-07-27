@@ -1234,7 +1234,7 @@ public class Ui_StackMangement  extends BasePageClass implements WarehousePicker
             if(rawMaterialName.equals(""))rawMaterialName=null;
             if(warehouseId.equals(""))warehouseId=null;
         }
-        SqlDataTable result = this.itsStockManager_.queryStock(warehouseId, rawMaterialName);
+        SqlDataTable result = this.itsStockManager_.queryStock(warehouseId, rawMaterialName, null);
         this.jTable1.setModel(new javax.swing.table.DefaultTableModel(result.getData(),result.getColumnNames()));
     }//GEN-LAST:event_jButton1ActionPerformed
 

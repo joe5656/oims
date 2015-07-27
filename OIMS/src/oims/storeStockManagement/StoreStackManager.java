@@ -78,8 +78,9 @@ public class StoreStackManager implements oims.systemManagement.Client{
         }
     }
     
-    public SqlResultInfo updateStoreStock(String storeName, String productName, Double updateQuantity)
+    public SqlResultInfo updateStoreStock(String StoreName, String ProductName, 
+            Integer updateNumber, Boolean add)
     {
-        return this.itsStoreStackTable_.updateStoreStock(storeName, productName, updateQuantity);
+        return this.itsStoreStackTable_.updateStoreStock(StoreName, ProductName, updateNumber, add);
     }
 }

@@ -474,7 +474,7 @@ public class CiTicketOperationPage extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         Ticket t = this.itsTicket_;
-        if(this.itsStockManager_.checkIn(t.getFor(),t.getForName() , t.getRawMaterialId(), t.getRawMaterialName(), t.getQuantity()))
+        if(this.itsStockManager_.checkIn(t.getFor(),t.getForName() , t.getRawMaterialId(), t.getRawMaterialName(), t.getQuantity()).isSucceed())
         {
             t = this.itsTicketManager_.CiTicketGotoNextStep(t.getTicketId(), TicketManager.TicketAction.ACTION_NEXTSTEP);
         }

@@ -6,7 +6,6 @@
 package oims.dataBase.tables;
 
 import com.google.common.collect.Maps;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.Vector;
@@ -14,12 +13,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import oims.dataBase.Db_table;
 import oims.dataBase.DataBaseManager;
-import oims.support.util.CommonUnit;
 import oims.support.util.Db_publicColumnAttribute;
-import oims.support.util.UnitQuantity;
-import oims.rawMaterialManagement.RawMaterial;
 import oims.support.util.SqlResultInfo;
-import oims.warehouseManagemnet.WareHouse;
 
 /**
  *
@@ -42,14 +37,40 @@ public class StoreStackTable extends Db_table{
     }    
     
     public SqlResultInfo updateStoreStock(String StoreName, String ProductName, 
-            Double updateNumber)
+            Integer updateNumber, Boolean add)
     {
         SqlResultInfo result = new SqlResultInfo(false);
+        if(!add)
+        {
+            SqlResultInfo inStack = query(StoreName, ProductName);
+            Integer stockNum;
+            if(inStack.isSucceed())
+            {
+                try {
+                    inStack.getResultSet().first();
+                    stockNum = inStack.getResultSet().getInt("Quantity");
+                } catch (SQLException ex) {
+                    Logger.getLogger(StoreStackTable.class.getName()).log(Level.SEVERE, null, ex);
+                    return result;
+                }
+                
+                if(stockNum < updateNumber)
+                {
+                    result.setErrInfo("in StoreStackTicet::updateStoreStack: 货架库存不足");
+                    return result;
+                }
+            }
+            else
+            {
+                result.setErrInfo("in StoreStackTicet::updateStoreStack: 货架商品查询失败");
+                return result;
+            }
+        }
         if(StoreName != null && ProductName != null)
         {
             TableEntry update = super.generateTableEntry();
             Map<String, String> prepare = Maps.newHashMap();
-            prepare.put("Quantity", "Quantity=Quantity+"+updateNumber.toString());
+            prepare.put("Quantity", "Quantity=Quantity"+(add?"+":"-")+updateNumber.toString());
             
             TableEntry where = super.generateTableEntry();
             Map<String, String> whereeq = Maps.newHashMap();

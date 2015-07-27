@@ -61,16 +61,8 @@ public class ErrorReportingManager implements oims.systemManagement.Client{
         if(result.isSucceed())
         {
             // report to StoreStock manager to update StoreStock
-            String adNumber;
-            if(isMoreThanRecorded)
-            {
-                adNumber = ErrNumber;
-            }
-            else
-            {
-                adNumber = "-"+ErrNumber;
-            }
-            this.itsStockManager_.
+            this.itsStockManager_.modifyStock(null, warehouseName, rawMaterialname, null, ErrNumber, isMoreThanRecorded, unit);
+            
         }
         return result;        
     }
@@ -158,7 +150,8 @@ public class ErrorReportingManager implements oims.systemManagement.Client{
             {
                 adNumber = "-"+numberOfErr;
             }
-            itsStoreStackManager_.updateStoreStock(pName, pName, Double.parseDouble(adNumber));
+            itsStoreStackManager_.updateStoreStock(storeName, pName, 
+                    Integer.parseInt(numberOfErr), isMoreThanRecord);
         }
         return result;
     }

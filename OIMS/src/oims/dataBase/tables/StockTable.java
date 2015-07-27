@@ -69,7 +69,7 @@ public class StockTable extends Db_table{
         }
     }
     
-    public UnitQuantity rawMaterialStoredInWarehouse(Integer warehouseId,Integer rawMaterialId)
+    public UnitQuantity rawMaterialStoredInWarehouse(Integer warehouseId,Integer rawMaterialId, String unit)
     {
         UnitQuantity returnValue = null;
         // select storageQuantity,storageUnit where warehouseid = warehouseId and storageQuantity>0
@@ -84,6 +84,7 @@ public class StockTable extends Db_table{
         Map<String, String> whereClause_equal = Maps.newHashMap();
         whereClause_equal.put("wareHouseId", warehouseId.toString());
         whereClause_equal.put("materialId", rawMaterialId.toString());
+        whereClause_equal.put("storageUnit", unit);
         entry_equal.fillInEntryValues(whereClause_equal);
         
         ResultSet queryResult = super.select(entry_select, entry_equal, null, null).getResultSet();
@@ -101,78 +102,98 @@ public class StockTable extends Db_table{
         return returnValue;
     }
     
-    public Boolean rawMaterialCheckIn(Integer whId, String whName, Integer rawMaterialId, 
-            String rawMaterialName, UnitQuantity uq)
+    public SqlResultInfo rawMaterialCheckIn(String whName, Integer whId, Integer rawMaterialId,
+            String rawMaterialName, UnitQuantity uq, Boolean createOnNew)
     {
-        Boolean returnValue = false;
-        UnitQuantity storedQ = rawMaterialStoredInWarehouse(whId, rawMaterialId);
-        if( storedQ != null)
+        SqlResultInfo result = new SqlResultInfo(false);
+        if((whName == null && whId == null) || (rawMaterialName == null && rawMaterialId == null) 
+                || uq == null || createOnNew == null)
         {
-            // update
-            Map<String, String> prepare = Maps.newHashMap();
-            if(uq.getQuantityInUnit(storedQ.getUnit())>=0)
-            {
-                prepare.put("storageQuantity", "storageQuantity+"+uq.getQuantityInUnit(storedQ.getUnit()));
-
-                TableEntry entry_update = super.generateTableEntry();
-                entry_update.fillInEntryValues(prepare);
-
-                Map<String, String> where_eq = Maps.newHashMap();
-                where_eq.put("wareHouseId", whId.toString());
-                where_eq.put("materialId", rawMaterialId.toString());
-
-                TableEntry entry_eq = super.generateTableEntry();
-                entry_eq.fillInEntryValues(prepare);
-
-                returnValue = super.update(entry_update, entry_eq, null, null).isSucceed();
-            }
-        }
-        else
-        {
-            //create
-            Map<String, String> prepare = Maps.newHashMap();
-            prepare.put("wareHouseId", whId.toString());
-            prepare.put("wareHouseName", whName);
-            prepare.put("storageQuantity", uq.getQuantity().toString());
-            prepare.put("storeUnit", uq.getUnit().getUnitName());
-            prepare.put("materialId", rawMaterialId.toString());
-            prepare.put("materialName", rawMaterialName);
-
-            TableEntry entryToBeInserted = super.generateTableEntry();
-            entryToBeInserted.fillInEntryValues(prepare);
-            returnValue = super.insertRecord(entryToBeInserted).isSucceed();
+            result.setErrInfo("in StockManager::rawMaterialCheckIn: 信息不完整");
+            return result;
         }
         
-        return returnValue;
+        // check if rawMaterial with the same unit exists
+        SqlResultInfo resultValue = this.query(whName, rawMaterialName, uq.getUnit().getUnitName());
+        
+        if(resultValue.isSucceed())
+        {
+            try {
+                if(resultValue.getResultSet().first())
+                {
+                    TableEntry update = generateTableEntry();
+                    Map<String, String> updateHolder = Maps.newHashMap();
+                    updateHolder.put("storageQuantity", "storageQuantity+"+uq.getQuantity().toString());
+                    
+                    // where
+                    TableEntry where = generateTableEntry();
+                    Map<String, String> whereHolder = Maps.newHashMap();
+                    whereHolder.put("wareHouseName", whName);
+                    whereHolder.put("materialName", rawMaterialName);
+                    whereHolder.put("storageUnit", uq.getUnit().getUnitName());
+                    
+                    if(update.fillInEntryValues(updateHolder) && where.fillInEntryValues(whereHolder))
+                    {
+                        result = super.update(update, where, null, null);
+                    }
+                }
+                else if(createOnNew)
+                {
+                    //create
+                    Map<String, String> prepare = Maps.newHashMap();
+                    prepare.put("wareHouseId", whId.toString());
+                    prepare.put("wareHouseName", whName);
+                    prepare.put("storageQuantity", uq.getQuantity().toString());
+                    prepare.put("storeUnit", uq.getUnit().getUnitName());
+                    prepare.put("materialId", rawMaterialId.toString());
+                    prepare.put("materialName", rawMaterialName);
+
+                    TableEntry entryToBeInserted = super.generateTableEntry();
+                    entryToBeInserted.fillInEntryValues(prepare);
+                    result = super.insertRecord(entryToBeInserted);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(StockTable.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        return result;
     }
     
-    public Boolean rawMaterialCheckOut(Integer whid, RawMaterial rawMaterial, 
+    public SqlResultInfo rawMaterialCheckOut(Integer whid, Integer rawMaterialId, 
                         UnitQuantity uq)
     {
-        Boolean returnValue = Boolean.FALSE;
-        UnitQuantity storedQ = rawMaterialStoredInWarehouse(whid, rawMaterial.getId());
-        if(storedQ != null && uq.smallerThan(storedQ))
+        SqlResultInfo returnValue = new SqlResultInfo(false);
+        if(whid == null || uq == null || rawMaterialId == null)
+        {
+            returnValue.setErrInfo("in StockManager::rawMaterialCheckIn: 信息不完整");
+            return returnValue;
+        }
+        UnitQuantity storedQ = rawMaterialStoredInWarehouse(whid, rawMaterialId, uq.getUnit().getUnitName());
+        
+        if(storedQ != null && storedQ.getQuantity()>= uq.getQuantity())
         {
             // update
             Map<String, String> prepare = Maps.newHashMap();
-            prepare.put("storageQuantity", "storageQuantity-"+uq.getQuantityInUnit(storedQ.getUnit()));
+            prepare.put("storageQuantity", "storageQuantity-"+uq.getQuantity());
 
             TableEntry entry_update = super.generateTableEntry();
             entry_update.fillInEntryValues(prepare);
 
             Map<String, String> where_eq = Maps.newHashMap();
             where_eq.put("wareHouseId", whid.toString());
-            where_eq.put("materialId", rawMaterial.getId().toString());
+            where_eq.put("materialId", rawMaterialId.toString());
+            where_eq.put("storeUnit", uq.getUnit().getUnitName());
 
             TableEntry entry_eq = super.generateTableEntry();
             entry_eq.fillInEntryValues(prepare);
 
-            returnValue = super.update(entry_update, entry_eq, null, null).isSucceed();            
+            returnValue = super.update(entry_update, entry_eq, null, null);            
         }
         return returnValue;
     }
     
-    public SqlResultInfo query(String whId, String rmName)
+    public SqlResultInfo query(String wName, String rmName, String unit)
     {
         SqlResultInfo result = new SqlResultInfo(false);
         TableEntry select = super.generateTableEntry();
@@ -186,9 +207,9 @@ public class StockTable extends Db_table{
         
         TableEntry where = super.generateTableEntry();
         Map<String, String> whereeq = Maps.newHashMap();
-        if(whId != null){whereeq.put("wareHouseId",whId);}
         if(rmName != null){whereeq.put("materialId",rmName);}
-        
+        if(unit != null){whereeq.put("storeUnit",unit);}
+        if(wName != null){whereeq.put("storeUnit",wName);}
         
         if(select.fillInEntryValues(prepare) && where.fillInEntryValues(whereeq) )
         {
