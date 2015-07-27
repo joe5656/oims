@@ -43,7 +43,7 @@ public class Ui_StackMangement  extends BasePageClass implements WarehousePicker
     private RawMaterialManager itsRawMaterialManager_;
     private Boolean       isConditionQuery_;
     private String        itsTempUnit_;
-    private String        itsTempWarehouseUnit_;
+    private String[]      itsTempWarehouseUnits_;
     private SqlDataTable  itsTmpCiTicketTable_;
     /**
      * Creates new form Ui_wareHouseMangement
@@ -136,7 +136,6 @@ public class Ui_StackMangement  extends BasePageClass implements WarehousePicker
         jLabel28 = new javax.swing.JLabel();
         jTextField20 = new javax.swing.JTextField();
         jComboBox5 = new javax.swing.JComboBox();
-        jLabel29 = new javax.swing.JLabel();
         jButton19 = new javax.swing.JButton();
         jButton20 = new javax.swing.JButton();
         jLabel30 = new javax.swing.JLabel();
@@ -146,6 +145,7 @@ public class Ui_StackMangement  extends BasePageClass implements WarehousePicker
         jButton22 = new javax.swing.JButton();
         jLabel42 = new javax.swing.JLabel();
         jLabel44 = new javax.swing.JLabel();
+        jComboBox3 = new javax.swing.JComboBox();
         jPanel2 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
@@ -576,8 +576,6 @@ public class Ui_StackMangement  extends BasePageClass implements WarehousePicker
         jComboBox5.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jComboBox5.setEnabled(false);
 
-        jLabel29.setText("未指定单位");
-
         jButton19.setText("创建入库单");
         jButton19.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -618,6 +616,8 @@ public class Ui_StackMangement  extends BasePageClass implements WarehousePicker
 
         jLabel44.setText("未创建");
 
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "库存单位" }));
+
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
         jPanel13Layout.setHorizontalGroup(
@@ -640,8 +640,8 @@ public class Ui_StackMangement  extends BasePageClass implements WarehousePicker
                         .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton16)
                             .addComponent(jLabel24)
-                            .addComponent(jLabel29))
-                        .addGap(50, 50, 50)
+                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(48, 48, 48)
                         .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel13Layout.createSequentialGroup()
                                 .addComponent(jLabel25)
@@ -690,7 +690,7 @@ public class Ui_StackMangement  extends BasePageClass implements WarehousePicker
                         .addComponent(jButton19)
                         .addGap(18, 18, 18)
                         .addComponent(jButton20)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(346, Short.MAX_VALUE))
         );
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -715,9 +715,9 @@ public class Ui_StackMangement  extends BasePageClass implements WarehousePicker
                     .addComponent(jLabel28)
                     .addComponent(jTextField20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel29)
                     .addComponent(jButton21)
-                    .addComponent(jButton22))
+                    .addComponent(jButton22)
+                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1285,7 +1285,7 @@ public class Ui_StackMangement  extends BasePageClass implements WarehousePicker
         String whId = this.jTextField16.getText().trim();
         String whName = this.jTextField4.getText().trim();
         String quantity = this.jTextField17.getText().trim();
-        String unit = this.jLabel29.getText().trim();
+        String unit = this.jComboBox3.getSelectedItem().toString();
         String totalPrice = this.jTextField19.getText().trim();
         String unitPrice = this.jTextField18.getText().trim();
         String deliveryPrice = this.jTextField21.getText().trim();
@@ -1315,20 +1315,20 @@ public class Ui_StackMangement  extends BasePageClass implements WarehousePicker
         if(!this.jTextField20.getText().trim().equals(""))
         {
             String unitPrefix = this.jTextField20.getText().trim();
-            this.jLabel29.setText(unitPrefix+this.jComboBox5.getSelectedItem().toString()+
-                    this.jComboBox4.getSelectedItem().toString());
+            this.jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { unitPrefix+this.jComboBox5.getSelectedItem().toString()+
+                    this.jComboBox4.getSelectedItem().toString() }));
         }
         toggleUnitArea(false);
     }//GEN-LAST:event_jButton21ActionPerformed
 
     private void jButton22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton22ActionPerformed
-        if(this.itsTempWarehouseUnit_ != null)
+        if(this.itsTempWarehouseUnits_ != null)
         {
-            this.jLabel29.setText(itsTempWarehouseUnit_);
+            this.jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(this.itsTempWarehouseUnits_));
         }
         else
         {
-            this.jLabel29.setText(this.itsTempUnit_);
+            this.jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] {itsTempUnit_ }));
         }
         toggleUnitArea(false);
     }//GEN-LAST:event_jButton22ActionPerformed
@@ -1399,6 +1399,7 @@ public class Ui_StackMangement  extends BasePageClass implements WarehousePicker
     private javax.swing.JButton jButton9;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JComboBox jComboBox2;
+    private javax.swing.JComboBox jComboBox3;
     private javax.swing.JComboBox jComboBox4;
     private javax.swing.JComboBox jComboBox5;
     private javax.swing.JLabel jLabel1;
@@ -1422,7 +1423,6 @@ public class Ui_StackMangement  extends BasePageClass implements WarehousePicker
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
-    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
@@ -1531,12 +1531,12 @@ public class Ui_StackMangement  extends BasePageClass implements WarehousePicker
                 this.jTextField19.setEnabled(true);
                 this.jTextField21.setEnabled(true);
                 this.jTextField21.setText("0");
-                String unit = this.itsStockManager_.queryMaterialStockUnit(warehouseId, 
+                String[] units = this.itsStockManager_.queryMaterialStockUnit(warehouseId, 
                         this.jTextField1.getText().trim());
-                if(unit != null)
+                if(units != null)
                 {
-                    this.jLabel29.setText(unit);
-                    this.itsTempWarehouseUnit_ = unit;
+                    this.jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(units));
+                    itsTempWarehouseUnits_ = units;
                 }
             }
         }
@@ -1566,7 +1566,7 @@ public class Ui_StackMangement  extends BasePageClass implements WarehousePicker
                 String type = (String)data.get(rmTypeIndex);
                 String name = (String)data.get(rmNameIndex);
                 String unit = (String)data.get(unitNameIndex);
-                this.jLabel29.setText(unit);
+                this.jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[]{unit}));
                 this.itsTempUnit_ = unit;
                 if(type.equals("精确管理"))
                 {
@@ -1616,8 +1616,10 @@ public class Ui_StackMangement  extends BasePageClass implements WarehousePicker
             this.jButton18.setEnabled(false);
             this.jComboBox4.setEnabled(false);
             this.jComboBox5.setEnabled(false);
+            this.jComboBox3.setEnabled(false);
+            this.jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] {"库存单位" }));
         }
-        this.itsTempWarehouseUnit_ = null;
+        this.itsTempWarehouseUnits_ = null;
         this.itsTempUnit_ = null;
     }
 }

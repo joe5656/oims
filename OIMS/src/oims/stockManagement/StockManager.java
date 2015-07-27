@@ -5,6 +5,7 @@
  */
 package oims.stockManagement;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -44,7 +45,12 @@ public class StockManager  implements oims.systemManagement.Client{
     {
         return itsStockTable_.rawMaterialCheckOut(whid, rawMaterialId, uq);
     }
-
+    
+    public String[] queryMaterialStockUnit(String whId, String rmName)
+    {
+        return this.itsStockTable_.queryMaterialStockUnit(whId, rmName);
+    }
+    
     @Override
     public Boolean systemStatusChangeNotify(SystemManager.systemStatus status) {
         switch(status)

@@ -193,6 +193,30 @@ public class StockTable extends Db_table{
         return returnValue;
     }
     
+    public String[] queryMaterialStockUnit(String whId, String rmName)
+    {
+        SqlResultInfo result = this.query(whId, rmName,null);
+        String[] returnvalue = null;
+        if(result.isSucceed())
+        {
+            ResultSet rs = result.getResultSet();
+            Integer i = 0;
+            try {
+                if(rs.first())
+                {
+                    do
+                    {
+                        returnvalue[i] = rs.getString("");
+                        i++;
+                    }while(rs.next());
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(StockTable.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return returnvalue;
+    }
+    
     public SqlResultInfo query(String wName, String rmName, String unit)
     {
         SqlResultInfo result = new SqlResultInfo(false);
