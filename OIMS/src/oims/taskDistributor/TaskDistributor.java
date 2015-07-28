@@ -36,8 +36,8 @@ public class TaskDistributor {
         calendar.set(Calendar.DATE, Calendar.DATE - 1);
         // CK request day should be one day ahead plan date
         Date CkReqeustDate = calendar.getTime();
-        Map<String, Map<String,Integer>> planData = plan.getPlanData().getProductList();
-        for(Entry<String, Map<String,Integer>> entry:planData.entrySet())
+        Map<String, String> planData = plan.getPlanData().getProductList();
+        for(Entry<String, String> entry:planData.entrySet())
         {
             String recieverName = entry.getKey();
             Integer recieverId = 22; // TODO: get ID

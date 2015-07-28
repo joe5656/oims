@@ -6,24 +6,30 @@
 package oims.support.util;
 
 import com.google.common.collect.Maps;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Vector;
 
 /**
  *
  * @author ezouyyi
  */
 public class ProductPlanDataTable {
-    // Map<StoreName, Map<ProductName, Quantity>>
-    private Map<String, Map<String,Integer>> productList_;
+    // Map<ProductName, Quantity>
+    private Map<String, String> productList_;
     private String serilizedInfo_;
     private Map<String, Integer>  productNameToId_;
-    
+    private Iterator<Entry<String, String>> tmepItr_;
+    private Entry<String, String> tmpHolder_;
     // format:
-    // storeName1:productName1:quantity|storeName1:productName2:quantity|...|storeNameN:productNameN:quantity
+    // productName1:quantity1|productName2:quantity2|...|productNameN:quantityN
     public ProductPlanDataTable(String serilizedInfo)
     {
-        
+        serilizedInfo_ = serilizedInfo;
+        productNameToId_ = Maps.newHashMap();
+        productList_ = Maps.newHashMap();
+        unserializeInfo(serilizedInfo_);
     }
     
     public ProductPlanDataTable(Map<Integer, Map<Integer,Integer>> info)
@@ -36,25 +42,19 @@ public class ProductPlanDataTable {
         
     }
     
-    public Map<String, Map<String,Integer>> getProductList(){return productList_;}
-    public Boolean addData(String storeName, String productName, Integer quantity)
+    public Map<String, String> getProductList(){return productList_;}
+    public Boolean addData(String productName, String productId, String quantity)
     {
         Boolean result = false;
         if(this.productList_ != null)
         {
-            if(this.productList_.containsKey(storeName))
+            if(!this.productList_.containsKey(productName))
             {
-                Map<String, Integer> quantityMap = this.productList_.get(storeName);
-                if(!quantityMap.containsKey(productName))
-                {
-                    quantityMap.put(productName, quantity);
-                }
+                this.productList_.put(productName, quantity);
             }
             else
             {
-                Map<String, Integer> quantityMap = Maps.newHashMap();
-                quantityMap.put(productName, quantity);
-                this.productList_.put(storeName, quantityMap);
+                this.productList_.replace(productName, quantity);
             }
         }
         return result;
@@ -72,18 +72,58 @@ public class ProductPlanDataTable {
         if(this.productList_ != null)
         {
             Boolean firstloop = true;
-            for(Entry<String,Map<String,Integer>> entry:this.productList_.entrySet())
+            for(Entry<String,String> entry:this.productList_.entrySet())
             {
-                String storeName = entry.getKey();
-                for(Entry<String,Integer> quantityEntry:entry.getValue().entrySet())
-                {
-                    String productName = quantityEntry.getKey();
-                    Integer quantity = quantityEntry.getValue();
-                    this.serilizedInfo_ += (firstloop?"":"|")+storeName+":"+productName+":"+quantity;
-                    firstloop = false;
-                }
+                String productName = entry.getKey();
+                String quantity = entry.getValue();
+                this.serilizedInfo_ += (firstloop?"":"|")+productName+":"+quantity;
+                firstloop = false;
             }
         }
+    }
+    
+    public Boolean initItr()
+    {
+        this.tmepItr_ = this.productList_.entrySet().iterator();
+        if(tmepItr_ != null)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    public boolean next()
+    {
+        Boolean result = false;
+        if(tmepItr_.hasNext())
+        {
+            tmpHolder_ = tmepItr_.next();
+            result = true;
+        }
+        return result;
+    }
+    
+    public String getProductName()
+    {
+        String result = "NA";
+        if(tmpHolder_ != null)
+        {
+            result = tmpHolder_.getKey();
+        }
+        return result;
+    }
+    
+    public String getProductQuantity()
+    {
+        String result = "NA";
+        if(tmpHolder_ != null)
+        {
+            result = tmpHolder_.getValue();
+        }
+        return result;
     }
     
     private void unserializeInfo(String serilizedInfo)
@@ -91,28 +131,21 @@ public class ProductPlanDataTable {
         if(serilizedInfo!=null)
         {
             this.productList_.clear();
-            String[] splitL1 =  serilizedInfo.split("\\|");
+            String[] splitL1 =  serilizedInfo.split("|");
             for(String str:splitL1)
             {
                 String[] splitL2 = str.split(":");
-                if(splitL2.length == 3)
+                if(splitL2.length == 2)
                 {
-                    String storeName = splitL2[0];
-                    String productName = splitL2[1];
-                    Integer quantity = Integer.parseInt(splitL2[2]);
-                    if(this.productList_.containsKey(storeName))
+                    String productName = splitL2[0];
+                    String quantity = splitL2[1];
+                    if(this.productList_.containsKey(productName))
                     {
-                        Map<String, Integer> quantityMap = this.productList_.get(storeName);
-                        if(!quantityMap.containsKey(productName))
-                        {
-                            quantityMap.put(productName, quantity);
-                        }
+                        this.productList_.replace(productName, quantity);
                     }
                     else
                     {
-                        Map<String, Integer> quantityMap = Maps.newHashMap();
-                        this.productList_.put(storeName, quantityMap);
-                        quantityMap.put(productName, quantity);
+                        this.productList_.put(productName, quantity);
                     }
                 }
             }

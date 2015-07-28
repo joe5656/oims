@@ -74,7 +74,7 @@ public class StoreStackManager implements oims.systemManagement.Client{
         }
         else
         {
-            return new SqlDataTable();
+            return new SqlDataTable(this.itsStoreStackTable_.getName());
         }
     }
     

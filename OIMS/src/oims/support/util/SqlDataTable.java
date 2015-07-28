@@ -24,13 +24,14 @@ public class SqlDataTable {
     private Vector     data_;
     private List<Integer> selectedRows_;
     
-     public SqlDataTable()
-     {
-        tableName_ = "noName";
-        data_ = new Vector();
-        selectedRows_ = Lists.newArrayList();
-        tableHead_ = new Vector();
-     }
+    public SqlDataTable(String tableName)
+    {
+       tableName_ = tableName==null?"noName":tableName;
+       data_ = new Vector();
+       selectedRows_ = Lists.newArrayList();
+       tableHead_ = new Vector();
+    }
+    
     public SqlDataTable(ResultSet rs, String tableName)
     {
         tableName_ = tableName;
@@ -83,5 +84,13 @@ public class SqlDataTable {
             result.add(data_.get(i));
         }
         return result;
+    }
+    public void setHeader(Vector header){tableHead_ = header;}
+    public void addRow(Vector data)
+    {
+        if(this.data_ != null)
+        {
+            this.data_.add(data);
+        }
     }
 }

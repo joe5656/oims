@@ -8,7 +8,6 @@ package oims.dataBase.tables;
 import com.google.common.collect.Maps;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -19,7 +18,6 @@ import oims.dataBase.DataBaseManager;
 import oims.dataBase.Db_table;
 import oims.employeeManager.Employee;
 import oims.support.util.Db_publicColumnAttribute;
-import oims.support.util.SqlDataTable;
 import oims.support.util.SqlResultInfo;
 
 /**
