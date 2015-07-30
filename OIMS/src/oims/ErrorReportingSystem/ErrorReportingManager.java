@@ -26,6 +26,11 @@ public class ErrorReportingManager implements oims.systemManagement.Client{
     private StockManager     itsStockManager_;
     private StoreStackManager itsStoreStackManager_;
     
+    public ErrorReportingManager(DataBaseManager dbm)
+    {
+        itsErrReportingTable_ = new ErrorReportingTable(dbm);
+        itsdbm_  = dbm;
+    }  
     public enum ERR_TYPE
     {
         ERR_TYPE_NOT_ENOUGH_PRODUCT,

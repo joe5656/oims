@@ -47,7 +47,7 @@ public class ProducingPlanTable extends Db_table{
         super.registerColumn("tindex", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER, Boolean.TRUE, Boolean.TRUE,  Boolean.TRUE, null);
     }
     
-    public SqlResultInfo newPlan(Date planDate, ProductPlanDataTable detail, Integer planerId,
+    public SqlResultInfo newPlan(Date planDate, ProductPlanDataTable detail, String planerId,
             String planerName , String storeName)
     {
         SqlResultInfo result = new SqlResultInfo(false);
@@ -78,7 +78,7 @@ public class ProducingPlanTable extends Db_table{
     }
     
     public SqlResultInfo update(String storeName, Date planDate, ProductPlanDataTable detail, Boolean lock,
-            Integer lockerId, String lockerName)
+            String lockerId, String lockerName)
     {
         SqlResultInfo result = new SqlResultInfo(false);
         SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -102,13 +102,13 @@ public class ProducingPlanTable extends Db_table{
         if(lock == true)
         {
             valueHolder.put("locked", "1");
-            valueHolder.put("lockerId", lockerId.toString());
+            valueHolder.put("lockerId", lockerId);
             valueHolder.put("lockerName", lockerName);
             valueHolder.put("lockTime", timeFormat.format(new Date(System.currentTimeMillis())));
         }
         else
         {
-            valueHolder.put("serializedPlanDetail", detail.getSerilizedInfo());
+            if(detail!=null)valueHolder.put("serializedPlanDetail", detail.getSerilizedInfo());
         }
         
         // where

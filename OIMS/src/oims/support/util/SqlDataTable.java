@@ -32,6 +32,14 @@ public class SqlDataTable {
        tableHead_ = new Vector();
     }
     
+    public SqlDataTable()
+    {
+       tableName_ = "noName";
+       data_ = new Vector();
+       selectedRows_ = Lists.newArrayList();
+       tableHead_ = new Vector();
+    }
+    
     public SqlDataTable(ResultSet rs, String tableName)
     {
         tableName_ = tableName;

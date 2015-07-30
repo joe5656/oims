@@ -5,9 +5,9 @@
  */
 package oims.producingPlanManagement;
 
-import java.sql.ResultSet;
 import java.util.Date;
 import oims.dataBase.tables.ProducingPlanTable;
+import oims.support.util.ProductPlanDataTable;
 import oims.support.util.SqlDataTable;
 import oims.support.util.SqlResultInfo;
 import oims.systemManagement.SystemManager;
@@ -61,5 +61,31 @@ public class ProducingPlanManager  implements oims.systemManagement.Client{
     public SqlDataTable getStorePlan(String storeName, String date)
     {
         return this.itsProductPlanTable_.getStorePlan(storeName, date);
+    }
+    
+    public SqlResultInfo lockPlan(Date planDate, String storeName, String lockerId, 
+            String lockerName)
+    {
+        if(planDate == null)return new SqlResultInfo(false);
+        return this.itsProductPlanTable_.update(storeName, planDate, null, Boolean.TRUE, lockerId, lockerName);
+    }
+    
+    public SqlResultInfo updatePlan(Date planDate, String storeName, ProductPlanDataTable detail)
+    {
+        if(planDate == null || storeName == null || detail == null)
+        {
+            return new SqlResultInfo(false);
+        }
+        return this.itsProductPlanTable_.update(storeName, planDate, detail, false, null, null);
+    }
+    
+    public SqlResultInfo newPlan(Date planDate, String storeName, ProductPlanDataTable detail,
+            String planer, String planerId)
+    {
+        if(planDate == null || storeName == null || detail == null)
+        {
+            return new SqlResultInfo(false);
+        }
+        return this.itsProductPlanTable_.newPlan(planDate, detail, planerId, planer, storeName);
     }
 }
