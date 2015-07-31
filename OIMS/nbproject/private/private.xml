@@ -21,6 +21,7 @@
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/dataBase/MYSQL/Db_dataBase_MYSQL.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/UI/pages/reciptPage/Ui_reciptPage.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/stockManagement/StockManager.java</file>
+            <file>file:/C:/JoeFolder/git/OIMS/src/oims/dataBase/tables/AccountingTable.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/dataBase/Db_dataBase.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/UI/pages/reciptPage/DetailReciptPickerTx.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/storeStockManagement/StoreStackManager.java</file>
@@ -28,6 +29,7 @@
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/dataBase/tables/SyncerTable.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/UI/pages/employeePage/Ui_employeeManagerment.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/support/util/ProductPlanDataTable.java</file>
+            <file>file:/C:/JoeFolder/git/OIMS/src/oims/SellingSystem/SellingManager.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/UI/pages/warehouseManagerment/WarehousePageRx.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/producingPlanManagement/ProducingPlanManager.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/UI/pages/reciptPage/ProductReciptPicker.java</file>
@@ -48,6 +50,7 @@
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/UI/UiManagerTx.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/dataBase/Db_table.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/UI/pages/reciptPage/ProductReciptPickerTx.java</file>
+            <file>file:/C:/JoeFolder/git/OIMS/src/oims/productManagement/Product.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/warehouseManagemnet/WareHouseManager.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/AppBuilder.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/dataBase/tables/ErrorReportingTable.java</file>

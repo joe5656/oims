@@ -8,7 +8,6 @@ package oims.dataBase.tables;
 import com.google.common.collect.Maps;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -19,7 +18,6 @@ import oims.dataBase.DataBaseManager;
 import oims.dataBase.Db_table;
 import oims.employeeManager.Employee;
 import oims.support.util.Db_publicColumnAttribute;
-import oims.support.util.SqlDataTable;
 import oims.support.util.SqlResultInfo;
 
 /**
@@ -31,51 +29,45 @@ public class SellTicketTable extends Db_table{
     {
         return "SellTicketTable";
     }
+    
     public SellTicketTable(DataBaseManager dbm)
     {
         super("SellTicketTable", dbm, Table_Type.TABLE_TYPE_2_LEVEL);
         super.registerColumn("resvfield3", Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR60,  Boolean.FALSE,   Boolean.FALSE,  Boolean.FALSE, null);
         super.registerColumn("resvfield2", Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR60,  Boolean.FALSE,   Boolean.FALSE,  Boolean.FALSE, null);
         super.registerColumn("resvfield1", Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR60,  Boolean.FALSE,   Boolean.FALSE,  Boolean.FALSE, null);
-        super.registerColumn("zipcode", Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR60,  Boolean.FALSE,   Boolean.FALSE,  Boolean.FALSE, null);
-        super.registerColumn("couponNumber", Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR60,  Boolean.FALSE,   Boolean.FALSE,  Boolean.FALSE, null);
+        super.registerColumn("discountType", Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR60,  Boolean.FALSE,   Boolean.FALSE,  Boolean.FALSE, null);
         super.registerColumn("salerId", Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR60,  Boolean.FALSE,   Boolean.FALSE,  Boolean.FALSE, null);
         super.registerColumn("salerName", Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR60,  Boolean.FALSE,   Boolean.FALSE,  Boolean.FALSE, null);
         super.registerColumn("paymentMethod", Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR60, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
         super.registerColumn("orderTime", Db_publicColumnAttribute.ATTRIBUTE_NAME.TIME,  Boolean.FALSE,   Boolean.FALSE,  Boolean.FALSE, null);
-        super.registerColumn("discount", Db_publicColumnAttribute.ATTRIBUTE_NAME.DOUBLE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
         super.registerColumn("amount", Db_publicColumnAttribute.ATTRIBUTE_NAME.DOUBLE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
+        super.registerColumn("memberName", Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR60, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
+        super.registerColumn("originAmount", Db_publicColumnAttribute.ATTRIBUTE_NAME.DOUBLE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
         super.registerColumn("memberId", Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR60, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
         super.registerColumn("storeName", Db_publicColumnAttribute.ATTRIBUTE_NAME.VARCHAR60, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, null);
         super.registerColumn("ticketId", Db_publicColumnAttribute.ATTRIBUTE_NAME.INTEGER, Boolean.TRUE, Boolean.TRUE,  Boolean.TRUE, null);
     }
     
-    public SqlResultInfo newEntry(String name, String NationalId, String picurl, String contact,
-                            Date birthDate, Integer posi,
-                            Integer deptId, String gender)
+    public SqlResultInfo newEntry(String StoreName, String memberId, Double originPrice,
+            Double amount, String salerName, String discntType, String salerId, String memberName)
     {
         SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
-        if(!"male".equals(gender) && !"female".equals(gender))
-        {
-            result.setErrInfo("员工信息不合法，性别请填写“男/女”");
-            return result;
-        }
         
-        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String enroll = timeFormat.format(new Date(System.currentTimeMillis()));
+        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String orderTime = timeFormat.format(new Date(System.currentTimeMillis()));
         TableEntry entryToBeInsert = generateTableEntry();
         Map<String, String> valueHolder = Maps.newHashMap();
-        valueHolder.put("enrollDate", enroll);
-        valueHolder.put("gender", gender);
-        valueHolder.put("deptId", deptId.toString());
-        valueHolder.put("positionId", posi.toString());
-        valueHolder.put("birthDate", timeFormat.format(birthDate));
-        valueHolder.put("valid", "1");
-        valueHolder.put("contact", contact);
-        valueHolder.put("password", "123456");
-        valueHolder.put("picurl", picurl);
-        valueHolder.put("NationalId", NationalId);
-        valueHolder.put("name", name);
+        valueHolder.put("storeName", StoreName);
+        valueHolder.put("memberId", memberId);
+        valueHolder.put("originAmount", originPrice.toString());
+        valueHolder.put("amount", amount.toString());
+        valueHolder.put("orderTime", timeFormat.format(orderTime));
+        valueHolder.put("paymentMethod", "cash");
+        valueHolder.put("salerName", salerName);
+        valueHolder.put("salerId", salerId);
+        valueHolder.put("discountType", discntType);
+        valueHolder.put("memberName", memberName);
         
         if(entryToBeInsert.fillInEntryValues(valueHolder))
         {
@@ -83,103 +75,61 @@ public class SellTicketTable extends Db_table{
         }
         else
         {
-            result.setErrInfo("数据库连接请求失败，位置: EmployeeTable.newEntry");
+            result.setErrInfo("数据库连接请求失败，位置: SellTicketTable.newEntry");
         }
         
         return result;        
     }
     
-    public SqlResultInfo update(String id, String name, String NationalId, String picurl, String contact,
-                            Integer posi,Integer deptId, Boolean valid, String pw)
-    {
-         SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
-        
-       
-        TableEntry entryToBeInsert = generateTableEntry();
-        Map<String, String> valueHolder = Maps.newHashMap();
-        if(deptId!=null)valueHolder.put("deptId", deptId.toString());
-        if(posi!=null)valueHolder.put("positionId", posi.toString());
-        if(valid!=null)valueHolder.put("valid", valid==true?"1":"0");
-        if(contact!=null)valueHolder.put("contact", contact);
-        if(pw!=null)valueHolder.put("password", pw);
-        if(picurl!=null)valueHolder.put("picurl", picurl);
-        if(NationalId!=null)valueHolder.put("NationalId", NationalId);
-        if(name!=null)valueHolder.put("name", name);
-        
-        
-        // where
-        TableEntry wh = generateTableEntry();
-        Map<String, String> valueHoldereq = Maps.newHashMap();
-        valueHoldereq.put("EmployeeId", id);
-        
-        if(entryToBeInsert.fillInEntryValues(valueHolder) && wh.fillInEntryValues(valueHoldereq))
-        {
-            result = super.update(entryToBeInsert, wh, null, null);
-        }
-        else
-        {
-            result.setErrInfo("数据库连接请求失败，位置: EmployeeTable.newEntry");
-        }
-        
-        return result;  
-    }
     
     static private String EnToCh(String en)
-    {
+    {       
         switch(en)
         {
-            case "EmployeeTable":
+            case "storeName":
             {
-                return "员工信息表";
+                return "出售门店";
             }
-            case "gender":
+            case "memberId":
             {
-                return "性别";
+                return "会员号码";
             }       
-            case "deptId":
+            case "originAmount":
             {
-                return "部门ID";
+                return "原始总价";
             }       
-            case "positionId":
+            case "amount":
             {
-                return "职位ID";
+                return "折扣后总价";
             }   
-            case "enrollDate":
+            case "orderTime":
             {
-                return "入职日期";
+                return "购买时间";
             }   
-            case "birthDate":
+            case "paymentMethod":
             {
-                return "出生日期";
+                return "付款方式";
             }    
-            case "password":
+            case "salerName":
             {
-                return "密码";
+                return "销售员";
             }     
-            case "valid":
+            case "salerId":
             {
-                return "是否在职";
+                return "销售员编号";
             }        
-            case "contact":
+            case "discountType":
             {
-                return "联系电话";
-            }      
-            case "picurl":
+                return "折扣类型";
+            }              
+            case "memberName":
             {
-                return "照片";
-            }       
-            case "NationalId":
+                return "会员";
+            }              
+            case "ticketId":
             {
-                return "身份证号码";
-            }   
-            case "name":
-            {
-                return "名字";
-            }         
-            case "EmployeeId":
-            {
-                return "员工号码";
-            }   
+                return "单据编号";
+            }
             default:
             {
                 return "错误";
@@ -195,146 +145,6 @@ public class SellTicketTable extends Db_table{
         }
     }
     
-    public SqlResultInfo queryEmployeeGeneralInfo(String employeeId, String employeeName, Boolean acitveFlag)
-    {
-        SqlResultInfo result = new SqlResultInfo(Boolean.FALSE);
-        TableEntry select = generateTableEntry();
-        Map<String, String> valueHolder = Maps.newHashMap();
-        valueHolder.put("EmployeeId", "select");
-        valueHolder.put("gender", "select");
-        valueHolder.put("valid", "1");
-        valueHolder.put("contact", "select");
-        valueHolder.put("name", "select");
-        
-        TableEntry eq = generateTableEntry();
-        Map<String, String> valueHoldereq = Maps.newHashMap();
-        if(employeeId != null)valueHoldereq.put("EmployeeId", employeeId);
-        if(employeeName != null)valueHoldereq.put("name", employeeName);
-        if(acitveFlag != null)valueHoldereq.put("valid", acitveFlag?"1":"0");
-        
-        if(select.fillInEntryValues(valueHolder)
-                && eq.fillInEntryValues(valueHoldereq))
-        {
-            result = super.select(select, eq, null, null);
-        }
-        else
-        {
-            result.setErrInfo("数据库连接请求失败，位置: EmployeeTable.newEntry");
-        }
-        
-        return result;        
-    }
-    
-    public void serializeEmployee(Employee e, String employeeId)
-    {
-        TableEntry entryToBeQuery = generateTableEntry();
-        Map<String, String> valueHolder = Maps.newHashMap();
-        valueHolder.put("enrollDate", "select");
-        valueHolder.put("gender", "select");
-        valueHolder.put("deptId", "select");
-        valueHolder.put("positionId", "select");
-        valueHolder.put("birthDate", "select");
-        valueHolder.put("valid", "select");
-        valueHolder.put("contact", "select");
-        valueHolder.put("password", "select");
-        valueHolder.put("picurl", "select");
-        valueHolder.put("NationalId", "select");
-        valueHolder.put("name", "select");
-        valueHolder.put("EmployeeId", "select");    
-        
-        // where
-        TableEntry where = generateTableEntry();
-        Map<String, String> valueHoldereq = Maps.newHashMap();
-        valueHoldereq.put("EmployeeId", employeeId);
-        
-        if(entryToBeQuery.fillInEntryValues(valueHolder) && where.fillInEntryValues(valueHoldereq))
-        {
-            SqlResultInfo result = super.select(entryToBeQuery, where, null, null);
-            if(result.isSucceed())
-            {
-                ResultSet rs = result.getResultSet();
-                try {
-                    if(rs.first())
-                    {
-                        e.setId(rs.getInt("EmployeeId"));
-                        e.setName(rs.getString("name"));
-                        e.setNationId(rs.getString("NationalId"));
-                        e.setUrl(rs.getString("picurl"));
-                        e.setPassword(rs.getString("password"));
-                        e.setContact(rs.getString("contact"));
-                        e.setBirthDay(rs.getString("birthDate"));
-                        e.setPositionId(rs.getInt("positionId"));
-                        e.setDepId(rs.getInt("deptId"));
-                        e.setGender(rs.getString("gender"));
-                        e.setEnrollDate(rs.getString("enrollDate"));
-                    }
-                    
-                } catch (SQLException ex) {
-                    Logger.getLogger(SellTicketTable.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-    }
-    public Boolean checkPassword(String id, String pw)
-    {
-        Boolean value = false;
-        
-        TableEntry select = generateTableEntry();
-        Map<String, String> valueHolder = Maps.newHashMap();
-        valueHolder.put("EmployeeId", "select");
-        valueHolder.put("gender", "select");
-        valueHolder.put("contact", "select");
-        valueHolder.put("name", "select");
-        
-        TableEntry eq = generateTableEntry();
-        Map<String, String> valueHoldereq = Maps.newHashMap();
-        valueHoldereq.put("EmployeeId", id);
-        valueHoldereq.put("password", pw);
-        valueHoldereq.put("valid", "1");
-        
-        if(select.fillInEntryValues(valueHolder)
-                && eq.fillInEntryValues(valueHoldereq))
-        {
-            SqlResultInfo result = super.select(select, eq, null, null);
-            try {
-                if(result.isSucceed() && result.getResultSet().first())
-                {
-                    value = true;
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(SellTicketTable.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
-        if(value == false)
-        {
-            // no employee entry in system at all? login with admin
-            TableEntry sel = generateTableEntry();
-            Map<String, String> selHolder = Maps.newHashMap();
-            selHolder.put("EmployeeId", "select");
-            TableEntry where = generateTableEntry();
-            Map<String, String> selHoldereq = Maps.newHashMap();
-            selHoldereq.put("valid", "1");
-            
-            
-            if(sel.fillInEntryValues(selHolder) && where.fillInEntryValues(valueHoldereq))
-            {
-                SqlResultInfo result = super.select(select, where, null, null);
-                try {
-                    if(result.isSucceed() && !result.getResultSet().first())
-                    {
-                        value = ("admin".equals(id)) && ("admin".equals(pw));
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger(SellTicketTable.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            
-        }
-        return value;
-    }
-    static public String getPrimaryKeyColNameInCh(){return EnToCh("EmployeeId");} 
-    static public String getPrimaryKeyColNameInEng(){return "EmployeeId";}
-    static public String getEmployeeNameColNameInCh(){return EnToCh("name");} 
-    static public String getEmployeeNameColNameInEng(){return "name";}
+    static public String getPrimaryKeyColNameInCh(){return EnToCh("ticketId");} 
+    static public String getPrimaryKeyColNameInEng(){return "ticketId";}
 }
