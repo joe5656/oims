@@ -13,6 +13,7 @@
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/support/util/CommonUnit.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/dataBase/tables/ProducingPlanTable.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/UI/pages/warehouseManagerment/WarehouseListPage.java</file>
+            <file>file:/C:/JoeFolder/git/OIMS/src/oims/dataBase/tables/AccountCategory.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/dataBase/tables/DetailReciptTable.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/UI/pages/mainMenu/Ui_mainMenuPage.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/UI/pages/ProductPage/Ui_ProductPage.java</file>
@@ -48,6 +49,7 @@
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/dataBase/tables/ProductReciptTable.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/dataBase/syncer/DataBaseSyncer.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/UI/UiManagerTx.java</file>
+            <file>file:/C:/JoeFolder/git/OIMS/src/oims/support/util/SqlResultInfo.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/dataBase/Db_table.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/UI/pages/reciptPage/ProductReciptPickerTx.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/productManagement/Product.java</file>

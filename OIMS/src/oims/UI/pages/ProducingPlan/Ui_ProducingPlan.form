@@ -204,6 +204,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="&#x8f7d;&#x5165;&#x8ba1;&#x5212;"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton12ActionPerformed"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
@@ -646,6 +649,9 @@
                       <Properties>
                         <Property name="text" type="java.lang.String" value="&#x8f7d;&#x5165;"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton5ActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="jButton8">
                       <Properties>

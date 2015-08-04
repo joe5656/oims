@@ -5,11 +5,13 @@
  */
 package oims.UI.pages.ProducingPlan;
 
+import java.text.SimpleDateFormat;
 import javax.swing.ListSelectionModel;
 import oims.UI.UiManager;
 import oims.UI.pages.BasePageClass;
 import oims.UI.pages.Page;
 import oims.producingPlanManagement.ProducingPlanManager;
+import oims.support.util.SqlDataTable;
 
 /**
  *
@@ -17,6 +19,7 @@ import oims.producingPlanManagement.ProducingPlanManager;
  */
 public class Ui_ProducingPlan    extends BasePageClass {
     private ProducingPlanManager itsProducingManager_;
+    private SqlDataTable         itsOngoingPlan_;
     /**
      * Creates new form Ui_ProducingPlan
      */
@@ -42,9 +45,11 @@ public class Ui_ProducingPlan    extends BasePageClass {
         this.jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
     
-    private void loadPlan(javax.swing.JTable loadTo, String planDate, String planStore)
+    private SqlDataTable loadPlan(javax.swing.JTable loadTo, String planDate, String planStoreName)
     {
-        
+        SqlDataTable result = this.itsProducingManager_.getStorePlan(planStoreName, planDate);
+        loadTo.setModel(new javax.swing.table.DefaultTableModel(result.getData(),result.getColumnNames()) );
+        return result;
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -127,6 +132,11 @@ public class Ui_ProducingPlan    extends BasePageClass {
         jLabel17.setText("日");
 
         jButton12.setText("载入计划");
+        jButton12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton12ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -263,6 +273,11 @@ public class Ui_ProducingPlan    extends BasePageClass {
         jLabel12.setText("日");
 
         jButton5.setText("载入");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jButton8.setText("载入所有产品");
 
@@ -448,6 +463,41 @@ public class Ui_ProducingPlan    extends BasePageClass {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
+        String year = this.jComboBox9.getSelectedItem().toString();
+        String month = this.jComboBox10.getSelectedItem().toString();
+        String day = this.jTextField4.getText();
+        try
+        {
+            Integer day_int = Integer.parseInt(day);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            dateFormat.parse(year+"-"+month+"-"+day);
+            loadPlan(this.jTable2,year+"-"+month+"-"+day,this.jComboBox8.getSelectedItem().toString());
+            this.jTable2.setEnabled(false);
+        }catch(Exception e)
+        {
+            this.jTextField4.setText("");
+        }
+    }//GEN-LAST:event_jButton12ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        String year = this.jComboBox6.getSelectedItem().toString();
+        String month = this.jComboBox7.getSelectedItem().toString();
+        String day = this.jTextField3.getText();
+        try
+        {
+            Integer day_int = Integer.parseInt(day);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            dateFormat.parse(year+"-"+month+"-"+day);
+            SqlDataTable dataTable = loadPlan(this.jTable1,year+"-"+month+"-"+day,
+                    this.jComboBox5.getSelectedItem().toString());
+            itsOngoingPlan_ = dataTable;
+        }catch(Exception e)
+        {
+            this.jTextField3.setText("");
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

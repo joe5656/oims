@@ -7,6 +7,8 @@ package oims.support.util;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -32,6 +34,19 @@ public class SqlResultInfo {
         index_ = 0;
     }
     
+    public Boolean isRsEmpty()
+    {
+        Boolean result = false;
+        try {
+            if(this.rs_ != null && rs_.first())
+            {
+                result = true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SqlResultInfo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+    }
     public void    setSucceed()
     {
         executeResult_ = Boolean.TRUE;

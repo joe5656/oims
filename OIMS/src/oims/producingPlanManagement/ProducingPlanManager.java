@@ -60,7 +60,9 @@ public class ProducingPlanManager  implements oims.systemManagement.Client{
     
     public SqlDataTable getStorePlan(String storeName, String date)
     {
-        return this.itsProductPlanTable_.getStorePlan(storeName, date);
+        SqlDataTable result = this.itsProductPlanTable_.getStorePlan(storeName, date);
+        this.itsProductPlanTable_.translateColumnName(result.getColumnNames());
+        return result;
     }
     
     public SqlResultInfo lockPlan(Date planDate, String storeName, String lockerId, 
