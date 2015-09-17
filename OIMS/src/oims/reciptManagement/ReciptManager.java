@@ -37,32 +37,36 @@ public class ReciptManager  implements oims.systemManagement.Client{
         itsdbm_ = dbm;
     }
         
-    public SqlResultInfo newProductRecipt(String pName, Integer number, String mainName,
-            String topName, String fillingName, Integer workinghours, Boolean mainReciptByCK,
-            Boolean toppingByCK, Boolean fillingByCk)
+    public SqlResultInfo newProductRecipt(String pName, Integer number, Integer singleWeightInGram, 
+            String mainName, String mainFactor, String topName, String topFactor, 
+            String fillingName, String fillFactor, Integer workinghours, 
+            Boolean mainReciptByCK,Boolean toppingByCK, Boolean fillingByCk )
     {
-        return this.itsProductReciptTable_.newEntry(pName, number, mainName, 
-                topName, fillingName, workinghours, mainReciptByCK, toppingByCK, fillingByCk);
-    }
+        if(itsProductReciptTable_.reciptForProductExsited(pName))
+        {
+            return this.itsProductReciptTable_.update(number, pName, number, mainName, 
+                    mainFactor, topName, topFactor, fillingName, fillFactor, workinghours, 
+                    mainReciptByCK, toppingByCK, fillingByCk, singleWeightInGram);
+        }
+        else
+        {
+            return this.itsProductReciptTable_.newEntry(pName, number, mainName, mainFactor,
+                topName, topFactor, fillingName, fillFactor, workinghours,
+                singleWeightInGram, mainReciptByCK, toppingByCK, fillingByCk);
+        }
+  }
     
     public SqlResultInfo newDetailRecipt(String reciptName, List<QuantitiedRawMaterial> rms)
     {
         String recipt = DetailRecipt.serialize(rms);
-        return this.itsDetailReciptTable_.newEntry(reciptName, recipt);
-    }
-    
-    public SqlResultInfo updateProductRecipt(Integer reciptId, String pName, Integer number, String mainName,
-            String topName, String fillingName, Integer workinghours, Boolean mainReciptByCK,
-            Boolean toppingByCK, Boolean fillingByCk)
-    {
-        return this.itsProductReciptTable_.update(reciptId, pName, number, mainName, 
-                topName, fillingName, workinghours, mainReciptByCK, toppingByCK, fillingByCk);
-    }
-    
-    public SqlResultInfo updateDetailRecipt(String reciptName, List<QuantitiedRawMaterial> rms)
-    {
-        String recipt = DetailRecipt.serialize(rms);
-        return this.itsDetailReciptTable_.update(reciptName, recipt);
+        if(this.itsDetailReciptTable_.reciptExsited(reciptName))
+        {
+            return this.itsDetailReciptTable_.update(reciptName, recipt);
+        }
+        else
+        {
+            return this.itsDetailReciptTable_.newEntry(reciptName, recipt);
+        }
     }
     
     public SqlDataTable queryDetailReciptAll()
@@ -77,6 +81,12 @@ public class ReciptManager  implements oims.systemManagement.Client{
                 this.itsDetailReciptTable_.getName());
     }
     
+    public SqlDataTable queryProductRecipt(String reciptId, String productName)
+    {
+        return new SqlDataTable(this.itsProductReciptTable_.query(Integer.parseInt(reciptId), productName).getResultSet(),
+                this.itsDetailReciptTable_.getName());
+    }
+        
     @Override
     public Boolean systemStatusChangeNotify(SystemManager.systemStatus status)
     {

@@ -72,9 +72,48 @@ public class ProducingPlanManager  implements oims.systemManagement.Client{
         return this.itsProductPlanTable_.update(storeName, planDate, null, Boolean.TRUE, lockerId, lockerName);
     }
     
+    public Boolean planLocked(Date planDate, String storeName)
+    {
+        Boolean result = false;
+        if(planDate != null && storeName != null)
+        {
+            result = this.itsProductPlanTable_.isPlanLocked(planDate, storeName);
+        }
+        return result;
+    }
+    
+    public Boolean planExisted(Date planDate, String storeName)
+    {
+        Boolean result = false;
+        if(planDate != null && storeName != null)
+        {
+            result = this.itsProductPlanTable_.isPlanExisted(planDate, storeName);
+        }
+        return result;
+    }
+    
+    public SqlResultInfo plan(Date planDate, String storeName, ProductPlanDataTable detail,
+            String planer, String planerId)
+    {
+        SqlResultInfo result = new SqlResultInfo(false);
+        
+        if(planDate != null && storeName != null)
+        {
+            if(planExisted(planDate, storeName))
+            {
+                result = this.updatePlan(planDate, storeName, detail);
+            }
+            else
+            {
+                result = this.newPlan(planDate, storeName, detail, planer, planerId);
+            }
+        }
+        return result;
+    }
+    
     public SqlResultInfo updatePlan(Date planDate, String storeName, ProductPlanDataTable detail)
     {
-        if(planDate == null || storeName == null || detail == null)
+        if(planDate == null || storeName == null || detail == null || this.planLocked(planDate, storeName))
         {
             return new SqlResultInfo(false);
         }

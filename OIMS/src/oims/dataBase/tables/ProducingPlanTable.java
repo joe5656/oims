@@ -167,7 +167,83 @@ public class ProducingPlanTable extends Db_table{
         }
         return result;
     }
-        
+    
+    public Boolean isPlanLocked(Date planDate, String storeName)
+    {
+        Boolean result = false;
+        if(planDate != null && storeName != null)
+        {
+            SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            SqlResultInfo sqlResult = new SqlResultInfo(false);
+            
+            TableEntry queryEntry = generateTableEntry();
+            Map<String, String> valueHolder = Maps.newHashMap();
+            valueHolder.put("locked", "selected");
+            
+            // where
+            TableEntry where = generateTableEntry();
+            Map<String, String> valueHoldereq = Maps.newHashMap();
+            valueHoldereq.put("storeName", storeName);
+            valueHoldereq.put("PlanDate", timeFormat.format(planDate));
+            
+            if(queryEntry.fillInEntryValues(valueHolder) && where.fillInEntryValues(valueHoldereq))
+            {
+                sqlResult = super.select(queryEntry, where, null, null);
+                if(sqlResult.isSucceed() && !sqlResult.isRsEmpty())
+                {
+                    ResultSet rs = sqlResult.getResultSet();
+                    try {
+                        if(rs.first())
+                        {
+                            result = rs.getBoolean("locked");
+                        }
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ProducingPlanTable.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    
+    public Boolean isPlanExisted(Date planDate, String storeName)
+    {
+        Boolean result = false;
+        if(planDate != null && storeName != null)
+        {
+            SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            SqlResultInfo sqlResult = new SqlResultInfo(false);
+            
+            TableEntry queryEntry = generateTableEntry();
+            Map<String, String> valueHolder = Maps.newHashMap();
+            valueHolder.put("locked", "selected");
+            
+            // where
+            TableEntry where = generateTableEntry();
+            Map<String, String> valueHoldereq = Maps.newHashMap();
+            valueHoldereq.put("storeName", storeName);
+            valueHoldereq.put("PlanDate", timeFormat.format(planDate));
+            
+            if(queryEntry.fillInEntryValues(valueHolder) && where.fillInEntryValues(valueHoldereq))
+            {
+                sqlResult = super.select(queryEntry, where, null, null);
+                if(sqlResult.isSucceed() && !sqlResult.isRsEmpty())
+                {
+                    ResultSet rs = sqlResult.getResultSet();
+                    try {
+                        if(rs.first())
+                        {
+                            result = true;
+                        }
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ProducingPlanTable.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    
     public SqlResultInfo query(String planDate, String storeName)
     {
         SqlResultInfo result = new SqlResultInfo(false);

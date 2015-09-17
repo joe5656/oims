@@ -70,6 +70,17 @@ public class DetailReciptTable   extends Db_table{
         return result;
     }
     
+    public Boolean reciptExsited(String reciptName)
+    {
+        Boolean result = false;
+        SqlResultInfo sqlRs = query(null, reciptName);
+        if(!sqlRs.isRsEmpty())
+        {
+            result = true;
+        }
+        return result;
+    }
+    
     public SqlResultInfo query(Integer reciptId, String reciptName)
     {
         SqlResultInfo result = new SqlResultInfo(false);
