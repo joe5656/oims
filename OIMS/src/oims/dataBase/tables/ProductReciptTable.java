@@ -6,10 +6,16 @@
 package oims.dataBase.tables;
 
 import com.google.common.collect.Maps;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import oims.dataBase.DataBaseManager;
 import oims.dataBase.Db_table;
+import oims.reciptManagement.DetailRecipt;
+import oims.reciptManagement.ProductRecipt;
 import oims.support.util.Db_publicColumnAttribute;
 import oims.support.util.SqlResultInfo;
 
@@ -79,9 +85,9 @@ public class ProductReciptTable  extends Db_table{
             Map<String, String> valueHolder = Maps.newHashMap();
             valueHolder.put("standardProductNumber", number.toString());
             valueHolder.put("singleWeightInGram", singleWeightInGram.toString());
-            valueHolder.put("mainRecipt", mainName+"|"+mainFactor);
-            valueHolder.put("toppingRecipt", topName+"|"+topFactor);
-            valueHolder.put("fillingRecipt", fillingName+"|"+fillingFactor);
+            valueHolder.put("mainRecipt", mainName==null?"NONE|0":(mainName+"|"+mainFactor));
+            valueHolder.put("toppingRecipt", topName==null?"NONE|0":(topName+"|"+topFactor));
+            valueHolder.put("fillingRecipt", fillingName==null?"NONE|0":(fillingName+"|"+fillingFactor));
             valueHolder.put("mainReciptProcessByCK", mainReciptByCK==true?"1":"0");
             valueHolder.put("toppingProcessByCK", toppingByCK==true?"1":"0");
             valueHolder.put("fillingProcessByCK", fillingByCk==true?"1":"0");
@@ -113,6 +119,42 @@ public class ProductReciptTable  extends Db_table{
         return result;
     }
     
+    public Map<String, ProductRecipt> queryAll()
+    {
+        Map<String, ProductRecipt> result = Maps.newHashMap();
+        SqlResultInfo sqlResult = this.query(null, null);
+        
+        if(sqlResult.isSucceed() && !sqlResult.isRsEmpty())
+        {
+            ResultSet rs = sqlResult.getResultSet();
+            try {
+                if(rs.first())
+                {
+                    do
+                    {
+                        ProductRecipt temp = new ProductRecipt(rs.getString("productName"));
+                        Map<String, String> main = this.unserializeRecipt(rs.getString("mainRecipt"));
+                        Map<String, String> top = this.unserializeRecipt(rs.getString("toppingRecipt"));
+                        Map<String, String> fill = this.unserializeRecipt(rs.getString("fillingRecipt"));
+                        temp.setProductRecipt(rs.getInt("standardProductNumber"), 
+                                main.get("reciptName"), 
+                                top.get("reciptName"), 
+                                fill.get("reciptName"), 
+                                Double.parseDouble(main.get("factor")), 
+                                Double.parseDouble(top.get("factor")), 
+                                Double.parseDouble(fill.get("factor")),
+                                rs.getBoolean("mainReciptProcessByCK"),
+                                rs.getBoolean("toppingProcessByCK"),
+                                rs.getBoolean("fillingProcessByCK"));
+                        result.put(rs.getString("productName"), temp);
+                    }while(rs.next());
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(ProductReciptTable.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return result;
+    }
     public SqlResultInfo query(Integer reciptId, String pName)
     {
         SqlResultInfo result = new SqlResultInfo(false);
@@ -134,18 +176,28 @@ public class ProductReciptTable  extends Db_table{
         //where 
         TableEntry where = generateTableEntry();
         Map<String, String> valueHoldereq = Maps.newHashMap();
-        if(reciptId!=null)valueHoldereq.put("reciptIndentifier", reciptId.toString());
-        if(pName!=null)valueHoldereq.put("productName", pName);
-
-        if(entryToBeSel.fillInEntryValues(valueHolder) && where.fillInEntryValues(valueHoldereq))
+        Boolean insertWhere = false;
+        if(reciptId!=null)
         {
-            result = super.select(entryToBeSel, where,null , null);
+            insertWhere = true;
+            valueHoldereq.put("reciptIndentifier", reciptId.toString());
+        }
+        if(pName!=null)
+        {
+            insertWhere = true;
+            valueHoldereq.put("productName", pName);
+        }
+
+        if(entryToBeSel.fillInEntryValues(valueHolder) && 
+                (insertWhere && where.fillInEntryValues(valueHoldereq)))
+        {
+            result = super.select(entryToBeSel, insertWhere?where:null,null , null);
         }
         
         return result;
     }
     
-    public Map unserializeRecipt(String serilizedString)
+    public Map<String, String> unserializeRecipt(String serilizedString)
     {
         Map<String, String> result = Maps.newHashMap();
         if(serilizedString != null)

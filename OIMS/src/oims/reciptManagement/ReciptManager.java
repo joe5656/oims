@@ -5,7 +5,9 @@
  */
 package oims.reciptManagement;
 
+import com.google.common.collect.Maps;
 import java.util.List;
+import java.util.Map;
 import oims.UI.UiManager;
 import oims.UI.pages.ProductPage.ProductPickerTx;
 import oims.UI.pages.reciptPage.DetailReciptPickerTx;
@@ -86,7 +88,80 @@ public class ReciptManager  implements oims.systemManagement.Client{
         return new SqlDataTable(this.itsProductReciptTable_.query(Integer.parseInt(reciptId), productName).getResultSet(),
                 this.itsDetailReciptTable_.getName());
     }
+    
+    /*
+    calculate the detailRecipt list 
+    input productMap <productName, neededNumber>
+    output reciptMap <reciptName, factor>
+    */
+    public Map<String, Double> calDetailReciptList(Map<String, Integer> productMap)
+    {
+        Map<String, Double> result = Maps.newHashMap();
+        Map<String, ProductRecipt> productRectip = getAll();
+        if(!productRectip.isEmpty() && !productMap.isEmpty())
+        {
+            for(String key :productMap.keySet())
+            {
+                if(productRectip.containsKey(key))
+                {
+                    ProductRecipt temp = productRectip.get(key);
+                    Integer       needNum = productMap.get(key);
+                    Integer       standNum = temp.getStandNum();
+                    if(standNum == 0){continue;}
+                    Double        factor   = new Double(needNum/standNum);
+                    
+                    String mr = temp.getMainReciptName();
+                    String tr = temp.getTopReciptName();
+                    String fr = temp.getFillReciptName();
+                    Double mf = temp.getMainFactor();
+                    Double tf = temp.getTopFactor();
+                    Double ff = temp.getFillFactor();
+                    
+                    if(mr != "NONE")
+                    {
+                        if(result.containsKey(mr))
+                        {
+                            result.replace(mr, result.get(mr) + Math.floor(mf*factor*10)/10);
+                        }
+                        else
+                        {
+                            result.put(mr, Math.floor(mf*factor*10)/10);
+                        }
+                    }
+                    if(tr != "NONE")
+                    {
+                        if(result.containsKey(tr))
+                        {
+                            result.replace(tr, result.get(tr) + Math.floor(tf*factor*10)/10);
+                        }
+                        else
+                        {
+                            result.put(tr, Math.floor(tf*factor*10)/10);
+                        }
+                    }
+                    if(fr != "NONE")
+                    {
+                        if(result.containsKey(fr))
+                        {
+                            result.replace(fr, result.get(fr) + Math.floor(ff*factor*10)/10);
+                        }
+                        else
+                        {
+                            result.put(fr, Math.floor(ff*factor*10)/10);
+                        }
+                    }
+                }
+            }
+        }
         
+        return result;
+    }
+    
+    private Map<String, ProductRecipt> getAll()
+    {
+        return this.itsProductReciptTable_.queryAll();
+    }
+    
     @Override
     public Boolean systemStatusChangeNotify(SystemManager.systemStatus status)
     {

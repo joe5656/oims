@@ -5,6 +5,7 @@
         <group>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/UI/pages/ProducingPlan/Ui_ProducingPlan.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/UI/pages/StackPage/Ui_StackMangement.java</file>
+            <file>file:/C:/JoeFolder/git/OIMS/src/oims/dataBase/MYSQL/Db_db_MYSQL.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/taskDistributor/TaskDistributor.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/UI/pages/rawMaterialPage/RawMaterialPicker.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/productManagement/ProductManager.java</file>
@@ -75,6 +76,7 @@
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/rawMaterialManagement/RawMaterialManager.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/dataBase/DbmReqHandler.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/UI/pages/employeePage/EmployeePageTx.java</file>
+            <file>file:/C:/JoeFolder/git/OIMS/src/oims/reciptManagement/ProductRecipt.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/UI/pages/employeePage/EmployeePickerTx.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/support/util/QuantitiedRawMaterial.java</file>
             <file>file:/C:/JoeFolder/git/OIMS/src/oims/dataBase/tables/MemberTable.java</file>
