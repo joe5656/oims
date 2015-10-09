@@ -124,6 +124,22 @@ public class ProducingPlanTable extends Db_table{
         return result;
     }
     
+    public String getStorePlanInString(String storeName, String date)
+    {
+        String result = "";
+        SqlResultInfo resultValue = this.query(date, storeName);
+        ResultSet rs = resultValue.getResultSet();
+        try {
+            if(rs.first())
+            {
+                result = rs.getString("serializedPlanDetail");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProducingPlanTable.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+    }
+    
     public SqlDataTable getStorePlan(String storeName, String date)
     {
         SqlDataTable result = new SqlDataTable("ProducingPlanTable");

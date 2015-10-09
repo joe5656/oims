@@ -5,12 +5,16 @@
  */
 package oims.taskDistributor;
 
+import com.google.common.collect.Maps;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 import oims.employeeManager.EmployeeManager;
 import oims.producingPlanManagement.ProducingPlan;
+import oims.producingPlanManagement.ProducingPlanManager;
+import oims.reciptManagement.ReciptManager;
+import oims.support.util.ProductPlanDataTable;
 import oims.ticketSystem.TicketManager;
 
 /**
@@ -19,6 +23,8 @@ import oims.ticketSystem.TicketManager;
  */
 public class TaskDistributor {
     private TicketManager itsTicketManager_;
+    private ProducingPlanManager itsProducingPlanManager_;
+    private ReciptManager itsReciptManager_;
     
     public void actionWhenPlanLocked(ProducingPlan plan)
     {
@@ -55,5 +61,17 @@ public class TaskDistributor {
     public void genReceivingList(Date forDate, Boolean isWarehouse, Integer StoreWhId)
     {
         
+    }
+    
+    public Map<String, Double> showProductToreciptList(String storeName, Date planDate)
+    {
+        Map<String, Double> result = Maps.newHashMap();
+        ProductPlanDataTable plan = this.itsProducingPlanManager_.getPlan(storeName, planDate);
+        if(plan.productNum() > 0 && plan.initItr())
+        {
+            result = this.itsReciptManager_.calDetailReciptList(plan);
+        }
+        
+        return result;
     }
 }

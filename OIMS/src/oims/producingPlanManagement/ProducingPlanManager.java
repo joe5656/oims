@@ -5,7 +5,9 @@
  */
 package oims.producingPlanManagement;
 
+import com.google.common.collect.Maps;
 import java.util.Date;
+import java.util.Map;
 import oims.dataBase.tables.ProducingPlanTable;
 import oims.support.util.ProductPlanDataTable;
 import oims.support.util.SqlDataTable;
@@ -111,7 +113,7 @@ public class ProducingPlanManager  implements oims.systemManagement.Client{
         return result;
     }
     
-    public SqlResultInfo updatePlan(Date planDate, String storeName, ProductPlanDataTable detail)
+    private SqlResultInfo updatePlan(Date planDate, String storeName, ProductPlanDataTable detail)
     {
         if(planDate == null || storeName == null || detail == null || this.planLocked(planDate, storeName))
         {
@@ -120,7 +122,7 @@ public class ProducingPlanManager  implements oims.systemManagement.Client{
         return this.itsProductPlanTable_.update(storeName, planDate, detail, false, null, null);
     }
     
-    public SqlResultInfo newPlan(Date planDate, String storeName, ProductPlanDataTable detail,
+    private SqlResultInfo newPlan(Date planDate, String storeName, ProductPlanDataTable detail,
             String planer, String planerId)
     {
         if(planDate == null || storeName == null || detail == null)
@@ -128,5 +130,11 @@ public class ProducingPlanManager  implements oims.systemManagement.Client{
             return new SqlResultInfo(false);
         }
         return this.itsProductPlanTable_.newPlan(planDate, detail, planerId, planer, storeName);
+    }
+    
+    public ProductPlanDataTable getPlan(String storeName, Date planDate)
+    {
+        ProductPlanDataTable result = new ProductPlanDataTable(this.itsProductPlanTable_.getStorePlanInString(storeName, planDate.toString()));
+        return result;
     }
 }

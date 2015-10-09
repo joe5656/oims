@@ -9,14 +9,12 @@ import com.google.common.collect.Maps;
 import java.util.List;
 import java.util.Map;
 import oims.UI.UiManager;
-import oims.UI.pages.ProductPage.ProductPickerTx;
 import oims.UI.pages.reciptPage.DetailReciptPickerTx;
 import oims.UI.pages.reciptPage.ProductReciptPickerTx;
 import oims.dataBase.DataBaseManager;
 import oims.dataBase.tables.DetailReciptTable;
 import oims.dataBase.tables.ProductReciptTable;
-import oims.dataBase.tables.RawMaterialTable;
-import oims.support.util.CommonUnit;
+import oims.support.util.ProductPlanDataTable;
 import oims.support.util.QuantitiedRawMaterial;
 import oims.support.util.SqlDataTable;
 import oims.support.util.SqlResultInfo;
@@ -94,18 +92,19 @@ public class ReciptManager  implements oims.systemManagement.Client{
     input productMap <productName, neededNumber>
     output reciptMap <reciptName, factor>
     */
-    public Map<String, Double> calDetailReciptList(Map<String, Integer> productMap)
+    public Map<String, Double> calDetailReciptList(ProductPlanDataTable productMap)
     {
         Map<String, Double> result = Maps.newHashMap();
         Map<String, ProductRecipt> productRectip = getAll();
-        if(!productRectip.isEmpty() && !productMap.isEmpty())
+        if(!productRectip.isEmpty() && productMap.productNum()>0 && productMap.initItr())
         {
-            for(String key :productMap.keySet())
+            do
             {
+                String key = productMap.getProductName();
                 if(productRectip.containsKey(key))
                 {
                     ProductRecipt temp = productRectip.get(key);
-                    Integer       needNum = productMap.get(key);
+                    Integer       needNum = Integer.parseInt(productMap.getProductQuantity());
                     Integer       standNum = temp.getStandNum();
                     if(standNum == 0){continue;}
                     Double        factor   = new Double(needNum/standNum);
@@ -151,7 +150,7 @@ public class ReciptManager  implements oims.systemManagement.Client{
                         }
                     }
                 }
-            }
+            }while(productMap.next());
         }
         
         return result;

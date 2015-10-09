@@ -34,12 +34,14 @@ public class ProductPlanDataTable {
     
     public ProductPlanDataTable(Map<Integer, Map<Integer,Integer>> info)
     {
-        
+        productNameToId_ = Maps.newHashMap();
+        productList_ = Maps.newHashMap();
     }
     
     public ProductPlanDataTable()
     {
-        
+        productNameToId_ = Maps.newHashMap();
+        productList_ = Maps.newHashMap();
     }
     
     public Map<String, String> getProductList(){return productList_;}
@@ -124,6 +126,11 @@ public class ProductPlanDataTable {
             result = tmpHolder_.getValue();
         }
         return result;
+    }
+    
+    public Integer productNum()
+    {
+        return this.productList_.size();
     }
     
     private void unserializeInfo(String serilizedInfo)
