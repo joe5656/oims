@@ -10,8 +10,8 @@ package oims.support.util;
  * @author ezouyyi
  */
 public class UnitQuantity {
-    CommonUnit unit_;
-    Double     quantity_;
+    private CommonUnit unit_;
+    private Double     quantity_;
     
     public UnitQuantity()
     {
@@ -53,4 +53,17 @@ public class UnitQuantity {
     {
         return quantity_ < rh.getQuantity()*rh.getUnit().getUnitChanageFactor(unit_.getUnit());
     }
+    
+    public Boolean add(UnitQuantity addto)
+    {
+        Boolean result = false;
+        double factor = addto.getUnit().getUnitChanageFactor(unit_.getUnit());
+        if(factor != -1.0)
+        {
+            quantity_ += addto.getQuantity()*factor;
+        }
+        return result;
+    }
+    
+    public void multiply(Double factor){this.quantity_ *= factor;}
 }

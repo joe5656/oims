@@ -8,6 +8,7 @@ package oims.reciptManagement;
 import com.google.common.collect.Maps;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import oims.UI.UiManager;
 import oims.UI.pages.reciptPage.DetailReciptPickerTx;
 import oims.UI.pages.reciptPage.ProductReciptPickerTx;
@@ -89,7 +90,53 @@ public class ReciptManager  implements oims.systemManagement.Client{
     
     /*
     calculate the detailRecipt list 
-    input productMap <productName, neededNumber>
+    output MaterialMap <name, quantity>
+    Input reciptMap <reciptName, factor>
+    */
+    public Map<String, QuantitiedRawMaterial> calMaterial(Map<String, Double> reciptMap)
+    {
+        Map<String, QuantitiedRawMaterial> result = Maps.newHashMap();
+        if(reciptMap.size() > 0)
+        {
+            Map<String, DetailRecipt> detailRecipt = getAllDetailedRecipt();
+            if(!detailRecipt.isEmpty())
+            {
+                for(String reciptName:reciptMap.keySet())
+                {
+                    Double factor = reciptMap.get(reciptName);
+                    if(detailRecipt.containsKey(reciptName))
+                    {
+                        DetailRecipt recipt = detailRecipt.get(reciptName);
+                        recipt.initItr();
+                        while(recipt.hasNextMaterial())
+                        {
+                            Entry<String, QuantitiedRawMaterial> rm = recipt.nextMaterial();
+                            String rmName = rm.getKey();
+                            if(result.containsKey(rmName))
+                            {
+                                QuantitiedRawMaterial newValue = rm.getValue();
+                                newValue.multiply(factor);
+                                QuantitiedRawMaterial oldValue = result.get(rmName);
+                                newValue.add(oldValue);
+                                result.replace(rmName, newValue);
+                            }
+                            else
+                            {
+                                QuantitiedRawMaterial newValue = rm.getValue();
+                                newValue.multiply(factor);
+                                result.put(rmName, newValue);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    
+    /*
+    calculate the detailRecipt list 
+    input ProductPlanDataTable
     output reciptMap <reciptName, factor>
     */
     public Map<String, Double> calDetailReciptList(ProductPlanDataTable productMap)
@@ -159,6 +206,11 @@ public class ReciptManager  implements oims.systemManagement.Client{
     private Map<String, ProductRecipt> getAll()
     {
         return this.itsProductReciptTable_.queryAll();
+    }
+    
+    private Map<String, DetailRecipt> getAllDetailedRecipt()
+    {
+        return this.itsDetailReciptTable_.queryAll();
     }
     
     @Override

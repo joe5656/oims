@@ -6,10 +6,15 @@
 package oims.dataBase.tables;
 
 import com.google.common.collect.Maps;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import oims.dataBase.DataBaseManager;
 import oims.dataBase.Db_table;
+import oims.reciptManagement.DetailRecipt;
 import oims.support.util.Db_publicColumnAttribute;
 import oims.support.util.SqlResultInfo;
 
@@ -100,6 +105,40 @@ public class DetailReciptTable   extends Db_table{
         if(entryToBeSelect.fillInEntryValues(valueHolder) && where.fillInEntryValues(valueHoldereq))
         {
             result = super.select(entryToBeSelect, where, null,null);
+        }
+        
+        return result;
+    }
+    
+    public Map<String, DetailRecipt> queryAll()
+    {
+        Map<String, DetailRecipt> result = Maps.newHashMap();
+        
+        TableEntry entryToBeSelect = generateTableEntry();
+        Map<String, String> valueHolder = Maps.newHashMap();
+        valueHolder.put("recipt", "selected");
+        valueHolder.put("reciptName", "selected");
+        
+
+        if(entryToBeSelect.fillInEntryValues(valueHolder))
+        {
+            SqlResultInfo sqlResult = super.select(entryToBeSelect, null, null,null);
+            if(sqlResult.isSucceed() && !sqlResult.isRsEmpty())
+            {
+                ResultSet rs = sqlResult.getResultSet();
+                try {
+                    if(rs.first())
+                    {
+                        do
+                        {
+                            result.put(rs.getString("reciptName"), 
+                                    new DetailRecipt(rs.getString("reciptName"),rs.getString("recipt")));
+                        }while(rs.next());
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(DetailReciptTable.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
         
         return result;

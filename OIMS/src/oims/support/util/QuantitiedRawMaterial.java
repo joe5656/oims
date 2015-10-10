@@ -21,6 +21,23 @@ public class QuantitiedRawMaterial {
     
     
     public String getRmName(){return rmName_;}
+    public UnitQuantity getUnitQuantity(){return quantity_;}
     public String getRmQuantity(){return quantity_.getQuantity().toString();}
     public String getRmUnitName(){return quantity_.getUnit().getUnitName();}
+    public Boolean add(QuantitiedRawMaterial add)
+    {
+        Boolean result = false;
+        if(add.getRmName().equals(rmName_))
+        {
+            UnitQuantity addQ = add.getUnitQuantity();
+            result = quantity_.add(addQ);
+        }
+        return result;
+    }
+    
+    public void multiply(Double factor)
+    {
+        quantity_.multiply(factor);
+    }
+    
 }

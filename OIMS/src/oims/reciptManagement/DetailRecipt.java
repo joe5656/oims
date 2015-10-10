@@ -6,7 +6,11 @@
 package oims.reciptManagement;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import oims.support.util.QuantitiedRawMaterial;
 
 /**
@@ -14,6 +18,33 @@ import oims.support.util.QuantitiedRawMaterial;
  * @author ezouyyi
  */
 public class DetailRecipt {
+    private String detailReciptName_;
+    private String serializedRecipt_;
+    private Map<String, QuantitiedRawMaterial> recipt_;
+    private Iterator<Entry<String, QuantitiedRawMaterial>> Itr_;
+    
+    public DetailRecipt()
+    {
+        recipt_ = Maps.newHashMap();
+        this.detailReciptName_ = "NA";
+        this.serializedRecipt_ = "NA";
+    }
+    
+    public DetailRecipt(String reciptName, String serilizedString)
+    {
+        this.detailReciptName_ = reciptName;
+        this.serializedRecipt_ = serilizedString;
+        recipt_ = DetailRecipt.unSerialize(serilizedString);
+    }
+    
+    public void initItr()
+    {
+        Itr_ = this.recipt_.entrySet().iterator();
+    }
+    
+    public Boolean hasNextMaterial(){return this.Itr_.hasNext();}
+    public Entry<String, QuantitiedRawMaterial> nextMaterial(){return this.Itr_.next();}
+    
     static public String serialize(List<QuantitiedRawMaterial> rms)
     {
         String result = "";
@@ -37,17 +68,17 @@ public class DetailRecipt {
         return result;
     }
     
-    static public List<QuantitiedRawMaterial> unSerialize(String recipt)
+    static public Map<String, QuantitiedRawMaterial> unSerialize(String recipt)
     {
-        List<QuantitiedRawMaterial> returnList = Lists.newArrayList();
+        Map<String, QuantitiedRawMaterial> returnMap = Maps.newHashMap();
         String[] rms = recipt.split("|");
         for(String entry:rms)
         {
             String[] detailInfo = entry.split(":");
             QuantitiedRawMaterial tmpRm = new QuantitiedRawMaterial(
                 detailInfo[0],detailInfo[1],detailInfo[2]);
-            returnList.add(tmpRm);
+            returnMap.put(detailInfo[2],tmpRm);
         }
-        return returnList;
+        return returnMap;
     }
 }
